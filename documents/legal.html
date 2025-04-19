@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Юридическая информация - Ibod Corporation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/additional-styles.css">
+  <style>
+    .document-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: var(--bg);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .document-title {
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--accent);
+    }
+    
+    .document-subtitle {
+      text-align: center;
+      font-style: italic;
+      margin-bottom: 40px;
+      color: var(--text);
+      opacity: 0.8;
+    }
+    
+    .document-section {
+      margin-bottom: 30px;
+    }
+    
+    .document-section h2 {
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .document-section h3 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .document-section p, .document-section li {
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
+    
+    .document-section ul {
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .document-footer {
+      margin-top: 50px;
+      text-align: right;
+      font-style: italic;
+    }
+    
+    .back-to-home {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s;
+    }
+    
+    .back-to-home:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 201, 167, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+      .document-container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo"><i class="fas fa-building logo-icon"></i> <strong>Ibod Corporation</strong></div>
+  <nav>
+    <a href="../index.html#about">О нас</a>
+    <a href="../index.html#team">Команда</a>
+    <a href="../index.html#portfolio">Портфель</a>
+    <a href="../index.html#news">Новости</a>
+    <a href="../index.html#career">Карьера</a>
+    <a href="../index.html#faq">FAQ</a>
+    <a href="../charter.html">Устав</a>
+    <a href="../index.html#contact">Контакты</a>
+  </nav>
+  <div class="controls">
+    <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+    <select id="langSwitcher" onchange="switchLang(this.value)">
+      <option value="ru">RU</option>
+      <option value="en">EN</option>
+      <option value="tj">TJ</option>
+    </select>
+  </div>
+  
+  <!-- Гамбургер меню для мобильных устройств -->
+  <div class="hamburger-menu" id="hamburgerMenu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</header>
+
+<!-- Мобильное меню -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="../index.html#about">О нас</a>
+  <a href="../index.html#team">Команда</a>
+  <a href="../index.html#portfolio">Портфель</a>
+  <a href="../index.html#news">Новости</a>
+  <a href="../index.html#career">Карьера</a>
+  <a href="../index.html#faq">FAQ</a>
+  <a href="../charter.html">Устав</a>
+  <a href="../index.html#contact">Контакты</a>
+  <div class="mobile-controls">
+    <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i> Тема</button>
+    <select id="mobileLangSwitcher" onchange="switchLang(this.value)">
+      <option value="ru">Русский</option>
+      <option value="en">English</option>
+      <option value="tj">Тоҷикӣ</option>
+    </select>
+  </div>
+</div>
+
+<!-- Затемнение фона при открытом мобильном меню -->
+<div class="overlay" id="overlay"></div>
+
+<div class="document-container">
+  <h1 class="document-title">Юридическая информация</h1>
+  <p class="document-subtitle">Последнее обновление: 11.04.2025</p>
+
+  <div class="document-section">
+    <h2>1. Информация о компании</h2>
+    <p>Ibod Corporation (далее "Компания") является юридическим лицом, зарегистрированным в соответствии с законодательством Республики Таджикистан.</p>
+    <p><strong>Юридический адрес:</strong> Республика Таджикистан, г. Душанбе, ул. Примерная, д. 1</p>
+    <p><strong>Регистрационный номер:</strong> 123456789</p>
+    <p><strong>Налоговый идентификационный номер:</strong> 987654321</p>
+    <p><strong>Дата регистрации:</strong> 01.01.2015</p>
+  </div>
+
+  <div class="document-section">
+    <h2>2. Лицензии и разрешения</h2>
+    <p>Компания осуществляет свою деятельность на основании следующих лицензий и разрешений:</p>
+    <ul>
+      <li>Лицензия на осуществление деятельности в сфере информационных технологий №IT-12345 от 15.03.2015</li>
+      <li>Лицензия на осуществление консультационной деятельности №CON-67890 от 20.05.2015</li>
+      <li>Разрешение на осуществление внешнеэкономической деятельности №FEA-54321 от 10.07.2015</li>
+    </ul>
+    <p>Копии лицензий и разрешений могут быть предоставлены по запросу.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>3. Товарные знаки и интеллектуальная собственность</h2>
+    <p>Все товарные знаки, логотипы, фирменные наименования, доменные имена и другие отличительные знаки, используемые на веб-сайте и в материалах Компании, являются собственностью Ibod Corporation или используются с разрешения правообладателей.</p>
+    <p>Товарный знак "Ibod Corporation" и логотип Компании зарегистрированы в Патентном ведомстве Республики Таджикистан (свидетельство №TM-12345 от 05.02.2015).</p>
+    <p>Несанкционированное использование товарных знаков и других объектов интеллектуальной собственности Компании запрещено и может повлечь за собой юридическую ответственность.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>4. Авторские права</h2>
+    <p>Все материалы, размещенные на веб-сайте Компании, включая тексты, изображения, графику, логотипы, видео, аудио и программное обеспечение, защищены авторским правом и являются собственностью Ibod Corporation или используются с разрешения правообладателей.</p>
+    <p>Любое копирование, распространение, передача, изменение, публичное воспроизведение или использование материалов в коммерческих целях без предварительного письменного разрешения Компании запрещено.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>5. Ограничение ответственности</h2>
+    <p>Информация, представленная на веб-сайте Компании, предоставляется "как есть" без каких-либо гарантий, явных или подразумеваемых.</p>
+    <p>Компания не несет ответственности за любые прямые, косвенные, случайные, специальные или последующие убытки, возникшие в результате доступа, использования или невозможности использования веб-сайта или любой информации, содержащейся на нем.</p>
+    <p>Компания оставляет за собой право в любое время без предварительного уведомления вносить изменения в информацию, представленную на веб-сайте.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>6. Применимое право</h2>
+    <p>Деятельность Компании регулируется законодательством Республики Таджикистан.</p>
+    <p>Любые споры, возникающие в связи с деятельностью Компании или использованием веб-сайта, подлежат разрешению в соответствии с законодательством Республики Таджикистан в компетентных судах г. Душанбе.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>7. Корпоративное управление</h2>
+    <p>Компания осуществляет свою деятельность в соответствии с принципами корпоративного управления, установленными законодательством Республики Таджикистан и внутренними документами Компании.</p>
+    <p>Органами управления Компании являются:</p>
+    <ul>
+      <li>Общее собрание акционеров</li>
+      <li>Совет директоров</li>
+      <li>Генеральный директор</li>
+    </ul>
+    <p>Информация о составе органов управления Компании и их полномочиях содержится в Уставе Компании.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>8. Финансовая отчетность</h2>
+    <p>Компания ведет бухгалтерский учет и представляет финансовую отчетность в соответствии с требованиями законодательства Республики Таджикистан.</p>
+    <p>Годовая финансовая отчетность Компании подлежит обязательному аудиту независимой аудиторской организацией.</p>
+    <p>Информация о финансовых результатах деятельности Компании может быть предоставлена заинтересованным лицам в порядке, установленном законодательством и внутренними документами Компании.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>9. Налогообложение</h2>
+    <p>Компания является плательщиком налогов и сборов в соответствии с законодательством Республики Таджикистан.</p>
+    <p>Компания своевременно и в полном объеме исполняет обязанности по уплате налогов и сборов, а также по представлению налоговой отчетности.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>10. Трудовые отношения</h2>
+    <p>Компания осуществляет свою деятельность с соблюдением требований трудового законодательства Республики Таджикистан.</p>
+    <p>Трудовые отношения между Компанией и ее работниками регулируются трудовыми договорами, Правилами внутреннего трудового распорядка и другими локальными нормативными актами Компании.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>11. Экологическая ответственность</h2>
+    <p>Компания осуществляет свою деятельность с соблюдением требований законодательства Республики Таджикистан в области охраны окружающей среды.</p>
+    <p>Компания стремится минимизировать негативное воздействие своей деятельности на окружающую среду и реализует программы по энергосбережению и рациональному использованию природных ресурсов.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>12. Социальная ответственность</h2>
+    <p>Компания осознает свою социальную ответственность перед обществом и реализует программы, направленные на поддержку образования, здравоохранения, культуры и спорта.</p>
+    <p>Компания стремится к созданию благоприятных условий труда для своих работников и обеспечению их профессионального и личностного развития.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>13. Противодействие коррупции</h2>
+    <p>Компания придерживается принципа нулевой толерантности к коррупции и осуществляет свою деятельность в соответствии с требованиями законодательства Республики Таджикистан в области противодействия коррупции.</p>
+    <p>В Компании действует Антикоррупционная политика, устанавливающая принципы и требования, направленные на предотвращение коррупции и соблюдение антикоррупционного законодательства.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>14. Конфиденциальность</h2>
+    <p>Компания обеспечивает конфиденциальность информации, полученной в процессе осуществления своей деятельности, в соответствии с требованиями законодательства Республики Таджикистан и внутренними документами Компании.</p>
+    <p>Информация о политике Компании в области обработки персональных данных содержится в Политике конфиденциальности.</p>
+  </div>
+
+  <div class="document-section">
+    <h2>15. Контактная информация</h2>
+    <p>По всем юридическим вопросам, связанным с деятельностью Компании, вы можете обратиться в Юридический департамент:</p>
+    <p>
+      Адрес: Республика Таджикистан, г. Душанбе, ул. Примерная, д. 1<br>
+      Телефон: +992 00 000 0000<br>
+      Email: legal@ibodcorp.tj
+    </p>
+  </div>
+
+  <div class="document-footer">
+    <p>© 2025 Ibod Corporation. Все права защищены.</p>
+  </div>
+
+  <a href="../index.html" class="back-to-home"><i class="fas fa-arrow-left"></i> Вернуться на главную</a>
+</div>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-column">
+      <h3>О компании</h3>
+      <ul>
+        <li><a href="../index.html#about">О нас</a></li>
+        <li><a href="../index.html#team">Команда</a></li>
+        <li><a href="../index.html#portfolio">Портфель</a></li>
+        <li><a href="../index.html#career">Карьера</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Услуги</h3>
+      <ul>
+        <li><a href="#">Инвестиции</a></li>
+        <li><a href="#">Консалтинг</a></li>
+        <li><a href="#">Технологические решения</a></li>
+        <li><a href="#">Финансовые услуги</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Документы</h3>
+      <ul>
+        <li><a href="../charter.html">Устав компании</a></li>
+        <li><a href="privacy-policy.html">Политика конфиденциальности</a></li>
+        <li><a href="terms.html">Условия использования</a></li>
+        <li><a href="legal.html">Юридическая информация</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Контакты</h3>
+      <ul>
+        <li><a href="../index.html#contact">Связаться с нами</a></li>
+        <li><a href="#">Карта сайта</a></li>
+        <li><a href="#">Поддержка</a></li>
+        <li><a href="#">Пресс-центр</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="social-links">
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-linkedin"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
+    <p>&copy; 2025 Ibod Corporation. Все права защищены.</p>
+  </div>
+</footer>
+
+<script src="../js/script.js"></script>
+</body>
+</html>
