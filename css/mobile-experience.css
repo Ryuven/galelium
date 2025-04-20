@@ -1,0 +1,606 @@
+/* Улучшения для мобильного опыта */
+
+/* Общие улучшения для мобильных устройств */
+@media (max-width: 768px) {
+  /* Увеличиваем размер интерактивных элементов для лучшего взаимодействия на сенсорных экранах */
+  button, 
+  a, 
+  .nav-link-modern, 
+  .faq-question-modern,
+  input[type="submit"],
+  .slider-control-modern {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px;
+    touch-action: manipulation;
+  }
+  
+  /* Увеличиваем размер шрифта для лучшей читаемости */
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  /* Улучшаем отступы для лучшего использования пространства */
+  .section-modern {
+    padding: 60px 20px;
+  }
+  
+  /* Улучшаем мобильную навигацию */
+  .mobile-nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 320px;
+    height: 100vh;
+    background-color: var(--bg);
+    z-index: 1000;
+    padding: 80px 30px 30px;
+    box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  body.mobile-nav-open .mobile-nav {
+    right: 0;
+  }
+  
+  .mobile-nav a {
+    display: block;
+    padding: 15px 0;
+    font-size: 18px;
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .mobile-nav a:hover {
+    color: var(--accent);
+    transform: translateX(10px);
+  }
+  
+  /* Улучшаем гамбургер-меню */
+  .hamburger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+    cursor: pointer;
+    z-index: 1001;
+    position: relative;
+  }
+  
+  @media (max-width: 768px) {
+    .hamburger-menu {
+      display: flex;
+    }
+    
+    nav {
+      display: none;
+    }
+    
+    .controls {
+      display: none;
+    }
+  }
+  
+  .hamburger-menu span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: var(--text);
+    border-radius: 3px;
+    transition: all 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  
+  body.mobile-nav-open .hamburger-menu span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+    background-color: var(--accent);
+  }
+  
+  body.mobile-nav-open .hamburger-menu span:nth-child(2) {
+    opacity: 0;
+  }
+  
+  body.mobile-nav-open .hamburger-menu span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+    background-color: var(--accent);
+  }
+  
+  /* Затемнение фона при открытом мобильном меню */
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(3px);
+  }
+  
+  body.mobile-nav-open .overlay {
+    display: block;
+    opacity: 1;
+  }
+  
+  /* Улучшения для мобильных форм */
+  @media (max-width: 768px) {
+    .form-input-modern {
+      font-size: 16px; /* Предотвращает масштабирование на iOS */
+      padding: 15px;
+    }
+    
+    .form-group-modern {
+      margin-bottom: 20px;
+    }
+    
+    /* Улучшаем кнопку отправки формы */
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+    }
+  }
+  
+  /* Улучшения для карточек на мобильных устройствах */
+  @media (max-width: 768px) {
+    .card-modern {
+      width: 100%;
+      margin: 15px 0;
+      padding: 20px;
+    }
+    
+    .team-3d-card {
+      width: 100%;
+      max-width: 280px;
+      margin: 15px auto;
+    }
+    
+    .portfolio .card-modern,
+    .career .card-modern {
+      width: 100%;
+      margin: 15px 0;
+    }
+  }
+  
+  /* Улучшения для статистики на мобильных устройствах */
+  @media (max-width: 768px) {
+    .stats-3d-container {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .stat-3d-cube {
+      margin: 15px 0;
+    }
+    
+    .chart-3d-container {
+      height: 200px;
+      margin: 30px 0;
+    }
+  }
+  
+  /* Улучшения для героя-секции на мобильных устройствах */
+  @media (max-width: 768px) {
+    .hero-modern {
+      padding: 80px 20px;
+      min-height: 80vh;
+    }
+    
+    .hero-title-modern {
+      font-size: 32px;
+    }
+    
+    .hero-subtitle-modern {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    
+    .hero-buttons-modern {
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .hero-wave-container {
+      height: 80px;
+    }
+  }
+  
+  /* Улучшения для футера на мобильных устройствах */
+  @media (max-width: 768px) {
+    .footer-content-modern {
+      flex-direction: column;
+      gap: 30px;
+    }
+    
+    .footer-column-modern {
+      width: 100%;
+    }
+    
+    .footer-column-modern h3 {
+      margin-bottom: 15px;
+    }
+    
+    .footer-column-modern ul li {
+      margin-bottom: 10px;
+    }
+  }
+  
+  /* Улучшения для слайдера на мобильных устройствах */
+  @media (max-width: 768px) {
+    .slide-image-modern {
+      height: 250px;
+    }
+    
+    .slide-content-modern {
+      padding: 20px;
+    }
+    
+    .slide-content-modern h3 {
+      font-size: 20px;
+    }
+    
+    .slide-content-modern p {
+      font-size: 14px;
+    }
+    
+    .slider-controls-modern {
+      bottom: 10px;
+      right: 10px;
+    }
+    
+    .slider-control-modern {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
+
+/* Специальные улучшения для очень маленьких экранов */
+@media (max-width: 480px) {
+  .hero-title-modern {
+    font-size: 28px;
+  }
+  
+  .hero-subtitle-modern {
+    font-size: 16px;
+  }
+  
+  .section-title-modern h2 {
+    font-size: 24px;
+  }
+  
+  .card-modern h3 {
+    font-size: 20px;
+  }
+  
+  .mission-3d-card {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .globe-3d-container {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+/* Скрытие содержания в уставе на мобильных устройствах */
+@media (max-width: 768px) {
+  .charter-toc {
+    display: none !important;
+  }
+  
+  .charter-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+}
+
+/* Улучшения для мобильного меню */
+.mobile-controls {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.mobile-controls .theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 12px 15px;
+  background-color: rgba(0, 201, 167, 0.1);
+  border-radius: 8px;
+  border: none;
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mobile-controls .theme-toggle i {
+  margin-right: 10px;
+  color: var(--accent);
+}
+
+.mobile-controls select {
+  width: 100%;
+  padding: 12px 15px;
+  background-color: rgba(0, 201, 167, 0.1);
+  border-radius: 8px;
+  border: none;
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%2300c9a7' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+}
+
+/* Улучшения для мобильной версии FAQ */
+@media (max-width: 768px) {
+  .faq-question-modern h3 {
+    font-size: 16px;
+  }
+  
+  .faq-answer-modern {
+    font-size: 14px;
+  }
+  
+  .faq-item-modern {
+    margin-bottom: 15px;
+  }
+}
+
+/* Улучшения для мобильной версии контактной формы */
+@media (max-width: 768px) {
+  .contact-form {
+    padding: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-input-modern {
+    padding: 12px;
+  }
+  
+  .form-textarea-modern {
+    min-height: 120px;
+  }
+}
+
+/* Улучшения для мобильной версии портфолио */
+@media (max-width: 768px) {
+  .portfolio, .career {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .portfolio .card, .career .card {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+/* Улучшения для мобильной версии команды */
+@media (max-width: 768px) {
+  .team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .team-3d-card {
+    margin-bottom: 30px;
+  }
+}
+
+/* Улучшения для мобильной версии калькулятора инвестиций */
+@media (max-width: 768px) {
+  .investment-calculator {
+    padding: 20px;
+  }
+  
+  .calculator-field {
+    margin-bottom: 15px;
+  }
+  
+  .calculator-field label {
+    font-size: 14px;
+  }
+  
+  .calculator-field input, 
+  .calculator-field select {
+    font-size: 16px;
+    padding: 12px;
+  }
+}
+
+/* Улучшения для мобильной версии 3D элементов */
+@media (max-width: 768px) {
+  .mission-3d-card-front h3,
+  .mission-3d-card-back p {
+    font-size: 14px;
+  }
+  
+  .stat-number-3d {
+    font-size: 36px;
+  }
+  
+  .stat-label-3d {
+    font-size: 14px;
+  }
+  
+  .globe-3d {
+    transform: scale(0.8);
+  }
+  
+  .chart-3d {
+    transform: rotateX(60deg) rotateZ(0) scale(0.8);
+  }
+}
+
+/* Улучшения для мобильной версии кнопок */
+@media (max-width: 768px) {
+  .btn-modern {
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+  
+  .button-3d {
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+}
+
+/* Улучшения для мобильной версии заголовков */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 32px;
+  }
+  
+  h2 {
+    font-size: 24px;
+  }
+  
+  h3 {
+    font-size: 20px;
+  }
+}
+
+/* Улучшения для мобильной версии хедера */
+@media (max-width: 768px) {
+  header {
+    padding: 15px 20px;
+  }
+  
+  .logo {
+    font-size: 18px;
+  }
+  
+  .logo-icon {
+    font-size: 20px;
+  }
+}
+
+/* Улучшения для мобильной версии цитаты */
+@media (max-width: 768px) {
+  .quote-text {
+    font-size: 20px;
+    padding: 20px;
+  }
+}
+
+/* Улучшения для мобильной версии CTA */
+@media (max-width: 768px) {
+  .cta-glass {
+    padding: 30px 20px;
+  }
+  
+  .cta-glass h2 {
+    font-size: 24px;
+  }
+  
+  .cta-glass p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+}
+
+/* Улучшения для мобильной версии новостей */
+@media (max-width: 768px) {
+  .news-carousel-container {
+    padding: 0 20px;
+  }
+  
+  .carousel-controls {
+    bottom: 10px;
+  }
+  
+  .carousel-control {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Фиксированная кнопка "Наверх" для мобильных устройств */
+.back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 99;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-to-top i {
+  font-size: 20px;
+}
+
+/* Улучшения для мобильной версии прелоадера */
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+.preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.preloader-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 201, 167, 0.3);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
