@@ -1,0 +1,149 @@
+/* Стили для корпоративной структуры */
+.corporate-structure {
+  margin: 60px auto;
+  max-width: 1200px;
+  position: relative;
+}
+
+.structure-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.parent-company {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: white;
+  padding: 25px 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 2;
+  max-width: 400px;
+  transform: translateZ(30px);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.parent-company:hover {
+  transform: translateZ(50px) scale(1.03);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.parent-company h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.parent-company p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.subsidiaries {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  width: 100%;
+  position: relative;
+}
+
+.subsidiary {
+  background-color: var(--bg);
+  border: 2px solid var(--accent);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: calc(25% - 30px);
+  min-width: 200px;
+  position: relative;
+  z-index: 1;
+  transform: translateZ(10px);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.subsidiary:hover {
+  transform: translateZ(20px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.subsidiary h4 {
+  color: var(--accent);
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.subsidiary p {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.subsidiary-icon {
+  font-size: 32px;
+  color: var(--accent);
+  margin-bottom: 15px;
+}
+
+.connection-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Анимация для элементов структуры */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateZ(10px);
+  }
+}
+
+.subsidiary {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.subsidiary:nth-child(1) { animation-delay: 0.1s; }
+.subsidiary:nth-child(2) { animation-delay: 0.2s; }
+.subsidiary:nth-child(3) { animation-delay: 0.3s; }
+.subsidiary:nth-child(4) { animation-delay: 0.4s; }
+.subsidiary:nth-child(5) { animation-delay: 0.5s; }
+.subsidiary:nth-child(6) { animation-delay: 0.6s; }
+
+/* Адаптивность для корпоративной структуры */
+@media (max-width: 992px) {
+  .subsidiary {
+    width: calc(33.33% - 30px);
+  }
+}
+
+@media (max-width: 768px) {
+  .subsidiary {
+    width: calc(50% - 30px);
+  }
+}
+
+@media (max-width: 576px) {
+  .subsidiary {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .parent-company {
+    padding: 20px;
+    max-width: 300px;
+  }
+}
