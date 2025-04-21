@@ -1,0 +1,224 @@
+/* Адаптивные стили для структуры корпорации */
+@media (max-width: 768px) {
+  .corporate-structure {
+    padding: 10px;
+  }
+  
+  .structure-item {
+    margin-bottom: 20px;
+  }
+  
+  .structure-box {
+    padding: 15px;
+  }
+  
+  .structure-box h3 {
+    font-size: 1.1rem;
+  }
+  
+  .structure-box p {
+    font-size: 0.85rem;
+  }
+}
+
+/* Адаптивные стили для 3D глобуса */
+@media (max-width: 768px) {
+  .globe-container {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .mission-text h3 {
+    font-size: 1.2rem;
+  }
+  
+  .mission-text p {
+    font-size: 0.9rem;
+    padding: 0 15px;
+  }
+}
+
+/* Адаптивные стили для фотографий команды */
+@media (max-width: 768px) {
+  .team-photo-container {
+    width: 200px;
+    height: 240px;
+  }
+  
+  .team-card h3 {
+    font-size: 1.1rem;
+  }
+  
+  .team-card p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Адаптивные стили для анимированных линий связи */
+@media (max-width: 768px) {
+  .connection-line {
+    stroke-width: 1.5;
+  }
+  
+  .connection-dot {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .tooltip {
+    width: 150px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+/* Общие адаптивные улучшения */
+@media (max-width: 576px) {
+  section {
+    padding: 50px 15px;
+  }
+  
+  section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero p {
+    font-size: 1rem;
+    padding: 0 10px;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .quote-text {
+    font-size: 1.5rem;
+    padding: 0 15px;
+  }
+  
+  .cta-glass {
+    padding: 40px 20px;
+  }
+  
+  .cta-glass h2 {
+    font-size: 1.8rem;
+  }
+  
+  .cta-glass p {
+    font-size: 1rem;
+  }
+  
+  .faq-question h3 {
+    font-size: 1rem;
+  }
+  
+  .contact-form {
+    padding: 15px;
+  }
+  
+  /* Улучшенные стили для фотографий команды на маленьких экранах */
+  .team-photo-container {
+    width: 180px;
+    height: 220px;
+  }
+  
+  .team-card {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+  
+  /* Улучшения для анимированных линий на маленьких экранах */
+  .connection-lines svg {
+    transform: scale(0.9);
+    transform-origin: center top;
+  }
+}
+
+/* Улучшения для средних экранов */
+@media (min-width: 577px) and (max-width: 992px) {
+  .hero h1 {
+    font-size: 3rem;
+  }
+  
+  .structure-container {
+    max-width: 80%;
+  }
+  
+  .team {
+    gap: 20px;
+  }
+  
+  .team-card {
+    max-width: 250px;
+  }
+  
+  /* Улучшенные стили для фотографий команды на средних экранах */
+  .team-photo-container {
+    width: 220px;
+    height: 270px;
+  }
+}
+
+/* Исправления для мобильного меню */
+@media (max-width: 768px) {
+  .hamburger-menu {
+    display: flex;
+  }
+  
+  nav {
+    display: none;
+  }
+}
+
+/* Улучшения для анимаций на мобильных устройствах */
+@media (max-width: 768px) {
+  /* Оптимизация анимаций для производительности */
+  .fade-in {
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  
+  /* Уменьшаем интенсивность эффектов для экономии ресурсов */
+  .glow {
+    filter: blur(15px);
+  }
+  
+  /* Оптимизация для сенсорных устройств */
+  .subsidiary {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .subsidiary:active {
+    transform: translateZ(10px) scale(0.98) !important;
+    transition: transform 0.1s !important;
+  }
+}
+
+/* Улучшения для высоких разрешений экрана */
+@media (min-width: 1400px) {
+  .team-photo-container {
+    width: 280px;
+    height: 340px;
+  }
+  
+  .team {
+    gap: 40px;
+  }
+}
+
+/* Улучшения для ориентации экрана */
+@media (orientation: landscape) and (max-height: 500px) {
+  .hero {
+    min-height: 400px;
+  }
+  
+  .team-photo-container {
+    width: 160px;
+    height: 200px;
+  }
+}
