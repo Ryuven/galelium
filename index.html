@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galelium Corporation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.95), rgba(20, 20, 20, 0.95));
+            padding: 2rem 1rem;
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(0, 170, 255, 0.4);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            margin-top: 0.5rem;
+            font-weight: 300;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 2000;
+            cursor: pointer;
+            font-size: 1.8rem;
+            color: #e0e0e0;
+            transition: color 0.3s ease;
+        }
+
+        .hamburger:hover {
+            color: #00aaff;
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100%;
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: right 0.3s ease;
+            z-index: 1500;
+        }
+
+        .nav-menu.active {
+            right: 0;
+        }
+
+        .nav-menu a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: #00aaff;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 70vh;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
+        }
+
+        .hero canvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Content */
+        .content {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            text-align: left;
+        }
+
+        .section h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .section p, .section ul {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            font-weight: 300;
+        }
+
+        .section ul {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .section ul li {
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .section ul li::before {
+            content: '—';
+            position: absolute;
+            left: -1.5rem;
+            color: #00aaff;
+        }
+
+        /* Contact Section */
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1rem 0;
+            justify-content: flex-start;
+        }
+
+        .contact-links a {
+            color: #00aaff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .contact-links a:hover {
+            color: #ffffff;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1e1e1e, #121212);
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-links {
+            margin-top: 0.5rem;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            color: #777;
+            font-weight: 300;
+        }
+
+        footer a {
+            color: #00aaff;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1rem;
+            }
+
+            header h1 {
+                font-size: 2.2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .hamburger {
+                top: 1.2rem;
+                right: 1.2rem;
+                font-size: 1.6rem;
+            }
+
+            .nav-menu {
+                width: 260px;
+                padding: 3.5rem 1.5rem;
+            }
+
+            .nav-menu a {
+                font-size: 0.95rem;
+            }
+
+            .hero {
+                height: 60vh;
+            }
+
+            .content {
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
+
+            .section h3 {
+                font-size: 1.6rem;
+            }
+
+            .section p, .section ul {
+                font-size: 1rem;
+            }
+
+            .contact-links a {
+                font-size: 1rem;
+            }
+
+            footer p {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header p {
+                font-size: 0.95rem;
+            }
+
+            .hamburger {
+                font-size: 1.4rem;
+            }
+
+            .nav-menu {
+                width: 240px;
+            }
+
+            .hero {
+                height: 50vh;
+            }
+
+            .section h3 {
+                font-size: 1.5rem;
+            }
+
+            .section p, .section ul {
+                font-size: 0.95rem;
+            }
+
+            .contact-links {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Galelium Corporation</h1>
+        <p>Холдинговая компания</p>
+    </header>
+
+    <div class="hamburger">
+        <i class="fas fa-bars"></i>
+    </div>
+    <nav class="nav-menu">
+        <a href="#home">Главная</a>
+        <a href="#about">О нас</a>
+        <a href="#how-we-work">Как мы работаем</a>
+        <a href="#contact">Контакты</a>
+    </nav>
+
+    <section class="hero" id="hero">
+        <canvas id="three-canvas"></canvas>
+    </section>
+
+    <div class="content">
+        <section class="section" id="about">
+            <h3>О нас</h3>
+            <p>Galelium Corporation управляет активами и инвестициями, координируя работу дочерних компаний и партнёров для устойчивого роста.</p>
+        </section>
+
+        <section class="section" id="how-we-work">
+            <h3>Как мы работаем</h3>
+            <ul>
+                <li>Контроль долей и акций в разных отраслях.</li>
+                <li>Инвестиции в проекты с высоким потенциалом.</li>
+                <li>Развитие партнёрств для масштабирования.</li>
+                <li>Аналитика и стратегическое планирование.</li>
+            </ul>
+        </section>
+
+        <section class="section" id="contact">
+            <h3>Контакты</h3>
+            <p>Для сотрудничества:</p>
+            <div class="contact-links">
+                <a href="https://discord.com/users/lucas_vegas" target="_blank"><i class="fab fa-discord"></i> @lucas_vegas</a>
+                <a href="https://t.me/lucas_vegas" target="_blank"><i class="fab fa-telegram"></i> @lucas_vegas</a>
+            </div>
+            <p><a href="mailto:info@galelium.com">info@galelium.com</a></p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Galelium Corporation. Все права защищены.</p>
+        <div class="footer-links">
+            <a href="#privacy">Политика конфиденциальности</a> | 
+            <a href="#terms">Условия использования</a>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Hamburger Menu
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Matrix Animation
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Font loader for Matrix symbols
+        const loader = new THREE.FontLoader();
+        loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+            const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()';
+            const streams = [];
+            const streamCount = Math.floor(window.innerWidth / 30); // Adjusted for mobile
+            const streamHeight = 20;
+
+            // Create multiple streams of falling characters
+            for (let i = 0; i < streamCount; i++) {
+                const x = (i / streamCount - 0.5) * (window.innerWidth / 40);
+                const stream = [];
+                for (let j = 0; j < streamHeight; j++) {
+                    const char = characters[Math.floor(Math.random() * characters.length)];
+                    const geometry = new THREE.TextGeometry(char, {
+                        font: font,
+                        size: window.innerWidth < 768 ? 0.4 : 0.5,
+                        height: 0.1,
+                    });
+                    const material = new THREE.MeshBasicMaterial({ 
+                        color: 0x00aaff,
+                        transparent: true,
+                        opacity: Math.random() * 0.5 + 0.4,
+                    });
+                    const mesh = new THREE.Mesh(geometry, material);
+                    mesh.position.set(x, j * 1.2 - 10, -5);
+                    mesh.userData = { 
+                        speed: Math.random() * 0.05 + 0.03, 
+                        flicker: Math.random() * 0.015 
+                    };
+                    scene.add(mesh);
+                    stream.push(mesh);
+                }
+                streams.push(stream);
+            }
+
+            camera.position.z = 10;
+
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                streams.forEach(stream => {
+                    stream.forEach((char, index) => {
+                        char.position.y -= char.userData.speed;
+                        char.material.opacity = Math.max(0, char.material.opacity - char.userData.flicker);
+                        if (char.position.y < -15) {
+                            char.position.y = 10;
+                            char.material.opacity = Math.random() * 0.5 + 0.4;
+                            char.geometry = new THREE.TextGeometry(
+                                characters[Math.floor(Math.random() * characters.length)],
+                                { 
+                                    font: font, 
+                                    size: window.innerWidth < 768 ? 0.4 : 0.5, 
+                                    height: 0.1 
+                                }
+                            );
+                        }
+                    });
+                });
+                renderer.render(scene, camera);
+            }
+            animate();
+        });
+
+        // Resize handling
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+    </script>
+</body>
+</html>
