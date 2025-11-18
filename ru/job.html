@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Срочно требуется грузчик | Galelium Corporation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-weight: 400;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 25px;
+        }
+        
+        /* Floating Back Button */
+        .floating-back-btn {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, #8A2BE2 0%, #4B0082 100%);
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.25);
+            backdrop-filter: blur(15px);
+            font-size: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .floating-back-btn:hover {
+            transform: translateY(-3px) scale(1.08);
+            box-shadow: 0 12px 35px rgba(138, 43, 226, 0.4);
+            background: linear-gradient(135deg, #9d4edd 0%, #5a189a 100%);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(75, 0, 130, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(106, 13, 173, 0.08) 0%, transparent 50%);
+            z-index: 0;
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+            gap: 60px;
+        }
+        
+        .hero-text {
+            flex: 1;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #8A2BE2 0%, #4B0082 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #b8b8d0;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            color: #8A2BE2;
+            font-weight: 600;
+            background: rgba(138, 43, 226, 0.1);
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+        
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInRight 0.8s ease-out 0.2s both;
+        }
+        
+        .map-container {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(138, 43, 226, 0.2);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+        }
+        
+        .map-container:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 
+                0 35px 70px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(138, 43, 226, 0.3);
+        }
+        
+        .map-image {
+            width: 320px;
+            height: 580px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 30px 20px 20px;
+            color: white;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        /* Details Section */
+        .details {
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .detail-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .detail-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .detail-card:hover::before {
+            left: 100%;
+        }
+        
+        .detail-card:hover {
+            transform: translateY(-12px);
+            border-color: rgba(138, 43, 226, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .detail-icon {
+            font-size: 48px;
+            margin-bottom: 25px;
+            display: block;
+            filter: drop-shadow(0 5px 15px rgba(138, 43, 226, 0.3));
+        }
+        
+        .detail-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #8A2BE2;
+            font-weight: 600;
+        }
+        
+        .detail-text {
+            color: #b8b8d0;
+            font-size: 1rem;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+        
+        /* Contact Section */
+        .contact {
+            padding: 100px 0;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(22, 33, 62, 0.6) 100%);
+            position: relative;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.1) 0%, transparent 70%);
+        }
+        
+        .contact-title {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .contact-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            color: #b8b8d0;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+            margin: 0 auto;
+            display: block;
+            width: fit-content;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .whatsapp-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .whatsapp-btn:hover::before {
+            left: 100%;
+        }
+        
+        .whatsapp-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4);
+        }
+        
+        .whatsapp-icon {
+            margin-right: 12px;
+            font-size: 26px;
+        }
+        
+        .contact-info {
+            margin-top: 40px;
+            font-size: 1.2rem;
+            text-align: center;
+            color: #b8b8d0;
+        }
+        
+        .contact-info p {
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(12, 12, 18, 0.95);
+            padding: 50px 0 25px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .footer-logo {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #8A2BE2 0%, #4B0082 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-link {
+            color: #b8b8d0;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-weight: 400;
+            position: relative;
+        }
+        
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #8A2BE2 0%, #4B0082 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: #8A2BE2;
+        }
+        
+        .footer-link:hover::after {
+            width: 100%;
+        }
+        
+        .copyright {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-weight: 400;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .hero-content {
+                gap: 40px;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-text {
+                margin-bottom: 50px;
+            }
+            
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .map-image {
+                width: 300px;
+                height: 540px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                padding: 100px 0 60px;
+            }
+            
+            .hero-title {
+                font-size: 2.4rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .map-image {
+                width: 260px;
+                height: 470px;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .floating-back-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+                top: 20px;
+                right: 20px;
+            }
+            
+            .container {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Back Button -->
+    <a href="https://galelium.com" class="floating-back-btn">←</a>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge">Срочный найм</div>
+                    <h1 class="hero-title">Требуется грузчик</h1>
+                    <p class="hero-subtitle">На <span class="highlight">24 ноября</span> по адресу:</p>
+                    <p class="hero-subtitle"><span class="highlight">Ириновский проспект 27 к1</span></p>
+                    <p class="hero-subtitle">Оплата за смену: <span class="highlight">2500 рублей</span></p>
+                    <p class="hero-subtitle">Трудоустройство через аутстафф компанию</p>
+                </div>
+                <div class="hero-image">
+                    <div class="map-container">
+                        <img src="gps.png" alt="Карта Ириновский проспект 27 к1" class="map-image">
+                        <div class="map-overlay">Ириновский проспект 27 к1</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Details Section -->
+    <section class="details">
+        <div class="container">
+            <h2 class="section-title">Условия работы</h2>
+            <div class="details-grid">
+                <div class="detail-card">
+                    <div class="detail-icon">📅</div>
+                    <h3 class="detail-title">Дата работы</h3>
+                    <p class="detail-text">24 ноября</p>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">📍</div>
+                    <h3 class="detail-title">Местоположение</h3>
+                    <p class="detail-text">Ириновский проспект 27 к1</p>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">💰</div>
+                    <h3 class="detail-title">Оплата</h3>
+                    <p class="detail-text">2500 рублей за смену</p>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">👨‍💼</div>
+                    <h3 class="detail-title">Трудоустройство</h3>
+                    <p class="detail-text">Оформление через аутстафф компанию</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact">
+        <div class="container">
+            <h2 class="contact-title">Свяжитесь с нами</h2>
+            <p class="contact-subtitle">Для получения подробной информации и записи на работу, свяжитесь с нами через WhatsApp</p>
+            <a href="https://wa.me/+79291584945" class="whatsapp-btn">
+                <span class="whatsapp-icon">📱</span>
+                Написать в WhatsApp
+            </a>
+            <div class="contact-info">
+                <p><strong>Хуршид</strong></p>
+                <p>+7 929 158-49-45</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">GALELIUM CORPORATION</div>
+            <div class="footer-links">
+                <a href="https://galelium.com/privacy.html" class="footer-link">Конфиденциальность</a>
+                <a href="https://galelium.com/terms.html" class="footer-link">Условия использования</a>
+            </div>
+            <p class="copyright">© 2023 Galelium Corporation. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Плавная загрузка
+        document.addEventListener('DOMContentLoaded', function() {
+            // Добавляем небольшую задержку для плавного появления
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 50);
+            
+            // Оптимизация для мобильных
+            if ('ontouchstart' in window) {
+                document.documentElement.style.touchAction = 'manipulation';
+            }
+        });
+        
+        // Плавное появление при загрузке
+        window.addEventListener('load', function() {
+            document.body.style.transition = 'opacity 0.3s ease';
+            document.body.style.opacity = '1';
+        });
+    </script>
+</body>
+</html>
