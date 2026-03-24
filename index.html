@@ -1,1878 +1,1235 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Galelium Corporation - холдинговая компания, специализирующаяся на стратегических инвестициях и управлении активами">
-    <meta name="keywords" content="галелиум, galelium, инвестиции, холдинг, управление активами, стратегические инвестиции, бизнес">
-    <meta name="author" content="Galelium Corporation">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Galelium Corporation">
-    <meta property="og:description" content="Холдинговая компания, специализирующаяся на стратегических инвестициях и управлении активами">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://galelium.com">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Galelium Corporation">
-    <meta name="twitter:description" content="Холдинговая компания, специализирующаяся на стратегических инвестициях и управлении активами">
-    
-    <title>Galelium Corporation - Стратегические инвестиции и управление активами</title>
-
-    <!-- Preload critical resources -->
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"></noscript>
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" as="script">
-    <style>
-        :root {
-            --primary-color: #8a2be2;
-            --primary-dark: #6a1b9a;
-            --primary-light: #b388ff;
-            --bg-dark: #121212;
-            --bg-darker: #0d0d0d;
-            --bg-light: #1e1e1e;
-            --text-light: #ffffff;
-            --text-muted: #b0b0b0;
-            --text-dark: #777777;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --section-spacing: 6rem;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Respect user's motion preferences */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-muted);
-            line-height: 1.7;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-darker);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 4px;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, rgba(15, 15, 15, 0.95), rgba(8, 8, 8, 0.95));
-            padding: 4rem 1rem;
-            text-align: center;
-            position: relative;
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 1000;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            overflow: hidden;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at center, rgba(138, 43, 226, 0.05) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        header h1 {
-            font-size: 3.2rem;
-            font-weight: 600;
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 2;
-            background: linear-gradient(135deg, #ffffff 0%, var(--primary-light) 50%, #ffffff 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% 200%;
-            animation: gradientShift 4s ease-in-out infinite;
-            text-shadow: 0 0 30px rgba(138, 43, 226, 0.3);
-            transition: var(--transition);
-            filter: drop-shadow(0 0 20px rgba(138, 43, 226, 0.4));
-        }
-
-        /* Optimize header animations for mobile */
-        @media (max-width: 768px) {
-            header h1 {
-                /* Disable heavy animations on mobile */
-                animation: none;
-                text-shadow: none;
-                filter: none;
-                /* Keep gradient but static */
-                background: linear-gradient(135deg, #ffffff 0%, var(--primary-light) 100%);
-                background-clip: text;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-        }
-
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        header p {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            margin-top: 0.8rem;
-            font-weight: 400;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            position: relative;
-            z-index: 2;
-            opacity: 0.8;
-            transition: var(--transition);
-        }
-
-        header:hover p {
-            opacity: 1;
-            color: var(--primary-light);
-        }
-
-        /* Optimize header paragraph for mobile */
-        @media (max-width: 768px) {
-            header p {
-                /* Disable hover effects on mobile */
-                transition: none;
-            }
-            
-            header:hover p {
-                /* No hover effects on mobile */
-                opacity: 0.8;
-                color: var(--text-muted);
-            }
-            
-            /* Optimize CSS variables for mobile performance */
-            :root {
-                --transition: none; /* Disable transitions on mobile for better performance */
-            }
-        }
-
-        /* Hamburger Menu */
-        .hamburger {
-            position: fixed;
-            top: 1.8rem;
-            right: 2rem;
-            z-index: 2000;
-            cursor: pointer;
-            font-size: 1.8rem;
-            color: var(--text-light);
-            transition: var(--transition);
-            background: rgba(30, 30, 30, 0.7);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(5px);
-        }
-
-        .hamburger:hover {
-            color: var(--primary-light);
-            transform: rotate(90deg);
-            border-color: var(--primary-light);
-        }
-
-        .nav-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 320px;
-            height: 100%;
-            background: rgba(15, 15, 15, 0.98);
-            backdrop-filter: blur(12px);
-            padding: 5rem 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            transition: right 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
-            z-index: 1500;
-            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
-            border-left: 1px solid var(--border-color);
-        }
-
-        .nav-menu.active {
-            right: 0;
-        }
-
-        .nav-menu a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            transition: var(--transition);
-            letter-spacing: 1px;
-            padding: 0.8rem 1.2rem;
-            border-radius: 6px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-menu a::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-light);
-            transition: var(--transition);
-        }
-
-        .nav-menu a:hover {
-            color: var(--text-light);
-            background: rgba(138, 43, 226, 0.1);
-            transform: translateX(5px);
-        }
-
-        .nav-menu a:hover::before {
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 85vh;
-            min-height: 650px;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(15, 15, 15, 0.9));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 20%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(179, 136, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 60%, rgba(138, 43, 226, 0.08) 0%, transparent 50%);
-            z-index: 1;
-            animation: heroGlow 8s ease-in-out infinite;
-        }
-
-        /* Enhanced mobile visibility */
-        @media (max-width: 768px) {
-            .hero::before {
-                background: 
-                    radial-gradient(circle at 30% 30%, rgba(138, 43, 226, 0.25) 0%, transparent 60%),
-                    radial-gradient(circle at 70% 70%, rgba(179, 136, 255, 0.2) 0%, transparent 60%),
-                    radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.15) 0%, transparent 70%);
-            }
-            
-            .hero-overlay {
-                background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%);
-            }
-        }
-
-        /* Fallback animation for low-end mobile devices */
-        @media (max-width: 768px) {
-            .hero-fallback-animation {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: 
-                    radial-gradient(circle at 20% 20%, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 80%, rgba(179, 136, 255, 0.2) 0%, transparent 50%),
-                    radial-gradient(circle at 40% 60%, rgba(138, 43, 226, 0.2) 0%, transparent 50%);
-                animation: mobileGlow 4s ease-in-out infinite alternate;
-                z-index: 1;
-            }
-            
-            @keyframes mobileGlow {
-                0% {
-                    opacity: 0.6;
-                    transform: scale(1);
-                }
-                100% {
-                    opacity: 1;
-                    transform: scale(1.1);
-                }
-            }
-        }
-
-        @keyframes heroGlow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%);
-            z-index: 2;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 3;
-            text-align: center;
-            padding: 0 2rem;
-            max-width: 900px;
-            margin: 0 auto;
-            animation: heroFadeIn 1.5s ease-out;
-        }
-
-        @keyframes heroFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero-content h2 {
-            font-size: 3.5rem;
-            font-weight: 300;
-            color: var(--text-light);
-            margin-bottom: 2rem;
-            line-height: 1.1;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, #ffffff 0%, var(--primary-light) 50%, #ffffff 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% 200%;
-            animation: gradientShift 6s ease-in-out infinite;
-            text-shadow: 0 0 40px rgba(138, 43, 226, 0.3);
-        }
-
-        .hero-content p {
-            font-size: 1.4rem;
-            color: var(--text-muted);
-            margin-bottom: 3rem;
-            line-height: 1.6;
-            font-weight: 300;
-            letter-spacing: 0.5px;
-            opacity: 0.9;
-        }
-
-        .hero-btn {
-            display: inline-block;
-            padding: 1.2rem 3rem;
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(179, 136, 255, 0.05));
-            color: var(--primary-light);
-            border: 1px solid rgba(138, 43, 226, 0.3);
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 400;
-            text-decoration: none;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(138, 43, 226, 0.1);
-        }
-
-        .hero-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .hero-btn:hover {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-            color: var(--bg-dark);
-            border-color: var(--primary-light);
-            box-shadow: 0 12px 40px rgba(138, 43, 226, 0.4);
-            transform: translateY(-5px) scale(1.02);
-        }
-
-        .hero-btn:hover::before {
-            left: 100%;
-        }
-
-        .hero-btn:active {
-            transform: translateY(-2px) scale(0.98);
-        }
-
-        .hero canvas {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-
-        /* Content */
-        .content {
-            max-width: 1000px;
-            margin: 4rem auto 6rem auto;
-            padding: 0 2rem;
-        }
-
-        .section {
-            margin-bottom: var(--section-spacing);
-            text-align: left;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .section h3 {
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: var(--text-light);
-            margin-bottom: 1.8rem;
-            letter-spacing: 1px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section h3::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -8px;
-            width: 60px;
-            height: 3px;
-            background: var(--primary-color);
-            border-radius: 3px;
-        }
-
-        .section p, .section ul {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            font-weight: 300;
-            margin-bottom: 1.8rem;
-            line-height: 1.8;
-        }
-
-        .section ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .section ul li {
-            position: relative;
-            margin-bottom: 1.2rem;
-            padding-left: 2.2rem;
-        }
-
-        .section ul li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0.8rem;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            transform: translateY(-50%);
-        }
-
-        /* Contact Section */
-        .contact-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin: 2.5rem 0;
-            justify-content: flex-start;
-        }
-
-        .contact-links a {
-            color: var(--primary-light);
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.7rem;
-            padding: 0.9rem 1.7rem;
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
-            background: rgba(30, 30, 30, 0.7);
-        }
-
-        .contact-links a:hover {
-            color: var(--text-light);
-            background: rgba(138, 43, 226, 0.1);
-            border-color: var(--primary-light);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.2);
-        }
-
-        .contact-links a i {
-            font-size: 1.4rem;
-        }
-
-        /* Modern Footer */
-        footer {
-            background: linear-gradient(135deg, rgba(15, 15, 15, 0.95), rgba(8, 8, 8, 0.95));
-            padding: 5rem 2rem 3rem;
-            position: relative;
-            border-top: 1px solid var(--border-color);
-            overflow: hidden;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at center, rgba(138, 43, 226, 0.03) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        .footer-main {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            gap: 3rem;
-            align-items: start;
-            margin-bottom: 3rem;
-        }
-
-        .footer-brand {
-            text-align: left;
-        }
-
-        .footer-logo {
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-            display: block;
-            background: linear-gradient(135deg, #ffffff 0%, var(--primary-light) 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 2px;
-        }
-
-        .footer-description {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-nav {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        .footer-nav-section h4 {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 400;
-            transition: var(--transition);
-            position: relative;
-            padding-left: 0;
-        }
-
-        .footer-links a::before {
-            content: '';
-            position: absolute;
-            left: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 1px;
-            background: var(--primary-light);
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-light);
-            padding-left: 15px;
-        }
-
-        .footer-links a:hover::before {
-            width: 10px;
-        }
-
-        .footer-contact {
-            text-align: right;
-        }
-
-        .footer-contact h4 {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .footer-social {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-social a {
-            color: var(--text-muted);
-            font-size: 1.4rem;
-            transition: var(--transition);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            border: 1px solid var(--border-color);
-            background: rgba(30, 30, 30, 0.5);
-        }
-
-        .footer-social a:hover {
-            color: var(--primary-light);
-            border-color: var(--primary-light);
-            background: rgba(138, 43, 226, 0.1);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.2);
-        }
-
-        .footer-bottom {
-            border-top: 1px solid var(--border-color);
-            padding-top: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        footer p {
-            font-size: 0.9rem;
-            color: var(--text-dark);
-            font-weight: 300;
-            margin: 0;
-        }
-
-        .footer-legal {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .footer-legal a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-
-        .footer-legal a:hover {
-            color: var(--primary-light);
-        }
-
-        /* Partners Carousel */
-        .partners-section {
-            background: transparent;
-            padding: 0;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .partners-carousel {
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .partners-track {
-            display: flex;
-            width: max-content;
-            animation: scroll-infinite 30s linear infinite;
-        }
-
-        .logo-item {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 160px;
-            height: 80px;
-            padding: 0 30px;
-            margin: 0 10px;
-        }
-
-        .logo-item img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            filter: grayscale(100%);
-            opacity: 0.6;
-            transition: all 0.3s ease;
-        }
-
-        .logo-item:hover img {
-            filter: grayscale(0%);
-            opacity: 1;
-        }
-
-        /* Бесконечная анимация */
-        @keyframes scroll-infinite {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        /* Pause animation on hover */
-        .partners-track:hover {
-            animation-play-state: paused;
-        }
-
-        /* Back to top button */
-        .back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 50px;
-            height: 50px;
-            background: rgba(30, 30, 30, 0.8);
-            border: 1px solid var(--border-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 1.2rem;
-            cursor: pointer;
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-            backdrop-filter: blur(5px);
-        }
-
-        .back-to-top.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .back-to-top:hover {
-            color: var(--primary-light);
-            border-color: var(--primary-light);
-            transform: translateY(-5px);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .content {
-                max-width: 900px;
-            }
-            
-            .nav-menu {
-                width: 300px;
-            }
-        }
-
-        @media (max-width: 992px) {
-            header {
-                padding: 3.5rem 1rem;
-            }
-            
-            header h1 {
-                font-size: 2.8rem;
-                letter-spacing: 6px;
-                font-weight: 600;
-            }
-            
-            header p {
-                font-size: 1rem;
-                letter-spacing: 1.5px;
-            }
-            
-            .hero {
-                height: 80vh;
-                min-height: 600px;
-            }
-            
-            .hero-content h2 {
-                font-size: 2.8rem;
-                letter-spacing: 1.5px;
-            }
-            
-            .hero-content p {
-                font-size: 1.2rem;
-            }
-            
-            .hero-btn {
-                padding: 1rem 2.5rem;
-                font-size: 1rem;
-                letter-spacing: 1.5px;
-            }
-            
-            .section h3 {
-                font-size: 2rem;
-            }
-            
-            .contact-links {
-                justify-content: center;
-            }
-            
-            :root {
-                --section-spacing: 5rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            header {
-                padding: 3rem 1rem;
-            }
-
-            header h1 {
-                font-size: 2.5rem;
-                letter-spacing: 4px;
-                font-weight: 600;
-            }
-
-            header p {
-                font-size: 0.95rem;
-                letter-spacing: 1px;
-            }
-
-            .hamburger {
-                top: 1.5rem;
-                right: 1.5rem;
-                width: 45px;
-                height: 45px;
-                font-size: 1.6rem;
-            }
-
-            .nav-menu {
-                width: 280px;
-                padding: 4.5rem 1.5rem;
-            }
-
-            .hero {
-                height: 75vh;
-                min-height: 550px;
-            }
-
-            .hero-content h2 {
-                font-size: 2.5rem;
-                letter-spacing: 1px;
-                margin-bottom: 1.5rem;
-            }
-
-            .hero-content p {
-                font-size: 1.1rem;
-                margin-bottom: 2.5rem;
-            }
-
-            .hero-btn {
-                padding: 1rem 2.2rem;
-                font-size: 0.95rem;
-                letter-spacing: 1.5px;
-            }
-
-            .content {
-                margin: 3rem auto 5rem auto;
-                padding: 0 1.5rem;
-            }
-
-            .section {
-                margin-bottom: 4.5rem;
-            }
-
-            .section h3 {
-                font-size: 1.8rem;
-            }
-
-            .section p, .section ul {
-                font-size: 1.1rem;
-            }
-
-            .contact-links a {
-                font-size: 1.1rem;
-                padding: 0.8rem 1.5rem;
-            }
-
-            /* Balanced mobile footer */
-            footer {
-                padding: 3rem 1.5rem 2rem;
-            }
-
-            .footer-main {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                text-align: center;
-                margin-bottom: 2rem;
-            }
-
-            .footer-brand {
-                text-align: center;
-            }
-
-            .footer-logo {
-                font-size: 1.6rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .footer-description {
-                font-size: 0.9rem;
-                margin-bottom: 1.5rem;
-                line-height: 1.5;
-            }
-
-            .footer-nav {
-                display: none; /* Hide navigation on mobile to save space */
-            }
-
-            .footer-contact {
-                text-align: center;
-            }
-
-            .footer-contact h4 {
-                font-size: 1rem;
-                margin-bottom: 1rem;
-            }
-
-            .footer-social {
-                justify-content: center;
-                gap: 1rem;
-                margin-bottom: 1rem;
-            }
-
-            .footer-social a {
-                width: 38px;
-                height: 38px;
-                font-size: 1.3rem;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-                padding-top: 1.5rem;
-            }
-
-            .footer-bottom p {
-                font-size: 0.85rem;
-            }
-
-            .footer-legal {
-                gap: 1.2rem;
-            }
-
-            .footer-legal a {
-                font-size: 0.85rem;
-            }
-            
-            :root {
-                --section-spacing: 4.5rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            header {
-                padding: 2.5rem 1rem;
-            }
-            
-            header h1 {
-                font-size: 2rem;
-                letter-spacing: 3px;
-                font-weight: 600;
-            }
-
-            header p {
-                font-size: 0.9rem;
-                margin-top: 0.8rem;
-                letter-spacing: 0.8px;
-            }
-
-            .hamburger {
-                top: 1.2rem;
-                right: 1.2rem;
-                width: 42px;
-                height: 42px;
-                font-size: 1.4rem;
-            }
-
-            .nav-menu {
-                width: 100%;
-                padding: 4rem 1.5rem;
-            }
-
-            .hero {
-                height: 70vh;
-                min-height: 450px;
-            }
-
-            .hero-content {
-                padding: 0 1.5rem;
-            }
-
-            .hero-content h2 {
-                font-size: 2rem;
-                line-height: 1.2;
-                letter-spacing: 0.8px;
-            }
-
-            .hero-content p {
-                font-size: 1rem;
-                margin-bottom: 2rem;
-            }
-
-            .hero-btn {
-                padding: 0.9rem 2rem;
-                font-size: 0.9rem;
-                letter-spacing: 1px;
-            }
-
-            .content {
-                margin: 2.5rem auto 4rem auto;
-                padding: 0 1rem;
-            }
-
-            .section {
-                margin-bottom: 3.5rem;
-            }
-
-            .section h3 {
-                font-size: 1.6rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .section p, .section ul {
-                font-size: 1rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .contact-links {
-                gap: 1rem;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .contact-links a {
-                font-size: 1rem;
-                padding: 0.7rem 1.3rem;
-                width: 100%;
-                max-width: 280px;
-                justify-content: center;
-            }
-
-            /* Mobile carousel optimization */
-            .logo-item {
-                width: 120px;
-                height: 60px;
-                padding: 0 20px;
-                margin: 0 8px;
-            }
-
-            .partners-track {
-                animation-duration: 20s; /* Faster on mobile */
-            }
-
-            /* Disable carousel animation on very small screens for performance */
-            @media (max-width: 400px) {
-                .partners-track {
-                    animation: none;
-                    transform: translateX(0);
-                }
-            }
-
-            /* Compact but readable footer for small phones */
-            footer {
-                padding: 2.5rem 1rem 1.5rem;
-            }
-
-            .footer-main {
-                gap: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .footer-logo {
-                font-size: 1.4rem;
-                margin-bottom: 0.6rem;
-            }
-
-            .footer-description {
-                font-size: 0.85rem;
-                margin-bottom: 1.2rem;
-            }
-
-            .footer-contact h4 {
-                font-size: 0.95rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .footer-social {
-                gap: 0.8rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .footer-social a {
-                width: 35px;
-                height: 35px;
-                font-size: 1.2rem;
-            }
-
-            .footer-bottom {
-                padding-top: 1.2rem;
-                gap: 0.8rem;
-            }
-
-            .footer-bottom p {
-                font-size: 0.8rem;
-            }
-
-            .footer-legal {
-                gap: 1rem;
-            }
-
-            .footer-legal a {
-                font-size: 0.8rem;
-            }
-
-            .back-to-top {
-                width: 45px;
-                height: 45px;
-                font-size: 1.1rem;
-                bottom: 1.5rem;
-                right: 1.5rem;
-            }
-            
-            :root {
-                --section-spacing: 4rem;
-            }
-        }
-
-        /* Extra small devices */
-        @media (max-width: 400px) {
-            header h1 {
-                font-size: 1.6rem;
-                font-weight: 600;
-                letter-spacing: 2px;
-            }
-            
-            .hero-content h2 {
-                font-size: 1.6rem;
-            }
-            
-            .section h3 {
-                font-size: 1.4rem;
-            }
-            
-            .contact-links a {
-                font-size: 0.95rem;
-                padding: 0.6rem 1.2rem;
-            }
-        }
-
-        /* Landscape orientation for mobile */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .hero {
-                height: 100vh;
-                min-height: 100vh;
-            }
-            
-            .hero-content h2 {
-                font-size: 2rem;
-            }
-            
-            .hero-content p {
-                font-size: 1.1rem;
-                margin-bottom: 1.5rem;
-            }
-        }
-
-        /* Force mobile footer layout for mobile devices in landscape orientation */
-        @media (max-width: 1024px) and (orientation: landscape) and (max-height: 600px) {
-            /* Override any desktop styles for footer on mobile landscape */
-            .footer-main {
-                grid-template-columns: 1fr !important;
-                gap: 2rem !important;
-                text-align: center !important;
-                margin-bottom: 2rem !important;
-            }
-
-            .footer-brand {
-                text-align: center !important;
-            }
-
-            .footer-logo {
-                font-size: 1.6rem !important;
-                margin-bottom: 0.8rem !important;
-            }
-
-            .footer-description {
-                font-size: 0.9rem !important;
-                margin-bottom: 1.5rem !important;
-                line-height: 1.5 !important;
-            }
-
-            .footer-nav {
-                display: none !important; /* Hide navigation on mobile landscape */
-            }
-
-            .footer-contact {
-                text-align: center !important;
-            }
-
-            .footer-contact h4 {
-                font-size: 1rem !important;
-                margin-bottom: 1rem !important;
-            }
-
-            .footer-social {
-                justify-content: center !important;
-                gap: 1rem !important;
-                margin-bottom: 1rem !important;
-            }
-
-            .footer-social a {
-                width: 38px !important;
-                height: 38px !important;
-                font-size: 1.3rem !important;
-            }
-
-            .footer-bottom {
-                flex-direction: column !important;
-                text-align: center !important;
-                gap: 1rem !important;
-                padding-top: 1.5rem !important;
-            }
-
-            .footer-bottom p {
-                font-size: 0.85rem !important;
-            }
-
-            .footer-legal {
-                gap: 1.2rem !important;
-            }
-
-            .footer-legal a {
-                font-size: 0.85rem !important;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galelium Corporation — Стратегические инвестиции и управление активами</title>
+  <meta name="description" content="Galelium Corporation — холдинговая корпорация. Стратегические инвестиции, управление активами и развитие портфельных компаний." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://galelium.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://galelium.com/" />
+  <meta property="og:title" content="Galelium Corporation" />
+  <meta property="og:description" content="Холдинговая корпорация. Стратегические инвестиции, управление активами, долгосрочная ценность." />
+  <meta property="og:locale" content="ru_RU" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+        onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" /></noscript>
+
+  <style>
+
+    /* ════════════════════════════════════════════════════════
+       ТОКЕНЫ
+       ════════════════════════════════════════════════════════ */
+    :root {
+      --bg:         #0a0a0f;
+      --surface:    #111118;
+      --surface-2:  #16161f;
+      --border:     rgba(255,255,255,.07);
+      --border-h:   rgba(255,255,255,.13);
+      --accent:     #c8a96e;
+      --accent-dim: rgba(200,169,110,.10);
+      --accent-mid: rgba(200,169,110,.32);
+      --text:       #e8e6e0;
+      --muted:      #7a7870;
+      --muted-2:    #4a4845;
+      --font-sans:    'DM Sans', system-ui, sans-serif;
+      --font-display: 'Syne', sans-serif;
+      --nav-h: 64px;
+      --max:   1100px;
+      --px:    clamp(16px, 5vw, 48px);
+      --r:     2px;
+      --ease:   cubic-bezier(.4,0,.2,1);
+      --t-fast: .15s;
+      --t:      .25s;
+      --t-slow: .4s;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       СБРОС
+       ════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--font-sans); font-weight: 300;
+      font-size: 1rem; line-height: 1.7;
+      min-height: 100svh; overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; }
+    ul[role="list"] { list-style: none; }
+
+    .skip {
+      position: absolute; top: -999px; left: 16px; z-index: 9999;
+      background: var(--accent); color: #0a0a0f;
+      font-family: var(--font-display); font-weight: 800;
+      font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+      padding: 9px 18px; border-radius: var(--r);
+      text-decoration: none; transition: top var(--t-fast);
+    }
+    .skip:focus { top: 12px; }
+
+    /* ════════════════════════════════════════════════════════
+       НАВИГАЦИЯ
+       ════════════════════════════════════════════════════════ */
+    .site-nav {
+      position: fixed; inset: 0 0 auto; z-index: 200;
+      height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding-inline: var(--px);
+      background: rgba(10,10,15,.93);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 1rem; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--text); text-decoration: none; flex-shrink: 0;
+      transition: opacity var(--t-fast);
+    }
+    .nav-logo:hover { opacity: .65; }
+    .nav-logo:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-radius: var(--r); }
+
+    /* Десктоп-список */
+    .nav-list {
+      display: flex; gap: 2px; list-style: none;
+    }
+    .nav-list a {
+      color: var(--muted); text-decoration: none;
+      font-size: .73rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase;
+      white-space: nowrap; padding: 7px 12px; border-radius: var(--r);
+      transition: color var(--t-fast), background var(--t-fast);
+    }
+    .nav-list a:hover { color: var(--text); background: rgba(255,255,255,.04); }
+    .nav-list a[aria-current="page"] { color: var(--accent); }
+    .nav-list a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r); }
+
+    /* Кнопка в шапке */
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--accent); color: #0a0a0f;
+      font-family: var(--font-display); font-weight: 800;
+      font-size: .65rem; letter-spacing: .13em; text-transform: uppercase;
+      padding: 9px 18px; border-radius: var(--r); text-decoration: none;
+      flex-shrink: 0;
+      transition: opacity var(--t-fast);
+    }
+    .nav-cta:hover { opacity: .82; }
+    .nav-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+
+    /* Гамбургер */
+    .nav-btn {
+      display: none; align-items: center; justify-content: center;
+      width: 36px; height: 36px; padding: 0;
+      background: none; border: none; cursor: pointer;
+      color: var(--text); z-index: 201; flex-shrink: 0;
+    }
+    .nav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: var(--r); }
+    .ham { display: block; width: 20px; height: 14px; position: relative; }
+    .ham span {
+      display: block; width: 20px; height: 2px;
+      background: currentColor; border-radius: 1px;
+      position: absolute; left: 0; transform-origin: center;
+      transition: transform var(--t) var(--ease), opacity .18s ease, top var(--t) var(--ease);
+    }
+    .ham span:nth-child(1) { top: 0; }
+    .ham span:nth-child(2) { top: 6px; }
+    .ham span:nth-child(3) { top: 12px; }
+    .nav-btn.is-open .ham span:nth-child(1) { top: 6px; transform: rotate(45deg); }
+    .nav-btn.is-open .ham span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-btn.is-open .ham span:nth-child(3) { top: 6px; transform: rotate(-45deg); }
+
+    /* Мобильная панель — скрыта по умолчанию на всех экранах */
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      inset: var(--nav-h) 0 0;
+      z-index: 199;
+      /* Без backdrop-filter — не перекрывает содержимое */
+      background: rgba(10,10,15,.98);
+      flex-direction: column;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      /* Скользящая анимация появления */
+      transform: translateY(-8px);
+      opacity: 0;
+      transition: opacity .22s var(--ease), transform .22s var(--ease);
+      pointer-events: none;
+    }
+    .nav-mobile.is-open {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .nav-mobile__inner {
+      flex: 1;
+      padding: 8px var(--px) 32px;
+    }
+    /* Каждая ссылка мобильного меню */
+    .nav-mobile__item {
+      display: block;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-mobile__item:first-child {
+      border-top: 1px solid var(--border);
+    }
+    .nav-mobile__item a {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 0;
+      font-size: .95rem; font-weight: 400;
+      letter-spacing: .04em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+      transition: color var(--t-fast);
+    }
+    .nav-mobile__item a:hover { color: var(--text); }
+    .nav-mobile__item a[aria-current="page"] { color: var(--accent); }
+    .nav-mobile__item a svg { opacity: .3; flex-shrink: 0; }
+    .nav-mobile__item a:hover svg { opacity: .7; }
+
+    /* CTA внутри мобильного меню */
+    .nav-mobile__cta {
+      margin-top: 28px;
+    }
+    .nav-mobile__cta a {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--accent); color: #0a0a0f;
+      font-family: var(--font-display); font-weight: 800;
+      font-size: .72rem; letter-spacing: .13em; text-transform: uppercase;
+      padding: 14px 24px; border-radius: var(--r); text-decoration: none;
+      transition: opacity var(--t-fast);
+    }
+    .nav-mobile__cta a:hover { opacity: .82; }
+
+    /* Нижняя часть мобильного меню */
+    .nav-mobile__footer {
+      padding: 20px var(--px) 32px;
+      border-top: 1px solid var(--border);
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    .nav-mobile__footer a {
+      font-size: .68rem; color: var(--muted-2); text-decoration: none;
+      letter-spacing: .06em; text-transform: uppercase;
+      transition: color var(--t-fast);
+    }
+    .nav-mobile__footer a:hover { color: var(--muted); }
+
+    /* Оверлей затемнения */
+    .nav-overlay {
+      position: fixed; inset: var(--nav-h) 0 0;
+      background: rgba(5,5,10,.5);
+      z-index: 150; opacity: 0; pointer-events: none;
+      transition: opacity var(--t) ease;
+    }
+    .nav-overlay.is-open { opacity: 1; pointer-events: auto; }
+
+    /* ════════════════════════════════════════════════════════
+       HERO
+       ════════════════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex; align-items: center;
+      padding-top: var(--nav-h);
+      overflow: hidden;
+    }
+    /* Фоновая сетка */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(200,169,110,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,169,110,.035) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, black, transparent);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, black, transparent);
+      pointer-events: none;
+    }
+    /* Золотое свечение */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -15%; left: 50%; transform: translateX(-50%);
+      width: min(800px, 100vw);
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(200,169,110,.055) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .hero__inner {
+      position: relative; z-index: 1;
+      width: 100%; max-width: var(--max);
+      margin-inline: auto;
+      padding: clamp(56px, 8svh, 96px) var(--px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 5vw, 80px);
+      align-items: center;
+    }
+
+    /* Левая колонка */
+    .hero__eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: .63rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 22px;
+    }
+    .hero__eyebrow-line {
+      display: block; width: 24px; height: 1px;
+      background: var(--accent); flex-shrink: 0;
+    }
+    .hero__title {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: clamp(2.4rem, 5.2vw, 4rem);
+      line-height: 1.04; color: #fff; letter-spacing: -.02em;
+      margin-bottom: 22px;
+    }
+    .hero__title em { color: var(--accent); font-style: normal; }
+    .hero__sub {
+      font-size: clamp(.9rem, 1.3vw, 1.02rem);
+      color: var(--muted); line-height: 1.75; max-width: 460px;
+      margin-bottom: 36px;
+    }
+    .hero__btns { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .btn-p {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent); color: #0a0a0f;
+      font-family: var(--font-display); font-weight: 800;
+      font-size: .7rem; letter-spacing: .13em; text-transform: uppercase;
+      padding: 13px 24px; border-radius: var(--r); text-decoration: none;
+      border: none; cursor: pointer; touch-action: manipulation; white-space: nowrap;
+      transition: opacity var(--t-fast), transform var(--t-fast);
+    }
+    .btn-p:hover  { opacity: .82; }
+    .btn-p:active { transform: scale(.97); }
+    .btn-p:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    .btn-g {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid var(--border); color: var(--muted);
+      font-size: .7rem; letter-spacing: .09em; text-transform: uppercase;
+      padding: 12px 20px; border-radius: var(--r); text-decoration: none;
+      background: none; cursor: pointer; touch-action: manipulation; white-space: nowrap;
+      transition: border-color var(--t), color var(--t);
+    }
+    .btn-g:hover { border-color: var(--accent-mid); color: var(--text); }
+    .btn-g:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    /* Правая колонка — метрики */
+    .hero__stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+    .stat {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: clamp(20px, 2.5vw, 28px) clamp(18px, 2vw, 24px);
+      transition: border-color var(--t);
+    }
+    .stat:hover { border-color: var(--accent-mid); }
+    /* Первая карточка тянется на всю ширину */
+    .stat:first-child {
+      grid-column: 1 / -1;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .stat__val {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+      color: #fff; line-height: 1; letter-spacing: -.02em;
+    }
+    .stat__val em { color: var(--accent); font-style: normal; }
+    .stat__key { font-size: .72rem; color: var(--muted); margin-top: 7px; line-height: 1.4; }
+    .stat__note { font-size: .8rem; color: var(--muted); max-width: 200px; line-height: 1.55; font-style: italic; }
+
+    /* Индикатор скролла */
+    .hero__scroll {
+      position: absolute; bottom: clamp(20px, 3svh, 36px);
+      left: 50%; transform: translateX(-50%);
+      z-index: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--muted-2); font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px; height: 36px;
+      background: linear-gradient(to bottom, var(--accent-mid), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: .25; transform: scaleY(.5); transform-origin: top; }
+      50%       { opacity: 1;  transform: scaleY(1);  transform-origin: top; }
+    }
+
+    /* ════════════════════════════════════════════════════════
+       КАРУСЕЛЬ ПАРТНЁРОВ
+       ════════════════════════════════════════════════════════ */
+    .partners {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden; background: var(--surface);
+    }
+    .partners__track {
+      display: flex; width: max-content;
+      animation: marquee 28s linear infinite;
+    }
+    .partners:hover .partners__track { animation-play-state: paused; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .partners__item {
+      display: flex; align-items: center; justify-content: center;
+      padding-inline: clamp(24px, 4vw, 48px);
+      border-right: 1px solid var(--border);
+      height: 52px; flex-shrink: 0;
+    }
+    .partners__item img {
+      height: 26px; width: auto;
+      opacity: .35; filter: grayscale(1) brightness(2);
+      transition: opacity var(--t); object-fit: contain;
+    }
+    .partners__item:hover img { opacity: .75; }
+    .partners__item span {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted-2); white-space: nowrap; transition: color var(--t);
+    }
+    .partners__item:hover span { color: var(--muted); }
+
+    /* ════════════════════════════════════════════════════════
+       УТИЛИТЫ СЕКЦИЙ
+       ════════════════════════════════════════════════════════ */
+    .section {
+      padding: clamp(60px, 8vw, 96px) var(--px);
+      border-bottom: 1px solid var(--border);
+    }
+    .section__inner { max-width: var(--max); margin-inline: auto; }
+
+    .section-head {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 24px;
+      margin-bottom: clamp(32px, 4vw, 52px); flex-wrap: wrap;
+    }
+    .eyebrow {
+      display: block; font-size: .63rem; letter-spacing: .24em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+      color: #fff; line-height: 1.1;
+    }
+    .section-title em { color: var(--accent); font-style: normal; }
+    .section-lead {
+      font-size: clamp(.88rem, 1.2vw, .97rem);
+      color: var(--muted); max-width: 340px; line-height: 1.7;
+    }
+    .section-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; white-space: nowrap;
+      transition: color var(--t-fast);
+    }
+    .section-link:hover { color: var(--accent); }
+
+    /* ════════════════════════════════════════════════════════
+       КАК МЫ РАБОТАЕМ
+       ════════════════════════════════════════════════════════ */
+    .directions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .dir-card {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: clamp(22px, 2.5vw, 30px) clamp(18px, 2vw, 26px);
+      display: flex; flex-direction: column;
+      transition: border-color var(--t), background var(--t);
+    }
+    .dir-card:hover { border-color: var(--accent-mid); background: var(--surface-2); }
+    .dir-card__num {
+      font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 20px;
+    }
+    .dir-card__icon {
+      width: 34px; height: 34px; border: 1px solid var(--border);
+      border-radius: var(--r); display: flex; align-items: center;
+      justify-content: center; color: var(--accent); margin-bottom: 16px;
+      transition: border-color var(--t), background var(--t);
+    }
+    .dir-card:hover .dir-card__icon { border-color: var(--accent-mid); background: var(--accent-dim); }
+    .dir-card__title {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: clamp(.9rem, 1.4vw, 1.05rem); color: #fff;
+      line-height: 1.25; margin-bottom: 10px;
+    }
+    .dir-card__text {
+      font-size: .84rem; color: var(--muted); line-height: 1.65; flex: 1;
+    }
+    .dir-card__arrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 18px; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted-2); transition: color var(--t-fast), gap var(--t-fast);
+    }
+    .dir-card:hover .dir-card__arrow { color: var(--accent); gap: 10px; }
+
+    /* ════════════════════════════════════════════════════════
+       О НАС — двухколонный блок
+       ════════════════════════════════════════════════════════ */
+    .about__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(32px, 5vw, 80px);
+      align-items: start;
+    }
+    .about__sticky { position: sticky; top: calc(var(--nav-h) + 28px); }
+
+    .about__text p {
+      font-size: .9rem; color: var(--muted); line-height: 1.75; margin-bottom: 16px;
+    }
+    .about__text p:last-child { margin-bottom: 0; }
+    .about__text strong { color: var(--text); font-weight: 400; }
+
+    .about__list {
+      margin-top: 28px; display: flex; flex-direction: column; gap: 2px;
+    }
+    .about__item {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 16px 18px; transition: border-color var(--t);
+    }
+    .about__item:hover { border-color: var(--accent-mid); }
+    .about__item-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0; margin-top: 9px;
+    }
+    .about__item-title {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: .83rem; color: #fff; margin-bottom: 3px;
+    }
+    .about__item-text { font-size: .8rem; color: var(--muted); line-height: 1.6; }
+
+    /* ════════════════════════════════════════════════════════
+       НОВОСТИ
+       ════════════════════════════════════════════════════════ */
+    .news-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2px;
+    }
+
+    /* Главная новость */
+    .news-featured {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: clamp(24px, 3vw, 36px) clamp(22px, 2.5vw, 32px);
+      display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
+      transition: border-color var(--t);
+    }
+    .news-featured:hover { border-color: var(--accent-mid); }
+    .news-featured__tag {
+      font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 14px;
+    }
+    .news-featured__title {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: clamp(1.1rem, 2vw, 1.55rem); color: #fff;
+      line-height: 1.22; margin-bottom: 14px;
+    }
+    .news-featured__summary {
+      font-size: .87rem; color: var(--muted); line-height: 1.65; flex: 1;
+    }
+    .news-featured__footer {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); gap: 12px;
+    }
+    .news-date { font-size: .67rem; color: var(--muted-2); white-space: nowrap; }
+    .news-arrow {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--accent); white-space: nowrap; flex-shrink: 0;
+      transition: gap var(--t-fast);
+    }
+    .news-featured:hover .news-arrow,
+    .news-card:hover .news-arrow { gap: 9px; }
+
+    /* Боковые карточки */
+    .news-side { display: flex; flex-direction: column; gap: 2px; }
+    .news-card {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 18px 18px; flex: 1;
+      display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
+      transition: border-color var(--t), background var(--t);
+    }
+    .news-card:hover { border-color: var(--accent-mid); background: var(--surface-2); }
+    .news-card__tag {
+      font-size: .58rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--muted-2); margin-bottom: 8px;
+    }
+    .news-card__title {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: .86rem; color: #fff; line-height: 1.3; flex: 1; margin-bottom: 12px;
+    }
+    .news-card__foot {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 10px; border-top: 1px solid var(--border); gap: 8px;
+    }
+
+    /* Строка «все новости» */
+    .news-all {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 2px; padding: 13px 18px;
+      background: var(--surface); border: 1px solid var(--border);
+      text-decoration: none; color: inherit;
+      transition: border-color var(--t);
+    }
+    .news-all:hover { border-color: var(--accent-mid); }
+    .news-all span { font-size: .75rem; color: var(--muted); }
+    .news-all .news-arrow { color: var(--muted); }
+    .news-all:hover .news-arrow { color: var(--accent); }
+
+    /* ════════════════════════════════════════════════════════
+       КОНТАКТ
+       ════════════════════════════════════════════════════════ */
+    .contact__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(32px, 5vw, 72px);
+      align-items: start;
+    }
+    .contact__title {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: clamp(1.4rem, 3vw, 2.2rem); color: #fff;
+      line-height: 1.1; letter-spacing: -.01em; margin-bottom: 14px;
+    }
+    .contact__title em { color: var(--accent); font-style: normal; }
+    .contact__text {
+      font-size: .88rem; color: var(--muted); line-height: 1.72; max-width: 380px;
+    }
+
+    .contact__channels { display: flex; flex-direction: column; gap: 2px; }
+    .ch-link {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 16px 18px; text-decoration: none; color: inherit;
+      transition: border-color var(--t), background var(--t);
+    }
+    .ch-link:hover { border-color: var(--accent-mid); background: var(--surface-2); }
+    .ch-link__icon {
+      width: 32px; height: 32px; border: 1px solid var(--border);
+      border-radius: var(--r); display: flex; align-items: center;
+      justify-content: center; color: var(--accent); flex-shrink: 0;
+      transition: border-color var(--t), background var(--t);
+    }
+    .ch-link:hover .ch-link__icon { border-color: var(--accent-mid); background: var(--accent-dim); }
+    .ch-link__type { font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 2px; }
+    .ch-link__val { font-size: .85rem; color: var(--text); }
+    .ch-link__arr { margin-left: auto; color: var(--muted-2); flex-shrink: 0; transition: color var(--t-fast); }
+    .ch-link:hover .ch-link__arr { color: var(--accent); }
+
+    /* ════════════════════════════════════════════════════════
+       АНИМАЦИИ
+       ════════════════════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .anim-in { opacity: 0; animation: fadeUp var(--t-slow) var(--ease) both; }
+    .reveal {
+      opacity: 0; transform: translateY(18px);
+      transition: opacity .5s var(--ease), transform .5s var(--ease);
+    }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+    /* ════════════════════════════════════════════════════════
+       ФУТЕР
+       ════════════════════════════════════════════════════════ */
+    .site-footer { border-top: 1px solid var(--border); padding-inline: var(--px); }
+    .footer-top {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 40px; padding-block: 40px; border-bottom: 1px solid var(--border); flex-wrap: wrap;
+    }
+    .f-logo {
+      font-family: var(--font-display); font-weight: 800; font-size: .9rem;
+      letter-spacing: .06em; text-transform: uppercase;
+      color: var(--text); text-decoration: none; display: block; margin-bottom: 10px;
+      transition: opacity var(--t-fast);
+    }
+    .f-logo:hover { opacity: .65; }
+    .f-tagline { font-size: .78rem; color: var(--muted); max-width: 240px; line-height: 1.6; }
+    .footer-nav { display: flex; gap: 48px; flex-wrap: wrap; }
+    .footer-nav-group__title {
+      font-family: var(--font-display); font-weight: 700; font-size: .6rem;
+      letter-spacing: .22em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 16px;
+    }
+    .footer-nav-group ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-nav-group a { font-size: .78rem; color: var(--muted); text-decoration: none; transition: color var(--t-fast); }
+    .footer-nav-group a:hover { color: var(--text); }
+    .footer-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding-block: 18px; flex-wrap: wrap;
+    }
+    .f-copy { font-size: .65rem; color: var(--muted-2); }
+    .f-legal { display: flex; gap: 20px; list-style: none; flex-wrap: wrap; }
+    .f-legal a { font-size: .62rem; color: var(--muted-2); text-decoration: none; letter-spacing: .06em; text-transform: uppercase; transition: color var(--t-fast); }
+    .f-legal a:hover { color: var(--muted); }
+
+    /* ════════════════════════════════════════════════════════
+       АДАПТИВ
+       ════════════════════════════════════════════════════════ */
+    @media (max-width: 960px) {
+      .hero__inner       { grid-template-columns: 1fr; gap: 40px; }
+      .hero__sub         { max-width: 100%; }
+      .hero__stats       { grid-template-columns: repeat(2, 1fr); }
+      .stat:first-child  { grid-column: auto; flex-direction: column; align-items: flex-start; }
+      .directions        { grid-template-columns: repeat(2, 1fr); }
+      .about__inner      { grid-template-columns: 1fr; gap: 32px; }
+      .about__sticky     { position: static; }
+      .news-grid         { grid-template-columns: 1fr; }
+      .contact__inner    { grid-template-columns: 1fr; gap: 28px; }
+      .footer-nav        { gap: 28px; }
+    }
+
+    @media (max-width: 640px) {
+      /* Скрываем десктоп-список */
+      .nav-list          { display: none; }
+      .nav-cta           { display: none; }
+      .nav-btn           { display: flex; }
+
+      /* Hero */
+      .hero__stats       { grid-template-columns: 1fr; }
+      .stat:first-child  { grid-column: auto; }
+      .hero__scroll      { display: none; }
+
+      /* Направления */
+      .directions        { grid-template-columns: 1fr; }
+
+      /* Футер */
+      .footer-top        { flex-direction: column; gap: 28px; padding-block: 32px; }
+      .footer-nav        { flex-direction: column; gap: 24px; }
+      .footer-bottom     { flex-direction: column; align-items: flex-start; gap: 10px; }
+    }
+
+    @media (max-width: 380px) {
+      :root { --px: 16px; }
+    }
+
+  </style>
 </head>
 <body>
-    <header id="home" role="banner">
-        <h1>Galelium Corporation</h1>
-        <p>Холдинговая корпорация</p>
-    </header>
 
-    <button class="hamburger" aria-label="Открыть меню навигации" aria-expanded="false" aria-controls="nav-menu">
-        <i class="fas fa-bars" aria-hidden="true"></i>
+<a class="skip" href="#main">Перейти к содержимому</a>
+<div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
+
+<!-- ════════════════════════════════════════════════════════
+     НАВИГАЦИЯ
+     ════════════════════════════════════════════════════════ -->
+<nav class="site-nav" aria-label="Основная навигация">
+  <a href="https://galelium.com" class="nav-logo" aria-current="page" aria-label="Galelium Corp. — главная">
+    Galelium Corp.
+  </a>
+
+  <!-- Десктоп -->
+  <ul class="nav-list" id="nav-list-desktop" role="list">
+    <li><a href="#about">О нас</a></li>
+    <li><a href="#how-we-work">Как работаем</a></li>
+    <li><a href="#news">Новости</a></li>
+    <li><a href="#contact">Контакты</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <a href="#contact" class="nav-cta">Связаться</a>
+    <button class="nav-btn" id="nav-btn"
+            aria-controls="nav-mobile"
+            aria-expanded="false"
+            aria-label="Открыть меню">
+      <span class="ham" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
     </button>
-    <nav class="nav-menu" id="nav-menu" role="navigation" aria-label="Основная навигация">
-        <a href="#home" aria-label="Перейти на главную страницу">Главная</a>
-        <a href="#about" aria-label="Перейти к разделу о компании">О нас</a>
-        <a href="#how-we-work" aria-label="Перейти к разделу о работе компании">Как мы работаем</a>
-        <a href="#contact" aria-label="Перейти к контактной информации">Контакты</a>
+  </div>
+</nav>
+
+<!-- Мобильное меню — отдельный элемент вне nav -->
+<div class="nav-mobile" id="nav-mobile" aria-hidden="true">
+  <div class="nav-mobile__inner">
+    <ul role="list">
+      <li class="nav-mobile__item">
+        <a href="#about">
+          О нас
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </li>
+      <li class="nav-mobile__item">
+        <a href="#how-we-work">
+          Как работаем
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </li>
+      <li class="nav-mobile__item">
+        <a href="#news">
+          Новости
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </li>
+      <li class="nav-mobile__item">
+        <a href="https://galelium.com/news.html">
+          Все новости →
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </li>
+      <li class="nav-mobile__item">
+        <a href="#contact">
+          Контакты
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </li>
+    </ul>
+    <div class="nav-mobile__cta">
+      <a href="#contact">
+        Связаться с нами
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h9M7.5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="nav-mobile__footer">
+    <a href="https://galelium.com/privacy.html">Конфиденциальность</a>
+    <a href="https://galelium.com/terms.html">Условия</a>
+    <a href="mailto:info@galelium.com">info@galelium.com</a>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- ════════════════════════════════════════════════════════
+       HERO
+       ════════════════════════════════════════════════════════ -->
+  <section class="hero" id="home" aria-label="Главная">
+    <div class="hero__inner">
+
+      <div>
+        <div class="hero__eyebrow anim-in" style="animation-delay:.0s">
+          <span class="hero__eyebrow-line"></span>
+          Холдинговая корпорация
+        </div>
+        <h1 class="hero__title anim-in" style="animation-delay:.07s">
+          Капитал,<br>который<br><em>работает</em>
+        </h1>
+        <p class="hero__sub anim-in" style="animation-delay:.14s">
+          Galelium Corporation создаёт долгосрочную ценность через стратегические инвестиции, управление активами и развитие портфельных компаний по всему миру.
+        </p>
+        <div class="hero__btns anim-in" style="animation-delay:.21s">
+          <a href="#contact" class="btn-p">
+            Обсудить сотрудничество
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#about" class="btn-g">О корпорации</a>
+        </div>
+      </div>
+
+      <div class="hero__stats anim-in" style="animation-delay:.15s" aria-label="Ключевые показатели">
+        <div class="stat">
+          <div>
+            <div class="stat__val">$200<em>M+</em></div>
+            <div class="stat__key">Активы под управлением<br>и в портфеле</div>
+          </div>
+          <p class="stat__note">«Устойчивый рост через дисциплинированный отбор активов»</p>
+        </div>
+        <div class="stat">
+          <div class="stat__val">15<em>+</em></div>
+          <div class="stat__key">Портфельных компаний</div>
+        </div>
+        <div class="stat">
+          <div class="stat__val">8<em>+</em></div>
+          <div class="stat__key">Рынков присутствия</div>
+        </div>
+        <div class="stat">
+          <div class="stat__val">3.4<em>×</em></div>
+          <div class="stat__key">Средний MOIC по выходам</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">
+      <div class="scroll-line"></div>
+      <span>Далее</span>
+    </div>
+  </section>
+
+  <!-- Карусель партнёров -->
+  <div class="partners" aria-label="Портфельные компании и партнёры">
+    <div class="partners__track">
+      <!-- Замени <span> на <img src="/images/carousel_logo_N.png" alt="Название"> когда будут логотипы -->
+      <div class="partners__item"><span>TerraLogic</span></div>
+      <div class="partners__item"><span>Nordic Capital</span></div>
+      <div class="partners__item"><span>SecureVault</span></div>
+      <div class="partners__item"><span>Партнёр 4</span></div>
+      <div class="partners__item"><span>Партнёр 5</span></div>
+      <div class="partners__item"><span>Партнёр 6</span></div>
+      <div class="partners__item" aria-hidden="true"><span>TerraLogic</span></div>
+      <div class="partners__item" aria-hidden="true"><span>Nordic Capital</span></div>
+      <div class="partners__item" aria-hidden="true"><span>SecureVault</span></div>
+      <div class="partners__item" aria-hidden="true"><span>Партнёр 4</span></div>
+      <div class="partners__item" aria-hidden="true"><span>Партнёр 5</span></div>
+      <div class="partners__item" aria-hidden="true"><span>Партнёр 6</span></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       КАК МЫ РАБОТАЕМ
+       ════════════════════════════════════════════════════════ -->
+  <section class="section" id="how-we-work" aria-labelledby="hw-title">
+    <div class="section__inner">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Как мы работаем</span>
+          <h2 class="section-title" id="hw-title">Пять направлений<br><em>нашей работы</em></h2>
+        </div>
+        <p class="section-lead">От выбора актива до операционного развития — системный подход на каждом этапе.</p>
+      </div>
+
+      <div class="directions">
+        <div class="dir-card reveal">
+          <div class="dir-card__num">01</div>
+          <div class="dir-card__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 13V8l5.5-5.5L13 8v5H9.5v-3.5H5.5V13H2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="dir-card__title">Стратегический контроль</h3>
+          <p class="dir-card__text">Управление долями и акциями в ключевых отраслях. Активное участие в советах директоров, формирование стратегии и контроль ключевых решений.</p>
+          <span class="dir-card__arrow">Подробнее <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+        <div class="dir-card reveal">
+          <div class="dir-card__num">02</div>
+          <div class="dir-card__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7.5 4.5v3l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="dir-card__title">Целевые инвестиции</h3>
+          <p class="dir-card__text">Строгий отбор объектов с высоким потенциалом роста. Глубокий due diligence, структурирование сделок для максимальной доходности.</p>
+          <span class="dir-card__arrow">Подробнее <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+        <div class="dir-card reveal">
+          <div class="dir-card__num">03</div>
+          <div class="dir-card__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="4" cy="7.5" r="2" stroke="currentColor" stroke-width="1.2"/><circle cx="11" cy="7.5" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M6 7.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="dir-card__title">Партнёрская сеть</h3>
+          <p class="dir-card__text">Стратегические партнёрства для масштабирования бизнеса. Глобальная сеть инвесторов, консультантов и операционных партнёров.</p>
+          <span class="dir-card__arrow">Подробнее <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+        <div class="dir-card reveal">
+          <div class="dir-card__num">04</div>
+          <div class="dir-card__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 11l3.5-3.5 3 2.5 4.5-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="dir-card__title">Аналитика и планирование</h3>
+          <p class="dir-card__text">Глубокий анализ рынков и макроэкономических трендов. Долгосрочное стратегическое планирование на основе данных.</p>
+          <span class="dir-card__arrow">Подробнее <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+        <div class="dir-card reveal">
+          <div class="dir-card__num">05</div>
+          <div class="dir-card__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="2" y="2" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8.5" y="2" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="8.5" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8.5" y="8.5" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>
+          </div>
+          <h3 class="dir-card__title">Операционная поддержка</h3>
+          <p class="dir-card__text">Ресурсы, экспертиза и инфраструктура для портфельных компаний. Помощь в процессах, найме руководителей и выходе на новые рынки.</p>
+          <span class="dir-card__arrow">Подробнее <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       О НАС
+       ════════════════════════════════════════════════════════ -->
+  <section class="section" id="about" aria-labelledby="about-title">
+    <div class="section__inner">
+      <div class="about__inner">
+
+        <div class="about__sticky">
+          <span class="eyebrow reveal">О корпорации</span>
+          <h2 class="section-title reveal" id="about-title" style="margin-top:12px; margin-bottom:20px;">
+            Создаём ценность<br>через <em>дисциплину</em>
+          </h2>
+          <a href="#contact" class="btn-p reveal">
+            Предложить проект
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+
+        <div>
+          <div class="about__text reveal">
+            <p>Galelium Corporation — <strong>холдинговая структура нового поколения</strong>, созданная для работы в условиях высокой неопределённости. Мы не следуем трендам — мы создаём их, выбирая объекты для инвестиций с горизонтом 5–10 лет.</p>
+            <p>Наша модель сочетает строгую финансовую дисциплину с гибкостью и скоростью принятия решений, характерной для лучших частных холдингов. Мы координируем работу дочерних компаний и партнёров, обеспечивая синергию и условия для <strong>устойчивого долгосрочного роста</strong>.</p>
+          </div>
+          <div class="about__list reveal">
+            <div class="about__item">
+              <div class="about__item-dot" aria-hidden="true"></div>
+              <div>
+                <p class="about__item-title">Долгосрочное мышление</p>
+                <p class="about__item-text">Оцениваем инвестиции через призму 5–10 лет. Это позволяет принимать решения, недоступные краткосрочным участникам рынка.</p>
+              </div>
+            </div>
+            <div class="about__item">
+              <div class="about__item-dot" aria-hidden="true"></div>
+              <div>
+                <p class="about__item-title">Концентрированный портфель</p>
+                <p class="about__item-text">Предпочитаем глубокое вовлечение в ограниченное число активов широкой диверсификации. Качество важнее количества.</p>
+              </div>
+            </div>
+            <div class="about__item">
+              <div class="about__item-dot" aria-hidden="true"></div>
+              <div>
+                <p class="about__item-title">Конфиденциальность</p>
+                <p class="about__item-text">Большинство сделок — непубличные. Мы ценим конфиденциальность партнёров и не раскрываем детали без необходимости.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       НОВОСТИ
+       ════════════════════════════════════════════════════════ -->
+  <section class="section" id="news" aria-labelledby="news-title">
+    <div class="section__inner">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Новости и обновления</span>
+          <h2 class="section-title" id="news-title">Последние <em>события</em></h2>
+        </div>
+        <a href="https://galelium.com/news.html" class="section-link reveal">
+          Все новости
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="news-grid reveal">
+        <a class="news-featured" href="https://galelium.com/news.html">
+          <span class="news-featured__tag">Сделки</span>
+          <h3 class="news-featured__title">Galelium закрыл раунд финансирования на $40 млн</h3>
+          <p class="news-featured__summary">Холдинг завершил стратегический раунд Series B при участии международных институциональных инвесторов. Средства направлены на расширение портфеля активов в секторе технологий и инфраструктуры.</p>
+          <div class="news-featured__footer">
+            <span class="news-date">22 марта 2026</span>
+            <span class="news-arrow">
+              Читать
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+        </a>
+
+        <div class="news-side">
+          <a class="news-card" href="https://galelium.com/news.html">
+            <span class="news-card__tag">Портфель</span>
+            <h3 class="news-card__title">Вхождение в капитал TerraLogic — сделка на $12 млн</h3>
+            <div class="news-card__foot">
+              <span class="news-date">15 марта 2026</span>
+              <span class="news-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="news-card" href="https://galelium.com/news.html">
+            <span class="news-card__tag">Корпорация</span>
+            <h3 class="news-card__title">Стратегия развития холдинга до 2030 года утверждена</h3>
+            <div class="news-card__foot">
+              <span class="news-date">8 марта 2026</span>
+              <span class="news-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="news-card" href="https://galelium.com/news.html">
+            <span class="news-card__tag">Аналитика</span>
+            <h3 class="news-card__title">M&amp;A-рынок 2026: объём вырос на 18% год к году</h3>
+            <div class="news-card__foot">
+              <span class="news-date">28 февр. 2026</span>
+              <span class="news-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <a class="news-all reveal" href="https://galelium.com/news.html">
+        <span>Все новости и аналитика Galelium Corporation</span>
+        <span class="news-arrow">
+          Перейти
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       КОНТАКТ
+       ════════════════════════════════════════════════════════ -->
+  <section class="section" id="contact" aria-labelledby="contact-title">
+    <div class="section__inner">
+      <div class="contact__inner">
+        <div>
+          <span class="eyebrow reveal">Для инвесторов и партнёров</span>
+          <h2 class="contact__title reveal" id="contact-title" style="margin-top:12px;">
+            Готовы обсудить<br><em>возможности?</em>
+          </h2>
+          <p class="contact__text reveal">
+            Рассматриваем инвестиционные предложения, партнёрства и запросы на со-инвестирование. Каждый запрос рассматривается индивидуально. Для первого контакта достаточно краткого описания проекта.
+          </p>
+        </div>
+        <div class="contact__channels reveal">
+          <a class="ch-link" href="mailto:info@galelium.com">
+            <div class="ch-link__icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3.5" width="11" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 5l5.5 3.5L12.5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+            </div>
+            <div>
+              <div class="ch-link__type">Email</div>
+              <div class="ch-link__val">info@galelium.com</div>
+            </div>
+            <svg class="ch-link__arr" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h9M7.5 3l4 3.5L7.5 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="ch-link" href="https://t.me/lucas_vegas" target="_blank" rel="noopener noreferrer">
+            <div class="ch-link__icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12.5 1.5L1 6l4.5 1.5L8 12l1.5-3.5 3-7z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M5.5 7.5l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <div class="ch-link__type">Telegram</div>
+              <div class="ch-link__val">@lucas_vegas</div>
+            </div>
+            <svg class="ch-link__arr" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h9M7.5 3l4 3.5L7.5 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="ch-link" href="https://discord.com/users/lucas_vegas" target="_blank" rel="noopener noreferrer">
+            <div class="ch-link__icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="5.5" cy="8" r=".75" fill="currentColor"/><circle cx="8.5" cy="8" r=".75" fill="currentColor"/><path d="M5 11.5s.5.5 2 .5 2-.5 2-.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><path d="M4.5 4A10 10 0 0 0 2 5.5c-.5 2-.5 4 0 5.5.8.6 1.8.9 2.5 1L5.5 11M9.5 4A10 10 0 0 1 12 5.5c.5 2 .5 4 0 5.5-.8.6-1.8.9-2.5 1L8.5 11" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="ch-link__type">Discord</div>
+              <div class="ch-link__val">@lucas_vegas</div>
+            </div>
+            <svg class="ch-link__arr" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h9M7.5 3l4 3.5L7.5 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ════════════════════════════════════════════════════════
+     ФУТЕР
+     ════════════════════════════════════════════════════════ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-top">
+    <div>
+      <a href="https://galelium.com" class="f-logo">Galelium Corp.</a>
+      <p class="f-tagline">Холдинговая корпорация. Инвестиции, технологии, развитие.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Навигация в футере">
+      <div class="footer-nav-group">
+        <p class="footer-nav-group__title">Компания</p>
+        <ul role="list">
+          <li><a href="#about">О нас</a></li>
+          <li><a href="#how-we-work">Как работаем</a></li>
+          <li><a href="https://galelium.com/news.html">Новости</a></li>
+        </ul>
+      </div>
+      <div class="footer-nav-group">
+        <p class="footer-nav-group__title">Контакт</p>
+        <ul role="list">
+          <li><a href="mailto:info@galelium.com">info@galelium.com</a></li>
+          <li><a href="https://t.me/lucas_vegas" target="_blank" rel="noopener">Telegram</a></li>
+          <li><a href="#contact">Написать нам</a></li>
+        </ul>
+      </div>
+      <div class="footer-nav-group">
+        <p class="footer-nav-group__title">Правовые</p>
+        <ul role="list">
+          <li><a href="https://galelium.com/privacy.html">Конфиденциальность</a></li>
+          <li><a href="https://galelium.com/terms.html">Условия</a></li>
+        </ul>
+      </div>
     </nav>
+  </div>
+  <div class="footer-bottom">
+    <span class="f-copy">© 2025–2026 Galelium Corporation. Все права защищены.</span>
+    <ul class="f-legal" role="list">
+      <li><a href="https://galelium.com/privacy.html">Конфиденциальность</a></li>
+      <li><a href="https://galelium.com/terms.html">Условия</a></li>
+    </ul>
+  </div>
+</footer>
 
-    <main>
-        <section class="hero" id="hero" role="banner" aria-label="Главная секция">
-            <div class="hero-overlay" aria-hidden="true"></div>
-            <div class="hero-content">
-                <h2>Решения для вашего бизнеса</h2>
-                <p>Создаем устойчивые ценности через стратегические инвестиции</p>
-                <a href="#contact" class="hero-btn" role="button" aria-label="Перейти к контактной информации">Связаться с нами</a>
-            </div>
-            <canvas id="three-canvas" aria-hidden="true"></canvas>
-        </section>
+<script>
+(function () {
+  'use strict';
 
-        <!-- Partners Carousel -->
-        <section class="partners-section" role="region" aria-label="Партнеры и клиенты">
-            <div class="partners-carousel">
-                <div class="partners-track">
-                    <!-- Первый набор логотипов -->
-                    <div class="logo-item">
-                        <img src="images/carousel_logo_1.png" alt="Партнер 1" loading="lazy">
-                    </div>
-                    <div class="logo-item">
-                        <img src="images/carousel_logo_2.png" alt="Партнер 2" loading="lazy">
-                    </div>
-                    <div class="logo-item">
-                        <img src="images/carousel_logo_3.png" alt="Партнер 3" loading="lazy">
-                    </div>
-                    <div class="logo-item">
-                        <img src="images/carousel_logo_4.png" alt="Партнер 4" loading="lazy">
-                    </div>
-                    <div class="logo-item">
-                        <img src="images/carousel_logo_5.png" alt="Партнер 5" loading="lazy">
-                    </div>
-                    <div class="logo-item">
-                        <img src="images/carousel_logo_6.png" alt="Партнер 6" loading="lazy">
-                    </div>
-                    
-                    <!-- Дублированный набор для бесшовности -->
-                    <div class="logo-item">
-                        <img src="images/carousel_logo_1.png" alt="Партнер 1" loading="lazy">
-                    </div>
-                    <div class="logo-item">
-                        <img src="images/carousel_logo_2.png" alt="Партнер 2" loading="lazy">
-                    </div>
-                    <div class="logo-item">
-                        <img src="images/carousel_logo_3.png" alt="Партнер 3" loading="lazy">
-                    </div>
-                    <div class="logo-item">
-                        <img src="images/carousel_logo_4.png" alt="Партнер 4" loading="lazy">
-                    </div>
-                    <div class="logo-item">
-                        <img src="images/carousel_logo_5.png" alt="Партнер 5" loading="lazy">
-                    </div>
-                    <div class="logo-item">
-                        <img src="images/carousel_logo_6.png" alt="Партнер 6" loading="lazy">
-                    </div>
-                </div>
-            </div>
-        </section>
+  /* ── Мобильное меню ── */
+  var btn     = document.getElementById('nav-btn');
+  var mobile  = document.getElementById('nav-mobile');
+  var overlay = document.getElementById('nav-overlay');
 
-        <div class="content">
-            <section class="section" id="about" aria-labelledby="about-heading">
-                <h3 id="about-heading">О нас</h3>
-                <p>Galelium Corporation - это динамично развивающийся холдинг, который специализируется на управлении активами и стратегических инвестициях. Мы координируем работу дочерних компаний и партнёров, обеспечивая устойчивый рост и создание долгосрочной ценности.</p>
-                <p>Наша миссия - выявлять перспективные направления для инвестиций, развивать инновационные проекты и создавать синергию между различными бизнес-единицами холдинга.</p>
-            </section>
-
-            <section class="section" id="how-we-work" aria-labelledby="how-we-work-heading">
-                <h3 id="how-we-work-heading">Как мы работаем</h3>
-                <ul role="list">
-                    <li><strong>Стратегический контроль</strong> - управление долями и акциями в ключевых отраслях экономики</li>
-                    <li><strong>Целевые инвестиции</strong> - вложение средств в проекты с высоким потенциалом роста и доходности</li>
-                    <li><strong>Партнерская сеть</strong> - развитие стратегических партнёрств для масштабирования бизнеса</li>
-                    <li><strong>Аналитика и планирование</strong> - глубокий анализ рынков и стратегическое планирование развития</li>
-                    <li><strong>Операционная поддержка</strong> - предоставление ресурсов и экспертизы портфельным компаниям</li>
-                </ul>
-            </section>
-
-            <section class="section" id="contact" aria-labelledby="contact-heading">
-                <h3 id="contact-heading">Контакты</h3>
-                <p>Для обсуждения возможностей сотрудничества и инвестиционных предложений:</p>
-                <div class="contact-links" role="list">
-                    <a href="https://discord.com/users/lucas_vegas" target="_blank" rel="noopener noreferrer" aria-label="Связаться через Discord"><i class="fab fa-discord" aria-hidden="true"></i> @lucas_vegas</a>
-                    <a href="https://t.me/lucas_vegas" target="_blank" rel="noopener noreferrer" aria-label="Связаться через Telegram"><i class="fab fa-telegram" aria-hidden="true"></i> @lucas_vegas</a>
-                    <a href="mailto:info@galelium.com" aria-label="Отправить email"><i class="fas fa-envelope" aria-hidden="true"></i> info@galelium.com</a>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <footer role="contentinfo">
-        <div class="footer-content">
-            <div class="footer-main">
-                <div class="footer-brand">
-                    <div class="footer-logo">Galelium</div>
-                    <p class="footer-description">Холдинговая корпорация, создающая устойчивые ценности через стратегические инвестиции и инновационные решения.</p>
-                </div>
-                
-                <div class="footer-nav">
-                    <div class="footer-nav-section">
-                        <h4>Навигация</h4>
-                        <ul class="footer-links">
-                            <li><a href="#home" aria-label="Перейти на главную страницу">Главная</a></li>
-                            <li><a href="#about" aria-label="Перейти к разделу о компании">О нас</a></li>
-                            <li><a href="#how-we-work" aria-label="Перейти к разделу о работе компании">Как мы работаем</a></li>
-                            <li><a href="#contact" aria-label="Перейти к контактной информации">Контакты</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-nav-section">
-                        <h4>Ресурсы</h4>
-                        <ul class="footer-links">
-                            <li><a href="privacy.html" aria-label="Политика конфиденциальности">Конфиденциальность</a></li>
-                            <li><a href="terms.html" aria-label="Условия использования">Условия</a></li>
-                            <li><a href="#careers" aria-label="Карьера">Карьера</a></li>
-                            <li><a href="#news" aria-label="Новости">Новости</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="footer-contact">
-                    <h4>Связь</h4>
-                    <div class="footer-social" role="list" aria-label="Социальные сети">
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
-                        <a href="#" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
-                        <a href="#" aria-label="Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a>
-                    </div>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">info@galelium.com</p>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025-2026 Galelium Corporation. Все права защищены.</p>
-                <div class="footer-legal">
-                    <a href="privacy.html">Конфиденциальность</a>
-                    <a href="terms.html">Условия</a>
-                    <a href="cookies.html">Cookies</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <button class="back-to-top" aria-label="Вернуться наверх" title="Вернуться наверх">
-        <i class="fas fa-arrow-up" aria-hidden="true"></i>
-    </button>
-
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Galelium Corporation",
-        "description": "Холдинговая компания, специализирующаяся на стратегических инвестициях и управлении активами",
-        "url": "https://galelium.com",
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "email": "info@galelium.com",
-            "contactType": "customer service"
-        },
-        "sameAs": [
-            "https://discord.com/users/lucas_vegas",
-            "https://t.me/lucas_vegas"
-        ]
+  if (btn && mobile) {
+    function openMenu() {
+      mobile.classList.add('is-open');
+      mobile.setAttribute('aria-hidden', 'false');
+      btn.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      btn.setAttribute('aria-label', 'Закрыть меню');
+      if (overlay) overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
     }
-    </script>
+    function closeMenu() {
+      mobile.classList.remove('is-open');
+      mobile.setAttribute('aria-hidden', 'true');
+      btn.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Открыть меню');
+      if (overlay) overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        // Hamburger Menu with accessibility improvements
-        const hamburger = document.querySelector('.hamburger');
-        const navMenu = document.querySelector('.nav-menu');
+    btn.addEventListener('click', function () {
+      mobile.classList.contains('is-open') ? closeMenu() : openMenu();
+    });
 
-        function toggleMenu() {
-            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !isExpanded);
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
-            
-            // Prevent body scroll when menu is open
-            document.body.style.overflow = !isExpanded ? 'hidden' : '';
+    if (overlay) overlay.addEventListener('click', closeMenu);
+
+    mobile.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && mobile.classList.contains('is-open')) {
+        closeMenu(); btn.focus();
+      }
+    });
+  }
+
+  /* ── Scroll reveal ── */
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
         }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -28px 0px' });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function (el) {
+      el.classList.add('is-visible');
+    });
+  }
 
-        hamburger.addEventListener('click', toggleMenu);
+}());
+</script>
 
-        // Close menu when clicking on links
-        navMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-                hamburger.classList.remove('active');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
-            });
-        });
-
-        // Close menu when pressing Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-                toggleMenu();
-            }
-        });
-
-        // Smooth scroll to sections with offset
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    const headerHeight = document.querySelector('header').offsetHeight;
-                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                    
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // Back to top button with throttling
-        const backToTopButton = document.querySelector('.back-to-top');
-        let ticking = false;
-        
-        function updateBackToTopButton() {
-            if (window.pageYOffset > 300) {
-                backToTopButton.classList.add('active');
-            } else {
-                backToTopButton.classList.remove('active');
-            }
-            ticking = false;
-        }
-        
-        function requestTick() {
-            if (!ticking) {
-                requestAnimationFrame(updateBackToTopButton);
-                ticking = true;
-            }
-        }
-        
-        window.addEventListener('scroll', requestTick);
-        
-        backToTopButton.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // Intersection Observer for section animations with performance optimization
-        const sections = document.querySelectorAll('.section');
-        
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-        
-        sections.forEach(section => {
-            observer.observe(section);
-        });
-
-        // Particle Animation (Desktop Only)
-        let scene, camera, renderer, particleSystem, particleSystem2;
-        let animationId;
-        let time = 0;
-        
-        // Mobile detection - particles disabled on mobile
-        const isMobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        const isMobileOptimized = window.innerWidth < 768 || isMobileDevice || isTouchDevice;
-        
-        function initThreeJS() {
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            
-            // Desktop-optimized renderer settings
-            const rendererSettings = {
-                canvas: document.getElementById('three-canvas'), 
-                alpha: true,
-                antialias: true,
-                powerPreference: "high-performance"
-            };
-            
-            renderer = new THREE.WebGLRenderer(rendererSettings);
-            
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.setClearColor(0x000000, 0);
-
-            // Desktop particle count
-            const particleCount = 1000;
-            const particles = new THREE.BufferGeometry();
-            const positions = new Float32Array(particleCount * 3);
-            const colors = new Float32Array(particleCount * 3);
-            const sizes = new Float32Array(particleCount);
-
-            for (let i = 0; i < particleCount; i++) {
-                // Desktop positioning
-                const radius = Math.random() * 1500 + 500;
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.random() * Math.PI;
-                
-                positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-                positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-                positions[i * 3 + 2] = radius * Math.cos(phi);
-
-                // Desktop colors
-                const hue = 0.75 + (Math.random() - 0.5) * 0.1;
-                const saturation = 0.6 + Math.random() * 0.3;
-                const lightness = 0.4 + Math.random() * 0.4;
-                
-                const color = new THREE.Color().setHSL(hue, saturation, lightness);
-                colors[i * 3] = color.r;
-                colors[i * 3 + 1] = color.g;
-                colors[i * 3 + 2] = color.b;
-
-                // Desktop sizes
-                sizes[i] = 0.5 + Math.random() * 3;
-            }
-
-            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-            // Desktop particle material
-            const particleMaterial = new THREE.PointsMaterial({
-                size: 1.5,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.6,
-                blending: THREE.AdditiveBlending,
-                sizeAttenuation: true
-            });
-
-            particleSystem = new THREE.Points(particles, particleMaterial);
-            scene.add(particleSystem);
-
-            // Secondary particle system for desktop
-            const particleCount2 = 300;
-            const particles2 = new THREE.BufferGeometry();
-            const positions2 = new Float32Array(particleCount2 * 3);
-            const colors2 = new Float32Array(particleCount2 * 3);
-            const sizes2 = new Float32Array(particleCount2);
-
-            for (let i = 0; i < particleCount2; i++) {
-                positions2[i * 3] = (Math.random() - 0.5) * 3000;
-                positions2[i * 3 + 1] = (Math.random() - 0.5) * 3000;
-                positions2[i * 3 + 2] = (Math.random() - 0.5) * 2000;
-
-                const color = new THREE.Color().setHSL(0.75, 0.3, 0.7);
-                colors2[i * 3] = color.r;
-                colors2[i * 3 + 1] = color.g;
-                colors2[i * 3 + 2] = color.b;
-
-                sizes2[i] = 0.3 + Math.random() * 1;
-            }
-
-            particles2.setAttribute('position', new THREE.BufferAttribute(positions2, 3));
-            particles2.setAttribute('color', new THREE.BufferAttribute(colors2, 3));
-            particles2.setAttribute('size', new THREE.BufferAttribute(sizes2, 1));
-
-            const particleMaterial2 = new THREE.PointsMaterial({
-                size: 0.8,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.3,
-                blending: THREE.AdditiveBlending,
-                sizeAttenuation: true
-            });
-
-            particleSystem2 = new THREE.Points(particles2, particleMaterial2);
-            scene.add(particleSystem2);
-
-            // Camera position for desktop
-            camera.position.z = 800;
-        }
-
-        function animate() {
-            if (!scene || !camera || !renderer || !particleSystem) return;
-            
-            animationId = requestAnimationFrame(animate);
-            time += 0.01;
-            
-            // Desktop rotation
-            particleSystem.rotation.y += 0.0003 + Math.sin(time * 0.5) * 0.0001;
-            particleSystem.rotation.x += 0.0002 + Math.cos(time * 0.3) * 0.0001;
-            
-            if (particleSystem2) {
-                particleSystem2.rotation.y -= 0.0002;
-                particleSystem2.rotation.x += 0.0001;
-            }
-            
-            // Desktop particle movement
-            const positions = particleSystem.geometry.attributes.position.array;
-            const particleCount = positions.length / 3;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const index = i * 3;
-                
-                // Add subtle wave motion
-                positions[index] += Math.sin(time + i * 0.01) * 0.1;
-                positions[index + 1] += Math.cos(time + i * 0.01) * 0.1;
-                positions[index + 2] += 0.3 + Math.sin(time * 0.5 + i * 0.02) * 0.2;
-                
-                // Reset particles that move too far
-                if (positions[index + 2] > 1000) {
-                    positions[index + 2] = -1000;
-                }
-            }
-            particleSystem.geometry.attributes.position.needsUpdate = true;
-            
-            // Secondary particle system movement
-            if (particleSystem2) {
-                const positions2 = particleSystem2.geometry.attributes.position.array;
-                for (let i = 0; i < positions2.length / 3; i++) {
-                    const index = i * 3;
-                    positions2[index + 2] += 0.2;
-                    if (positions2[index + 2] > 1000) {
-                        positions2[index + 2] = -1000;
-                    }
-                }
-                particleSystem2.geometry.attributes.position.needsUpdate = true;
-            }
-            
-            renderer.render(scene, camera);
-        }
-
-        // Initialize Three.js when page loads
-        function initAnimation() {
-            // Only run particle animation on desktop devices
-            if (!isMobileOptimized) {
-                initThreeJS();
-                animate();
-            } else {
-                // Hide canvas on mobile devices
-                const canvas = document.getElementById('three-canvas');
-                if (canvas) {
-                    canvas.style.display = 'none';
-                }
-                
-                // Add fallback animation div for mobile devices
-                const hero = document.querySelector('.hero');
-                if (hero) {
-                    const fallbackDiv = document.createElement('div');
-                    fallbackDiv.className = 'hero-fallback-animation';
-                    hero.appendChild(fallbackDiv);
-                }
-            }
-        }
-        
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initAnimation);
-        } else {
-            initAnimation();
-        }
-
-        // Resize handling for desktop only
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                // Only handle resize for desktop (when particles are active)
-                if (!isMobileOptimized && camera && renderer) {
-                    camera.aspect = window.innerWidth / window.innerHeight;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(window.innerWidth, window.innerHeight);
-                }
-            }, 150);
-        });
-
-        // Pause animation when page is not visible (performance optimization)
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                if (animationId) {
-                    cancelAnimationFrame(animationId);
-                }
-            } else {
-                animate();
-            }
-        });
-
-        // Carousel performance optimization
-        const carouselTrack = document.querySelector('.partners-track');
-        if (carouselTrack) {
-            const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                             'ontouchstart' in window || 
-                             navigator.maxTouchPoints > 0 || 
-                             window.innerWidth < 768;
-            
-            if (isMobile) {
-                carouselTrack.style.animationPlayState = 'running';
-            } else {
-                // Pause animation when not in viewport
-                const carouselObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            carouselTrack.style.animationPlayState = 'running';
-                        } else {
-                            carouselTrack.style.animationPlayState = 'paused';
-                        }
-                    });
-                }, { threshold: 0.1 });
-                
-                carouselObserver.observe(carouselTrack);
-            }
-            
-            // Reduce animation speed on low-end devices
-            if (navigator.hardwareConcurrency <= 4) {
-                carouselTrack.style.animationDuration = '40s';
-            }
-        }
-    </script>
 </body>
+</html>
