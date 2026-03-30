@@ -23,5 +23,31 @@
     },
     "tags": ["Нарушении: долгое вр. сборки, несколько жб."],
     "telegram_post": "https://t.me/yourchannel/123"
+  },
+
+  {
+    "id": "r-20260330",
+    "date": "2026-03-30",
+    "address": "ул. Бабушкина 9, СПБ",
+    "arrival": {
+      "time": "10:00",
+      "photo_tsd": "img_reports/IMG_20260330_095114.jpg",
+      "note": "Прибыл вовремя, ТСД принят у сменщика"
+    },
+    "departure": {
+      "time": "22:00",
+      "photo_tsd": "img_reports/IMG_20260330_220128.jpg",
+      "photo_stats1": "img_reports/IMG_20260330_220134.jpg",
+      "photo_stats2": "img_reports/IMG_20260330_220137.jpg",
+      "note": "Смена закрыта"
+    },
+    "stats": {
+      "positions": 345,
+      "orders": 32,
+      "correction_pct": 15.63,
+      "avg_position_sec": 55
+    },
+    "tags": ["Нарушении: долгое вр. сборки, несколько жб."],
+    "telegram_post": "https://t.me/yourchannel/123"
   }
 ]
