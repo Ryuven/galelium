@@ -837,6 +837,60 @@
       :root { --px: 16px; }
     }
 
+    /* ════════════════════════════════════════════════════════
+       ЮРИДИЧЕСКИЙ ДИСКЛЕЙМЕР
+       ════════════════════════════════════════════════════════ */
+    .legal-disclaimer {
+      border-top: 1px solid var(--border);
+      padding: clamp(24px,4vw,40px) var(--px);
+    }
+    .legal-disclaimer__toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; cursor: pointer; width: 100%;
+      background: none; border: none; text-align: left; padding: 0;
+    }
+    .legal-disclaimer__toggle-label {
+      font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--muted-2); font-family: var(--font-sans); font-weight: 400;
+    }
+    .legal-disclaimer__toggle-icon {
+      width: 20px; height: 20px; flex-shrink: 0;
+      border: 1px solid var(--border); border-radius: var(--r);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted-2); transition: border-color var(--t-fast), color var(--t-fast);
+    }
+    .legal-disclaimer__toggle:hover .legal-disclaimer__toggle-icon { border-color: var(--border-h); color: var(--muted); }
+    .legal-disclaimer__toggle[aria-expanded="true"] .legal-disclaimer__toggle-icon svg {
+      transform: rotate(180deg);
+    }
+    .legal-disclaimer__toggle-icon svg { transition: transform .25s var(--ease); }
+
+    .legal-disclaimer__body {
+      display: none;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      columns: 1;
+    }
+    .legal-disclaimer__body.is-open { display: block; }
+
+    .legal-disclaimer__text {
+      font-size: .68rem;
+      color: var(--muted-2);
+      line-height: 1.75;
+    }
+    .legal-disclaimer__text p { margin-bottom: 10px; }
+    .legal-disclaimer__text p:last-child { margin-bottom: 0; }
+    .legal-disclaimer__text strong {
+      color: var(--muted); font-weight: 400;
+    }
+    .legal-disclaimer__text a {
+      color: var(--muted); text-decoration: underline;
+      text-decoration-color: var(--border-h);
+      transition: color var(--t-fast);
+    }
+    .legal-disclaimer__text a:hover { color: var(--text); }
+
   </style>
 </head>
 <body>
@@ -1261,7 +1315,7 @@
       <div class="footer-nav-group">
         <p class="footer-nav-group__title">Контакт</p>
         <ul role="list">
-          <li><a href="mailto:info@galelium.com">info@galelium.com</a></li>
+          <li><a href="/cdn-cgi/l/email-protection#e48d8a828ba483858881888d9189ca878b89"><span class="__cf_email__" data-cfemail="5831363e37183f39343d34312d35763b3735">[email&#160;protected]</span></a></li>
           <li><a href="https://t.me/lucas_vegas" target="_blank" rel="noopener">Telegram</a></li>
           <li><a href="#contact">Написать нам</a></li>
         </ul>
@@ -1282,6 +1336,29 @@
       <li><a href="https://galelium.com/terms.html">Условия</a></li>
     </ul>
   </div>
+
+  <!-- Юридический дисклеймер -->
+  <div class="legal-disclaimer">
+    <button class="legal-disclaimer__toggle" aria-expanded="false" aria-controls="legal-body" id="legal-toggle">
+      <span class="legal-disclaimer__toggle-label">Правовая информация и оговорки</span>
+      <span class="legal-disclaimer__toggle-icon" aria-hidden="true">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </button>
+    <div class="legal-disclaimer__body" id="legal-body" role="region" aria-labelledby="legal-toggle">
+      <div class="legal-disclaimer__text">
+        <p>© 2025–2026 Galelium Corporation. Все права защищены. Galelium Corp. и связанные логотипы являются товарными знаками Galelium Corporation в Российской Федерации и других юрисдикциях. Все прочие товарные знаки принадлежат их соответствующим правообладателям.</p>
+        <p><strong>Общая оговорка.</strong> Настоящий сайт и все материалы на нём носят исключительно информационный характер и не являются инвестиционным советом, рекомендацией, офертой или предложением о покупке или продаже каких-либо ценных бумаг, долей, фондов или инвестиционных стратегий ни в одной юрисдикции. Мнения и оценки, представленные на сайте, могут изменяться без предварительного уведомления. Galelium Corporation не несёт ответственности за решения, принятые на основании материалов настоящего ресурса. Использование материалов сайта осуществляется исключительно на усмотрение и риск читателя.</p>
+        <p><strong>Инвестиционные риски.</strong> Любые инвестиции сопряжены с рисками, включая возможную потерю части или всей вложенной суммы. Прошлые результаты не являются гарантией будущих доходов. Стоимость активов может как расти, так и снижаться под воздействием рыночных, экономических, политических и иных факторов.</p>
+        <p><strong>Ограничение распространения.</strong> Информация, представленная на настоящем сайте, предназначена только для лиц, которым её распространение разрешено применимым законодательством. Galelium Corporation не гарантирует, что материалы соответствуют требованиям всех юрисдикций. Любое лицо, получившее доступ к данному сайту, обязано самостоятельно убедиться в отсутствии правовых ограничений на его использование в своей юрисдикции.</p>
+        <p><strong>Конфиденциальность и персональные данные.</strong> Обработка персональных данных пользователей осуществляется в соответствии с Политикой конфиденциальности Galelium Corporation, доступной по адресу <a href="https://galelium.com/privacy.html">galelium.com/privacy.html</a>. Используя настоящий сайт, вы соглашаетесь с условиями обработки ваших данных в объёме, необходимом для корректного функционирования ресурса.</p>
+        <p><strong>Отказ от ответственности.</strong> Несмотря на то что Galelium Corporation прилагает все разумные усилия для обеспечения точности и актуальности материалов сайта, корпорация не даёт никаких гарантий — явных или подразумеваемых — относительно их полноты, достоверности или пригодности для каких-либо целей. Galelium Corporation не несёт ответственности за любые прямые, косвенные или иные убытки, возникшие вследствие использования или невозможности использования материалов настоящего ресурса.</p>
+        <p><strong>Применимое право.</strong> Настоящий сайт и все материалы на нём регулируются законодательством Российской Федерации, если иное прямо не указано для конкретной юрисдикции. Любые споры, возникающие в связи с использованием настоящего ресурса, подлежат разрешению в соответствии с применимым правом Российской Федерации.</p>
+        <p>Подробнее об условиях использования: <a href="https://galelium.com/terms.html">galelium.com/terms.html</a></p>
+      </div>
+    </div>
+  </div>
+
 </footer>
 
 <script>
@@ -1560,6 +1637,19 @@
       var g = document.getElementById('nc-careers-grid');
       if (g) g.innerHTML = '<p style="padding:20px;color:var(--muted);font-size:.85rem">Вакансии временно недоступны</p>';
     });
+
+  /* ══════════════════════════════════════════════════════════
+     ЮРИДИЧЕСКИЙ ДИСКЛЕЙМЕР — тоггл
+     ══════════════════════════════════════════════════════════ */
+  var legalToggle = document.getElementById('legal-toggle');
+  var legalBody   = document.getElementById('legal-body');
+  if (legalToggle && legalBody) {
+    legalToggle.addEventListener('click', function() {
+      var isOpen = legalBody.classList.contains('is-open');
+      legalBody.classList.toggle('is-open');
+      legalToggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+    });
+  }
 
   /* ══════════════════════════════════════════════════════════
      SCROLL REVEAL
