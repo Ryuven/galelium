@@ -491,7 +491,6 @@
       border-bottom: 1px solid var(--border);
     }
     .section__inner { max-width: var(--max); margin-inline: auto; }
-
     .section-head {
       display: flex; align-items: flex-end;
       justify-content: space-between; gap: 24px;
@@ -520,85 +519,247 @@
     .section-link:hover { color: var(--accent); }
 
     /* ════════════════════════════════════════════════════════
-       КАК МЫ РАБОТАЕМ
+       HUB — НАВИГАЦИОННЫЕ КАРТОЧКИ
        ════════════════════════════════════════════════════════ */
-    .directions {
+    .hub {
+      padding: clamp(48px, 7vw, 80px) var(--px);
+      border-bottom: 1px solid var(--border);
+    }
+    .hub__inner {
+      max-width: var(--max);
+      margin-inline: auto;
+    }
+    .hub__label {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: clamp(32px, 5vw, 52px);
+    }
+    .hub__label-text {
+      font-size: .6rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--muted-2); white-space: nowrap;
+    }
+    .hub__label-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--border-h), transparent);
+    }
+
+    /* Большая сетка карточек */
+    .hub__grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto;
       gap: 2px;
     }
-    .dir-card {
+
+    /* Базовая карточка */
+    .hub-card {
+      position:        relative;
+      background:      var(--surface);
+      border:          1px solid var(--border);
+      padding:         clamp(22px, 3vw, 32px) clamp(20px, 2.5vw, 28px);
+      text-decoration: none; color: inherit;
+      display:         flex; flex-direction: column;
+      overflow:        hidden;
+      transition:      border-color .22s var(--ease), background .22s var(--ease);
+      cursor:          pointer;
+    }
+    .hub-card::after {
+      content:    '';
+      position:   absolute; bottom: 0; left: 0; right: 0;
+      height:     2px;
+      background: transparent;
+      transition: background .22s var(--ease);
+    }
+    .hub-card:hover { border-color: var(--border-h); background: var(--surface-2); }
+    .hub-card:hover::after { background: linear-gradient(90deg, var(--accent-mid), transparent); }
+
+    /* Акцентная карточка (широкая) — первая */
+    .hub-card--accent {
+      grid-column: span 2;
+      background: linear-gradient(135deg, var(--surface) 60%, rgba(200,169,110,.04));
+      border-color: rgba(200,169,110,.15);
+    }
+    .hub-card--accent::after { background: linear-gradient(90deg, var(--accent), transparent) !important; height: 2px; }
+    .hub-card--accent:hover { border-color: var(--accent-mid); background: linear-gradient(135deg, var(--surface-2) 60%, rgba(200,169,110,.07)); }
+
+    /* Иконка карточки */
+    .hub-card__icon {
+      width:  40px; height: 40px;
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent); margin-bottom: clamp(18px, 2.5vw, 26px);
+      flex-shrink: 0;
+      transition: border-color .22s, background .22s;
+    }
+    .hub-card--accent .hub-card__icon {
+      border-color: var(--accent-mid); background: var(--accent-dim);
+    }
+    .hub-card:hover .hub-card__icon { border-color: var(--accent-mid); background: var(--accent-dim); }
+
+    .hub-card__tag {
+      font-size: .56rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted-2); margin-bottom: 10px;
+    }
+    .hub-card--accent .hub-card__tag { color: var(--accent); opacity: .7; }
+
+    .hub-card__title {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: clamp(.95rem, 1.6vw, 1.18rem);
+      color: #fff; line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .hub-card--accent .hub-card__title { font-size: clamp(1.1rem, 2vw, 1.5rem); }
+
+    .hub-card__desc {
+      font-size: .8rem; color: var(--muted); line-height: 1.6;
+      flex: 1;
+    }
+
+    .hub-card__foot {
+      display:    flex; align-items: center; justify-content: space-between;
+      margin-top: 20px; padding-top: 16px;
+      border-top: 1px solid var(--border);
+      gap: 8px;
+    }
+    .hub-card__arrow {
+      display:     inline-flex; align-items: center; gap: 5px;
+      font-size:   .62rem; letter-spacing: .1em; text-transform: uppercase;
+      color:       var(--muted-2);
+      transition:  color .15s, gap .15s;
+    }
+    .hub-card:hover .hub-card__arrow { color: var(--accent); gap: 8px; }
+    .hub-card__arrow svg { flex-shrink: 0; }
+
+    .hub-card__badge {
+      font-size:      .55rem; letter-spacing: .14em; text-transform: uppercase;
+      color:          var(--accent); background: var(--accent-dim);
+      border:         1px solid var(--accent-mid);
+      padding:        2px 8px; border-radius: 40px; white-space: nowrap;
+    }
+
+    /* Строка «Связаться» — на всю ширину */
+    .hub-card--contact {
+      grid-column: 1 / -1;
+      flex-direction:  row;
+      align-items:     center;
+      justify-content: space-between;
+      gap:             20px;
+      padding-block:   clamp(18px, 2.5vw, 24px);
+    }
+    .hub-card--contact .hub-card__icon { margin-bottom: 0; flex-shrink: 0; }
+    .hub-card--contact .hub-card__body { flex: 1; min-width: 0; }
+    .hub-card--contact .hub-card__title {
+      font-size: clamp(.88rem, 1.3vw, 1rem); margin-bottom: 3px;
+    }
+    .hub-card--contact .hub-card__desc { font-size: .75rem; }
+    .hub-card--contact .hub-card__foot {
+      margin-top: 0; padding-top: 0; border-top: none; flex-shrink: 0;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       NEWS + CAREERS (остаётся внизу)
+       ════════════════════════════════════════════════════════ */
+    .nc-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2px; min-height: 200px;
+    }
+    .nc-card {
       background: var(--surface); border: 1px solid var(--border);
-      padding: clamp(22px, 2.5vw, 30px) clamp(18px, 2vw, 26px);
+      padding: clamp(20px,2.5vw,28px);
       display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
       transition: border-color var(--t), background var(--t);
     }
-    .dir-card:hover { border-color: var(--accent-mid); background: var(--surface-2); }
-    .dir-card__num {
-      font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
-      color: var(--accent); margin-bottom: 20px;
+    .nc-card:hover { border-color: var(--accent-mid); background: var(--surface-2); }
+    .nc-card__tag {
+      font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
     }
-    .dir-card__icon {
-      width: 34px; height: 34px; border: 1px solid var(--border);
-      border-radius: var(--r); display: flex; align-items: center;
-      justify-content: center; color: var(--accent); margin-bottom: 16px;
-      transition: border-color var(--t), background var(--t);
-    }
-    .dir-card:hover .dir-card__icon { border-color: var(--accent-mid); background: var(--accent-dim); }
-    .dir-card__title {
+    .nc-card__title {
       font-family: var(--font-display); font-weight: 700;
-      font-size: clamp(.9rem, 1.4vw, 1.05rem); color: #fff;
-      line-height: 1.25; margin-bottom: 10px;
+      font-size: clamp(.88rem,1.5vw,1.05rem); color: #fff;
+      line-height: 1.3; flex: 1; margin-bottom: 14px;
     }
-    .dir-card__text {
-      font-size: .84rem; color: var(--muted); line-height: 1.65; flex: 1;
+    .nc-card__summary {
+      font-size: .82rem; color: var(--muted); line-height: 1.6; margin-bottom: 14px; flex: 1;
     }
-    .dir-card__arrow {
-      display: inline-flex; align-items: center; gap: 6px;
-      margin-top: 18px; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--muted-2); transition: color var(--t-fast), gap var(--t-fast);
+    .nc-card__foot {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 12px; border-top: 1px solid var(--border); gap: 8px; margin-top: auto;
     }
-    .dir-card:hover .dir-card__arrow { color: var(--accent); gap: 10px; }
-
-    /* ════════════════════════════════════════════════════════
-       О НАС — двухколонный блок
-       ════════════════════════════════════════════════════════ */
-    .about__inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(32px, 5vw, 80px);
-      align-items: start;
+    .nc-card__meta { font-size: .65rem; color: var(--muted-2); }
+    .nc-job__loc {
+      font-size: .65rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted-2); margin-bottom: 6px;
     }
-    .about__sticky { position: sticky; top: calc(var(--nav-h) + 28px); }
-
-    .about__text p {
-      font-size: .9rem; color: var(--muted); line-height: 1.75; margin-bottom: 16px;
+    .nc-job__type {
+      display: inline-block; font-size: .58rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--accent);
+      border: 1px solid var(--accent-mid); background: var(--accent-dim);
+      padding: 2px 8px; border-radius: var(--r); margin-bottom: 10px;
     }
-    .about__text p:last-child { margin-bottom: 0; }
-    .about__text strong { color: var(--text); font-weight: 400; }
-
-    .about__list {
-      margin-top: 28px; display: flex; flex-direction: column; gap: 2px;
+    .news-arrow {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--accent); white-space: nowrap; flex-shrink: 0;
+      transition: gap var(--t-fast);
     }
-    .about__item {
-      display: flex; align-items: flex-start; gap: 14px;
+    .nc-card:hover .news-arrow { gap: 9px; }
+    .news-all {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 2px; padding: 13px 18px;
       background: var(--surface); border: 1px solid var(--border);
-      padding: 16px 18px; transition: border-color var(--t);
+      text-decoration: none; color: inherit; transition: border-color var(--t);
     }
-    .about__item:hover { border-color: var(--accent-mid); }
-    .about__item-dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--accent); flex-shrink: 0; margin-top: 9px;
+    .news-all:hover { border-color: var(--accent-mid); }
+    .news-all span { font-size: .75rem; color: var(--muted); }
+    .news-all .news-arrow { color: var(--muted); }
+    .news-all:hover .news-arrow { color: var(--accent); }
+    .news-date { font-size: .67rem; color: var(--muted-2); white-space: nowrap; }
+
+    .nc-skeleton {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: clamp(20px,2.5vw,28px); display: flex; flex-direction: column; gap: 12px;
     }
-    .about__item-title {
-      font-family: var(--font-display); font-weight: 700;
-      font-size: .83rem; color: #fff; margin-bottom: 3px;
+    .nc-skeleton__line {
+      height: 10px; border-radius: 2px;
+      background: linear-gradient(90deg, var(--surface-2) 25%, rgba(255,255,255,.05) 50%, var(--surface-2) 75%);
+      background-size: 200% 100%; animation: shimmer 1.4s infinite;
     }
-    .about__item-text { font-size: .8rem; color: var(--muted); line-height: 1.6; }
+    @keyframes shimmer { to { background-position: -200% 0; } }
 
     /* ════════════════════════════════════════════════════════
-       ПОИСК — оверлей
+       КОНТАКТ
        ════════════════════════════════════════════════════════ */
+    .contact__inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: clamp(32px, 5vw, 72px); align-items: start;
+    }
+    .contact__title {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: clamp(1.4rem, 3vw, 2.2rem); color: #fff;
+      line-height: 1.1; letter-spacing: -.01em; margin-bottom: 14px;
+    }
+    .contact__title em { color: var(--accent); font-style: normal; }
+    .contact__text { font-size: .88rem; color: var(--muted); line-height: 1.72; max-width: 380px; }
+    .contact__channels { display: flex; flex-direction: column; gap: 2px; }
+    .ch-link {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 16px 18px; text-decoration: none; color: inherit;
+      transition: border-color var(--t), background var(--t);
+    }
+    .ch-link:hover { border-color: var(--accent-mid); background: var(--surface-2); }
+    .ch-link__icon {
+      width: 32px; height: 32px; border: 1px solid var(--border);
+      border-radius: var(--r); display: flex; align-items: center;
+      justify-content: center; color: var(--accent); flex-shrink: 0;
+      transition: border-color var(--t), background var(--t);
+    }
+    .ch-link:hover .ch-link__icon { border-color: var(--accent-mid); background: var(--accent-dim); }
+    .ch-link__type { font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 2px; }
+    .ch-link__val { font-size: .85rem; color: var(--text); }
+    .ch-link__arr { margin-left: auto; color: var(--muted-2); flex-shrink: 0; transition: color var(--t-fast); }
+    .ch-link:hover .ch-link__arr { color: var(--accent); }
     /* Кнопка лупы в навбаре */
     .nav-search-btn {
       display: flex; align-items: center; justify-content: center;
@@ -883,28 +1044,22 @@
       .hero__sub         { max-width: 100%; }
       .hero__panel-grid  { grid-template-columns: repeat(3, 1fr); }
       .hero__accent-line { display: none; }
-      .directions        { grid-template-columns: repeat(2, 1fr); }
-      .about__inner      { grid-template-columns: 1fr; gap: 32px; }
-      .about__sticky     { position: static; }
+      .hub__grid         { grid-template-columns: repeat(2, 1fr); }
+      .hub-card--accent  { grid-column: span 2; }
+      .hub-card--contact { flex-direction: column; align-items: flex-start; }
       .nc-grid           { grid-template-columns: 1fr; }
       .contact__inner    { grid-template-columns: 1fr; gap: 28px; }
       .footer-nav        { gap: 28px; }
     }
 
     @media (max-width: 640px) {
-      /* Скрываем десктоп-список */
       .nav-list          { display: none; }
       .nav-cta           { display: none; }
       .nav-btn           { display: flex; }
-
-      /* Hero */
+      .hub__grid         { grid-template-columns: 1fr; }
+      .hub-card--accent  { grid-column: span 1; }
       .hero__panel-grid  { grid-template-columns: 1fr 1fr; }
       .hero__scroll      { display: none; }
-
-      /* Направления */
-      .directions        { grid-template-columns: 1fr; }
-
-      /* Футер */
       .footer-top        { flex-direction: column; gap: 28px; padding-block: 32px; }
       .footer-nav        { flex-direction: column; gap: 24px; }
       .footer-bottom     { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -1082,38 +1237,28 @@
        ════════════════════════════════════════════════════════ -->
   <section class="hero" id="home" aria-label="Главная">
 
-    <!-- Полигональная canvas-сетка -->
     <canvas id="hero-canvas" aria-hidden="true"></canvas>
-
-    <!-- Свечение и декор -->
     <div class="hero__glow" aria-hidden="true"></div>
     <div class="hero__accent-line" aria-hidden="true"></div>
 
     <div class="hero__inner">
-
-      <!-- Левая колонка — текст -->
       <div>
         <div class="hero__label anim-in" style="animation-delay:.0s">
           <span class="hero__label-tag">Холдинговая корпорация</span>
           <span class="hero__label-line"></span>
         </div>
-
         <h1 class="hero__title anim-in" style="animation-delay:.07s">
-          Капитал,<br>
-          который<br>
-          <em>работает</em>
+          Капитал,<br>который<br><em>работает</em>
         </h1>
-
         <p class="hero__sub anim-in" style="animation-delay:.14s">
-          Galelium Corporation создаёт долгосрочную ценность через стратегические инвестиции, управление активами и развитие портфельных компаний по всему миру.
+          Galelium Corporation — холдинговая структура нового поколения. Стратегические инвестиции, управление активами и развитие портфельных компаний по всему миру.
         </p>
-
         <div class="hero__btns anim-in" style="animation-delay:.21s">
           <a href="#contact" class="btn-p">
             Обсудить сотрудничество
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-          <a href="#about" class="btn-g">О корпорации</a>
+          <a href="#hub" class="btn-g">Исследовать</a>
           <span class="hero__live" aria-hidden="true">
             <span class="hero__live-dot"></span>
             Активен
@@ -1121,16 +1266,13 @@
         </div>
       </div>
 
-      <!-- Правая колонка — панель метрик -->
       <div class="hero__panel anim-in" style="animation-delay:.15s" aria-label="Ключевые показатели">
-
         <div class="hero__panel-top">
           <div class="hero__panel-top-label">Активы под управлением</div>
           <div class="hero__panel-top-val">$200<em>M+</em></div>
           <div class="hero__panel-top-sub">в портфеле и под управлением</div>
           <p class="hero__panel-top-note">«Устойчивый рост через дисциплинированный отбор активов»</p>
         </div>
-
         <div class="hero__panel-grid">
           <div class="hero__stat">
             <div class="hero__stat__val">15<em>+</em></div>
@@ -1145,7 +1287,6 @@
             <div class="hero__stat__key">Средний<br>MOIC</div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -1158,136 +1299,145 @@
   <!-- Карусель партнёров -->
   <div class="partners" aria-label="Портфельные компании и партнёры">
     <div class="partners__track">
-      <!-- Замени <span> на <img src="/images/carousel_logo_N.png" alt="Название"> когда будут логотипы -->
       <div class="partners__item"><span>TerraLogic</span></div>
       <div class="partners__item"><span>Nordic Capital</span></div>
       <div class="partners__item"><span>SecureVault</span></div>
-      <div class="partners__item"><span>Партнёр 4</span></div>
-      <div class="partners__item"><span>Партнёр 5</span></div>
-      <div class="partners__item"><span>Партнёр 6</span></div>
+      <div class="partners__item"><span>Galelium Ventures</span></div>
+      <div class="partners__item"><span>Atlas Holdings</span></div>
+      <div class="partners__item"><span>Meridian Group</span></div>
       <div class="partners__item" aria-hidden="true"><span>TerraLogic</span></div>
       <div class="partners__item" aria-hidden="true"><span>Nordic Capital</span></div>
       <div class="partners__item" aria-hidden="true"><span>SecureVault</span></div>
-      <div class="partners__item" aria-hidden="true"><span>Партнёр 4</span></div>
-      <div class="partners__item" aria-hidden="true"><span>Партнёр 5</span></div>
-      <div class="partners__item" aria-hidden="true"><span>Партнёр 6</span></div>
+      <div class="partners__item" aria-hidden="true"><span>Galelium Ventures</span></div>
+      <div class="partners__item" aria-hidden="true"><span>Atlas Holdings</span></div>
+      <div class="partners__item" aria-hidden="true"><span>Meridian Group</span></div>
     </div>
   </div>
 
   <!-- ════════════════════════════════════════════════════════
-       КАК МЫ РАБОТАЕМ
+       HUB — НАВИГАЦИОННЫЕ КАРТОЧКИ
        ════════════════════════════════════════════════════════ -->
-  <section class="section" id="how-we-work" aria-labelledby="hw-title">
-    <div class="section__inner">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">Как мы работаем</span>
-          <h2 class="section-title" id="hw-title">Пять направлений<br><em>нашей работы</em></h2>
-        </div>
-        <p class="section-lead">От выбора актива до операционного развития — системный подход на каждом этапе.</p>
+  <div class="hub" id="hub">
+    <div class="hub__inner">
+
+      <div class="hub__label reveal">
+        <span class="hub__label-text">Разделы корпорации</span>
+        <span class="hub__label-line"></span>
       </div>
 
-      <div class="directions">
-        <div class="dir-card reveal">
-          <div class="dir-card__num">01</div>
-          <div class="dir-card__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 13V8l5.5-5.5L13 8v5H9.5v-3.5H5.5V13H2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+      <div class="hub__grid">
+
+        <!-- 1. О корпорации — широкая акцентная -->
+        <a class="hub-card hub-card--accent reveal" href="https://galelium.com/#about" style="animation-delay:.0s">
+          <div class="hub-card__icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 2L2 6v6l7 4 7-4V6L9 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 10V7M9 12.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
           </div>
-          <h3 class="dir-card__title">Стратегический контроль</h3>
-          <p class="dir-card__text">Управление долями и акциями в ключевых отраслях. Активное участие в советах директоров, формирование стратегии и контроль ключевых решений.</p>
-          <span class="dir-card__arrow">Подробнее <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </div>
-        <div class="dir-card reveal">
-          <div class="dir-card__num">02</div>
-          <div class="dir-card__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7.5 4.5v3l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <div class="hub-card__tag">О корпорации</div>
+          <div class="hub-card__title">Galelium Corporation</div>
+          <div class="hub-card__desc">Холдинговая структура нового поколения. Создаём долгосрочную ценность через дисциплинированный отбор активов с горизонтом 5–10 лет.</div>
+          <div class="hub-card__foot">
+            <span class="hub-card__arrow">Узнать больше <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="hub-card__badge">EST. 2025</span>
           </div>
-          <h3 class="dir-card__title">Целевые инвестиции</h3>
-          <p class="dir-card__text">Строгий отбор объектов с высоким потенциалом роста. Глубокий due diligence, структурирование сделок для максимальной доходности.</p>
-          <span class="dir-card__arrow">Подробнее <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </div>
-        <div class="dir-card reveal">
-          <div class="dir-card__num">03</div>
-          <div class="dir-card__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="4" cy="7.5" r="2" stroke="currentColor" stroke-width="1.2"/><circle cx="11" cy="7.5" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M6 7.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </a>
+
+        <!-- 2. Наши активы -->
+        <a class="hub-card reveal" href="https://galelium.com/news.html" style="animation-delay:.04s">
+          <div class="hub-card__icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 12l3.5-4 3 2.5 4-5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="1" y="1" width="14" height="14" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>
           </div>
-          <h3 class="dir-card__title">Партнёрская сеть</h3>
-          <p class="dir-card__text">Стратегические партнёрства для масштабирования бизнеса. Глобальная сеть инвесторов, консультантов и операционных партнёров.</p>
-          <span class="dir-card__arrow">Подробнее <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </div>
-        <div class="dir-card reveal">
-          <div class="dir-card__num">04</div>
-          <div class="dir-card__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 11l3.5-3.5 3 2.5 4.5-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="hub-card__tag">Инвестиции</div>
+          <div class="hub-card__title">Наши активы</div>
+          <div class="hub-card__desc">Портфель из 15+ компаний. Технологии, инфраструктура, финансовые сервисы — отбор через строгий due diligence.</div>
+          <div class="hub-card__foot">
+            <span class="hub-card__arrow">Перейти <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="hub-card__badge">$200M+</span>
           </div>
-          <h3 class="dir-card__title">Аналитика и планирование</h3>
-          <p class="dir-card__text">Глубокий анализ рынков и макроэкономических трендов. Долгосрочное стратегическое планирование на основе данных.</p>
-          <span class="dir-card__arrow">Подробнее <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </div>
-        <div class="dir-card reveal">
-          <div class="dir-card__num">05</div>
-          <div class="dir-card__icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="2" y="2" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8.5" y="2" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="8.5" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8.5" y="8.5" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>
+        </a>
+
+        <!-- 3. Стратегия -->
+        <a class="hub-card reveal" href="https://galelium.com/#how-we-work" style="animation-delay:.08s">
+          <div class="hub-card__icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 8h5M8 5.5v5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
           </div>
-          <h3 class="dir-card__title">Операционная поддержка</h3>
-          <p class="dir-card__text">Ресурсы, экспертиза и инфраструктура для портфельных компаний. Помощь в процессах, найме руководителей и выходе на новые рынки.</p>
-          <span class="dir-card__arrow">Подробнее <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </div>
+          <div class="hub-card__tag">Методология</div>
+          <div class="hub-card__title">Как мы работаем</div>
+          <div class="hub-card__desc">Пять направлений: стратегический контроль, целевые инвестиции, партнёрская сеть, аналитика, операционная поддержка.</div>
+          <div class="hub-card__foot">
+            <span class="hub-card__arrow">Подробнее <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+        </a>
+
+        <!-- 4. Команда -->
+        <a class="hub-card reveal" href="https://galelium.com/#about" style="animation-delay:.12s">
+          <div class="hub-card__icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><circle cx="11" cy="6" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 13c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M11 10c1.657 0 3 1.343 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          <div class="hub-card__tag">Люди</div>
+          <div class="hub-card__title">Команда</div>
+          <div class="hub-card__desc">Профессионалы с опытом в private equity, M&A и операционном управлении.</div>
+          <div class="hub-card__foot">
+            <span class="hub-card__arrow">Познакомиться <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+        </a>
+
+        <!-- 5. Новости -->
+        <a class="hub-card reveal" href="https://galelium.com/news.html" style="animation-delay:.16s">
+          <div class="hub-card__icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 5.5h7M4.5 8h5M4.5 10.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          <div class="hub-card__tag">Медиа</div>
+          <div class="hub-card__title">Новости</div>
+          <div class="hub-card__desc">Сделки, аналитика рынков, корпоративные обновления — всё актуальное о деятельности Galelium.</div>
+          <div class="hub-card__foot">
+            <span class="hub-card__arrow">Читать <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+        </a>
+
+        <!-- 6. Карьера -->
+        <a class="hub-card reveal" href="https://galelium.com/careers.html" style="animation-delay:.20s">
+          <div class="hub-card__icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="4.5" y="1.5" width="7" height="4" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="1.5" y="5.5" width="13" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 9.5h13" stroke="currentColor" stroke-width="1.2"/></svg>
+          </div>
+          <div class="hub-card__tag">Карьера</div>
+          <div class="hub-card__title">Вакансии</div>
+          <div class="hub-card__desc">Открытые позиции в Galelium Corporation и портфельных компаниях.</div>
+          <div class="hub-card__foot">
+            <span class="hub-card__arrow">Смотреть вакансии <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+        </a>
+
+        <!-- 7. Отчёты -->
+        <a class="hub-card reveal" href="https://galelium.com/reports.html" style="animation-delay:.24s">
+          <div class="hub-card__icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="1.5" width="12" height="13" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M5 5.5h6M5 8h6M5 10.5h3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          <div class="hub-card__tag">Рабочие данные</div>
+          <div class="hub-card__title">Отчёты смен</div>
+          <div class="hub-card__desc">Ежедневные отчёты о рабочих сменах, статистика заказов.</div>
+          <div class="hub-card__foot">
+            <span class="hub-card__arrow">Открыть <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+        </a>
+
+        <!-- 8. Связаться — на всю ширину -->
+        <a class="hub-card hub-card--contact reveal" href="#contact" style="animation-delay:.28s">
+          <div class="hub-card__icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.5" y="3.5" width="13" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 5.5l6.5 4.5 6.5-4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          <div class="hub-card__body">
+            <div class="hub-card__tag">Прямой контакт</div>
+            <div class="hub-card__title">Связаться с нами</div>
+            <div class="hub-card__desc">Инвестиционные предложения, партнёрства, со-инвестирование — рассматриваем каждый запрос.</div>
+          </div>
+          <div class="hub-card__foot">
+            <span class="hub-card__arrow">Написать <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+        </a>
+
       </div>
     </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════
-       О НАС
-       ════════════════════════════════════════════════════════ -->
-  <section class="section" id="about" aria-labelledby="about-title">
-    <div class="section__inner">
-      <div class="about__inner">
-
-        <div class="about__sticky">
-          <span class="eyebrow reveal">О корпорации</span>
-          <h2 class="section-title reveal" id="about-title" style="margin-top:12px; margin-bottom:20px;">
-            Создаём ценность<br>через <em>дисциплину</em>
-          </h2>
-          <a href="#contact" class="btn-p reveal">
-            Предложить проект
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-        </div>
-
-        <div>
-          <div class="about__text reveal">
-            <p>Galelium Corporation — <strong>холдинговая структура нового поколения</strong>, созданная для работы в условиях высокой неопределённости. Мы не следуем трендам — мы создаём их, выбирая объекты для инвестиций с горизонтом 5–10 лет.</p>
-            <p>Наша модель сочетает строгую финансовую дисциплину с гибкостью и скоростью принятия решений, характерной для лучших частных холдингов. Мы координируем работу дочерних компаний и партнёров, обеспечивая синергию и условия для <strong>устойчивого долгосрочного роста</strong>.</p>
-          </div>
-          <div class="about__list reveal">
-            <div class="about__item">
-              <div class="about__item-dot" aria-hidden="true"></div>
-              <div>
-                <p class="about__item-title">Долгосрочное мышление</p>
-                <p class="about__item-text">Оцениваем инвестиции через призму 5–10 лет. Это позволяет принимать решения, недоступные краткосрочным участникам рынка.</p>
-              </div>
-            </div>
-            <div class="about__item">
-              <div class="about__item-dot" aria-hidden="true"></div>
-              <div>
-                <p class="about__item-title">Концентрированный портфель</p>
-                <p class="about__item-text">Предпочитаем глубокое вовлечение в ограниченное число активов широкой диверсификации. Качество важнее количества.</p>
-              </div>
-            </div>
-            <div class="about__item">
-              <div class="about__item-dot" aria-hidden="true"></div>
-              <div>
-                <p class="about__item-title">Конфиденциальность</p>
-                <p class="about__item-text">Большинство сделок — непубличные. Мы ценим конфиденциальность партнёров и не раскрываем детали без необходимости.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
+  </div>
 
   <!-- ════════════════════════════════════════════════════════
        НОВОСТИ
@@ -1316,32 +1466,6 @@
   </section>
 
   <!-- ════════════════════════════════════════════════════════
-       КАРЬЕРА
-       ════════════════════════════════════════════════════════ -->
-  <section class="section" id="careers" aria-labelledby="careers-title">
-    <div class="section__inner">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">Открытые позиции</span>
-          <h2 class="section-title" id="careers-title">Карьера в <em>Galelium</em></h2>
-        </div>
-        <a href="https://galelium.com/careers.html" class="section-link reveal">
-          Все вакансии
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-      <div class="nc-grid reveal" id="nc-careers-grid">
-        <div class="nc-skeleton"><div class="nc-skeleton__line" style="width:30%"></div><div class="nc-skeleton__line" style="width:70%"></div><div class="nc-skeleton__line" style="width:55%"></div><div class="nc-skeleton__line" style="width:40%;margin-top:6px"></div></div>
-        <div class="nc-skeleton"><div class="nc-skeleton__line" style="width:35%"></div><div class="nc-skeleton__line" style="width:72%"></div><div class="nc-skeleton__line" style="width:50%"></div><div class="nc-skeleton__line" style="width:38%;margin-top:6px"></div></div>
-      </div>
-      <a class="news-all reveal" href="https://galelium.com/careers.html">
-        <span>Все вакансии Galelium Corporation</span>
-        <span class="news-arrow">Перейти <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════
        КОНТАКТ
        ════════════════════════════════════════════════════════ -->
   <section class="section" id="contact" aria-labelledby="contact-title">
@@ -1357,13 +1481,13 @@
           </p>
         </div>
         <div class="contact__channels reveal">
-          <a class="ch-link" href="/cdn-cgi/l/email-protection#bfd6d1d9d0ffd8ded3dad3d6cad291dcd0d2">
+          <a class="ch-link" href="mailto:info@galelium.com">
             <div class="ch-link__icon" aria-hidden="true">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3.5" width="11" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 5l5.5 3.5L12.5 5" stroke="currentColor" stroke-width="1.2"/></svg>
             </div>
             <div>
               <div class="ch-link__type">Email</div>
-              <div class="ch-link__val"><span class="__cf_email__" data-cfemail="7811161e17381f19141d14110d15561b1715">[email&#160;protected]</span></div>
+              <div class="ch-link__val">info@galelium.com</div>
             </div>
             <svg class="ch-link__arr" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h9M7.5 3l4 3.5L7.5 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
