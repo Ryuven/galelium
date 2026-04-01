@@ -194,51 +194,120 @@
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    /* SUMMARY */
-    .summary-strip { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; margin-bottom: 20px; }
-    .summary-cell { background: var(--surface); border: 1px solid var(--border); padding: 22px 26px; border-radius: var(--r); }
-    .summary-cell__val { font-family: var(--font-display); font-weight: 800; font-size: 2.6rem; line-height: 1; color: #fff; margin-bottom: 4px; }
+    /* SUMMARY — расширенная аналитика */
+    .summary-strip { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-bottom: 20px; }
+    .summary-cell {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 18px 20px; position: relative; overflow: hidden;
+    }
+    .summary-cell::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: transparent; transition: background var(--t);
+    }
+    .summary-cell:hover::after { background: linear-gradient(90deg, var(--accent-mid), transparent); }
+    .summary-cell__val { font-family: var(--font-display); font-weight: 800; font-size: 2rem; line-height: 1; color: #fff; margin-bottom: 4px; }
     .summary-cell__val em { color: var(--accent); font-style: normal; }
-    .summary-cell__label { font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted-2); }
+    .summary-cell__val.red-val { color: var(--red); }
+    .summary-cell__val.green-val { color: var(--green); }
+    .summary-cell__label { font-size: .58rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted-2); }
+    .summary-cell__trend {
+      position: absolute; top: 14px; right: 14px;
+      font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
+      display: flex; align-items: center; gap: 3px;
+    }
+    .summary-cell__trend.up   { color: var(--red); }
+    .summary-cell__trend.down { color: var(--green); }
+    .summary-cell__trend.neutral { color: var(--muted-2); }
+
+    /* CHART MINI — спарклайн */
+    .summary-cell__spark { margin-top: 10px; }
+    .spark-canvas { width: 100%; height: 28px; display: block; }
+
+    /* АЛЕРТ-БАННЕР нарушений */
+    .alert-banner {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(207,102,121,.08); border: 1px solid rgba(207,102,121,.25);
+      padding: 12px 16px; margin-bottom: 14px;
+      font-size: .78rem; color: var(--muted);
+    }
+    .alert-banner__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; animation: pulse-red 2s ease-in-out infinite; }
+    @keyframes pulse-red {
+      0%,100% { box-shadow: 0 0 0 0 rgba(207,102,121,.4); }
+      50%      { box-shadow: 0 0 0 5px rgba(207,102,121,0); }
+    }
+    .alert-banner strong { color: var(--red); }
 
     /* SEARCH */
-    .search-row { margin-bottom: 14px; }
-    .search-wrap { position: relative; }
+    .search-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+    .search-wrap { position: relative; flex: 1; max-width: 320px; }
     .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted-2); pointer-events: none; }
     #search-input {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--r);
       color: var(--text); font-family: var(--font-sans); font-size: .78rem; font-weight: 300;
-      padding: 9px 14px 9px 36px; width: 100%; max-width: 320px; outline: none;
+      padding: 9px 14px 9px 36px; width: 100%; outline: none;
       transition: border-color var(--t-fast);
     }
     #search-input::placeholder { color: var(--muted-2); }
     #search-input:focus { border-color: var(--accent-mid); }
 
+    /* Фильтр по нарушениям */
+    .filter-toggle {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--r);
+      background: none; color: var(--muted); font-family: var(--font-sans);
+      font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+      cursor: pointer; transition: border-color var(--t-fast), color var(--t-fast), background var(--t-fast);
+      white-space: nowrap;
+    }
+    .filter-toggle:hover { border-color: var(--border-h); color: var(--text); }
+    .filter-toggle.active { border-color: rgba(207,102,121,.35); color: var(--red); background: rgba(207,102,121,.07); }
+    .filter-toggle .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
     /* REPORTS LIST */
     .reports-list { display: flex; flex-direction: column; gap: 2px; }
     .report-row {
-      display: grid; grid-template-columns: 110px 1fr auto;
+      display: grid; grid-template-columns: 100px 1fr auto;
       align-items: center; gap: 20px;
-      background: var(--surface); border: 1px solid var(--border); border-radius: var(--r);
-      padding: 18px 22px; cursor: pointer; position: relative; overflow: hidden;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 16px 20px; cursor: pointer; position: relative; overflow: hidden;
       transition: border-color var(--t-fast), background var(--t-fast);
     }
-    .report-row::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--green); }
+    .report-row::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background: var(--green); }
+    .report-row.has-violation::before { background: var(--red); }
+    .report-row.has-violation { border-color: rgba(207,102,121,.12); }
+    .report-row.has-violation:hover { border-color: rgba(207,102,121,.28); background: rgba(207,102,121,.03); }
     .report-row:hover { border-color: var(--border-h); background: var(--surface-2); }
-    .report-date { font-family:var(--font-display); font-weight:700; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
-    .report-date strong { display:block; font-size:1.4rem; color:#fff; line-height:1; margin-bottom:2px; letter-spacing:-.01em; }
+
+    /* Мини-бары показателей в строке */
+    .report-bars { display: flex; flex-direction: column; gap: 4px; }
+    .report-bar-row { display: flex; align-items: center; gap: 6px; }
+    .report-bar-label { font-size: .56rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); min-width: 24px; }
+    .report-bar-track { flex: 1; height: 3px; background: var(--surface-2); border-radius: 2px; overflow: hidden; min-width: 60px; max-width: 100px; }
+    .report-bar-fill { height: 100%; border-radius: 2px; transition: width .6s var(--ease); }
+    .report-bar-fill.ok  { background: var(--green); }
+    .report-bar-fill.bad { background: var(--red); }
+    .report-bar-val { font-size: .62rem; color: var(--muted); min-width: 36px; text-align: right; white-space: nowrap; }
+    .report-bar-val.bad { color: var(--red); }
+
+    .report-date { font-family:var(--font-display); font-weight:700; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+    .report-date strong { display:block; font-size:1.3rem; color:#fff; line-height:1; margin-bottom:2px; letter-spacing:-.01em; }
     .report-meta { min-width:0; }
-    .report-address { font-size:.9rem; font-weight:400; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:6px; }
-    .report-times { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
-    .report-time-item { display:flex; align-items:center; gap:6px; font-size:.75rem; color:var(--muted); }
+    .report-address { font-size:.88rem; font-weight:400; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:5px; }
+    .report-times { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+    .report-time-item { display:flex; align-items:center; gap:6px; font-size:.73rem; color:var(--muted); }
     .report-time-item span { font-weight:400; color:var(--text); }
     .report-right { display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0; }
+    .report-right-orders {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 1.2rem; color: #fff; line-height: 1; text-align: right;
+    }
+    .report-right-orders span { font-size: .58rem; font-family: var(--font-sans); font-weight: 300; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; display: block; margin-top: 3px; }
 
-    /* DRAWER */
-    .modal-overlay { position:fixed; inset:0; background:rgba(5,5,10,.7); z-index:300; opacity:0; pointer-events:none; transition:opacity var(--t) ease; }
+    /* DRAWER — улучшенный */
+    .modal-overlay { position:fixed; inset:0; background:rgba(5,5,10,.75); z-index:300; opacity:0; pointer-events:none; transition:opacity var(--t) ease; }
     .modal-overlay.is-open { opacity:1; pointer-events:auto; }
     .modal-drawer {
-      position:fixed; top:0; right:0; bottom:0; width:min(560px,100vw);
+      position:fixed; top:0; right:0; bottom:0; width:min(580px,100vw);
       background:var(--surface); border-left:1px solid var(--border); z-index:301;
       overflow-y:auto; transform:translateX(100%);
       transition:transform .3s var(--ease); -webkit-overflow-scrolling:touch;
@@ -251,37 +320,80 @@
       cursor:pointer; color:var(--muted); transition:border-color var(--t-fast),color var(--t-fast);
     }
     .drawer-close:hover { border-color:var(--border-h); color:var(--text); }
-    .drawer-body { padding:32px 28px 48px; }
-    .drawer-header { margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid var(--border); }
-    .drawer-date { font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
-    .drawer-address { font-family:var(--font-display); font-weight:700; font-size:1.1rem; color:#fff; line-height:1.3; }
+    .drawer-body { padding:32px 28px 56px; }
 
-    .shift-blocks { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:22px; }
-    .shift-block { background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r); padding:16px; }
-    .shift-block__label { font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted-2); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
-    .shift-block__time { font-family:var(--font-display); font-weight:800; font-size:1.8rem; line-height:1; color:#fff; margin-bottom:12px; }
-    .shift-block__photos { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+    /* Шапка дровера с индикатором */
+    .drawer-header {
+      margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .drawer-status-bar {
+      width: 4px; height: 100%; min-height: 48px; border-radius: 2px; flex-shrink: 0; margin-top: 2px;
+    }
+    .drawer-status-bar.ok  { background: var(--green); }
+    .drawer-status-bar.bad { background: var(--red); }
+    .drawer-header-content { flex: 1; min-width: 0; }
+    .drawer-date { font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+    .drawer-address { font-family:var(--font-display); font-weight:700; font-size:1.05rem; color:#fff; line-height:1.3; margin-bottom:8px; }
+    .drawer-duration-row {
+      display: flex; align-items: center; gap: 12px;
+      font-size: .72rem; color: var(--muted);
+    }
+    .drawer-duration-row strong { color: var(--text); }
+
+    /* Прогресс-бары в дровере */
+    .drawer-progress-section { margin-bottom: 22px; }
+    .drawer-progress-title { font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted-2); margin-bottom:12px; }
+    .dp-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .dp-label { font-size: .68rem; color: var(--muted); min-width: 140px; flex-shrink: 0; }
+    .dp-track { flex: 1; height: 5px; background: var(--surface-2); border-radius: 3px; overflow: hidden; position: relative; }
+    .dp-fill { height: 100%; border-radius: 3px; transition: width .7s var(--ease); position: relative; }
+    .dp-fill.ok  { background: var(--green); }
+    .dp-fill.bad { background: var(--red); }
+    .dp-val { font-size: .7rem; min-width: 52px; text-align: right; white-space: nowrap; }
+    .dp-val.bad { color: var(--red); font-weight: 500; }
+    .dp-val.ok  { color: var(--green); }
+    /* Норма-маркер */
+    .dp-norm { position: absolute; top: -2px; bottom: -2px; width: 1px; background: rgba(255,255,255,.2); }
+
+    .shift-blocks { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+    .shift-block { background:var(--surface-2); border:1px solid var(--border); padding:14px; }
+    .shift-block__label { font-size:.58rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted-2); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+    .shift-block__time { font-family:var(--font-display); font-weight:800; font-size:1.7rem; line-height:1; color:#fff; margin-bottom:10px; }
+    .shift-block__photos { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
     .photo-thumb {
-      width:72px; height:72px; border-radius:var(--r);
-      border:1px solid var(--border); overflow:hidden; cursor:pointer;
-      background:var(--bg); transition:border-color var(--t-fast); flex-shrink:0;
+      width:70px; height:70px; border:1px solid var(--border); overflow:hidden; cursor:pointer;
+      background:var(--bg); transition:border-color var(--t-fast); flex-shrink:0; position: relative;
     }
     .photo-thumb:hover { border-color:var(--accent-mid); }
-    .photo-thumb img { width:100%; height:100%; object-fit:cover; }
-    .photo-thumb--empty { display:flex; align-items:center; justify-content:center; font-size:.55rem; color:var(--muted-2); letter-spacing:.08em; text-transform:uppercase; text-align:center; padding:6px; line-height:1.4; }
-    .shift-block__note { font-size:.78rem; color:var(--muted); line-height:1.55; font-style:italic; }
+    .photo-thumb img { width:100%; height:100%; object-fit:cover; transition: transform .3s var(--ease); }
+    .photo-thumb:hover img { transform: scale(1.06); }
+    .photo-thumb--empty { display:flex; align-items:center; justify-content:center; font-size:.52rem; color:var(--muted-2); text-align:center; padding:6px; line-height:1.4; }
+    .shift-block__note { font-size:.75rem; color:var(--muted); line-height:1.5; font-style:italic; }
 
-    .stats-section { margin-bottom:22px; }
+    .stats-section { margin-bottom:20px; }
     .stats-title { font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted-2); margin-bottom:10px; }
     .stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; }
-    .stat-cell { background:var(--surface-2); border:1px solid var(--border); padding:14px 12px; border-radius:var(--r); }
-    .stat-cell__val { font-family:var(--font-display); font-weight:800; font-size:1.4rem; line-height:1; color:#fff; margin-bottom:4px; }
+    .stat-cell { background:var(--surface-2); border:1px solid var(--border); padding:12px 10px; }
+    .stat-cell__val { font-family:var(--font-display); font-weight:800; font-size:1.35rem; line-height:1; color:#fff; margin-bottom:4px; }
     .stat-cell__val.green { color:var(--green); }
     .stat-cell__val.red   { color:var(--red); }
-    .stat-cell__label { font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted-2); line-height:1.4; }
+    .stat-cell__label { font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-2); line-height:1.4; }
+    .stat-cell__warn { font-size:.56rem; color:var(--red); letter-spacing:.06em; margin-top:3px; }
 
-    .drawer-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; }
-    .tg-link { display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border:1px solid var(--border); border-radius:var(--r); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:border-color var(--t-fast),color var(--t-fast); }
+    /* Нарушение-алерт внутри дровера */
+    .violation-alert {
+      background: rgba(207,102,121,.08); border: 1px solid rgba(207,102,121,.22);
+      padding: 12px 14px; margin-bottom: 18px;
+      font-size: .78rem; color: var(--red); line-height: 1.5;
+    }
+    .violation-alert strong { display: block; font-weight: 500; margin-bottom: 2px; }
+
+    .drawer-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px; }
+    .tag { display:inline-block; font-size:.6rem; font-weight:400; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); border:1px solid var(--border); padding:3px 9px; white-space:nowrap; }
+    .tag--accent { color:var(--accent); border-color:var(--accent-mid); background:var(--accent-dim); }
+    .tag--warn { color:var(--red); border-color:rgba(207,102,121,.3); background:rgba(207,102,121,.07); }
+    .tg-link { display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border:1px solid var(--border); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:border-color var(--t-fast),color var(--t-fast); }
     .tg-link:hover { border-color:var(--accent-mid); color:var(--accent); }
 
     /* WORKER TAB */
@@ -339,7 +451,8 @@
     @media (max-width:640px) {
       .nav-list { display:none; }
       .nav-btn  { display:flex; }
-      .report-row { grid-template-columns:80px 1fr; gap:12px; padding:14px 14px; }
+      .summary-strip { grid-template-columns: repeat(2,1fr); }
+      .report-row { grid-template-columns:80px 1fr; gap:10px; padding:12px 14px; }
       .report-right { display:none; }
       .shift-blocks { grid-template-columns:1fr; }
       .stats-grid { grid-template-columns:repeat(2,1fr); }
@@ -420,11 +533,16 @@
 
         <div class="summary-strip anim-in" id="summary-strip" style="animation-delay:.24s"></div>
 
+        <div id="alert-container"></div>
+
         <div class="search-row anim-in" style="animation-delay:.28s">
           <div class="search-wrap">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.3"/><path d="M9.5 9.5l2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
             <input type="search" id="search-input" placeholder="Поиск по адресу…" autocomplete="off" />
           </div>
+          <button class="filter-toggle" id="filter-violations" title="Показать только смены с нарушениями">
+            <span class="dot"></span> Нарушения
+          </button>
         </div>
 
         <div class="reports-list anim-in" id="reports-list" style="animation-delay:.32s">
@@ -602,8 +720,10 @@
   /* Отчёты */
   var allReports  = [];
   var searchQuery = '';
-  var listEl    = document.getElementById('reports-list');
-  var summaryEl = document.getElementById('summary-strip');
+  var showViolations = false;
+  var listEl      = document.getElementById('reports-list');
+  var summaryEl   = document.getElementById('summary-strip');
+  var alertCont   = document.getElementById('alert-container');
 
   function fmtDate(s) {
     var d = new Date(s+'T00:00:00');
@@ -613,6 +733,40 @@
     return { day:d.getDate(), month:M[d.getMonth()], monthFull:MF[d.getMonth()], year:d.getFullYear(), dow:D[d.getDay()], mo:d.getMonth(), yr:d.getFullYear() };
   }
 
+  function isViolation(r) {
+    if (!r.stats) return false;
+    return (r.stats.correction_pct > 4) || (r.stats.avg_position_sec > 38);
+  }
+
+  /* Спарклайн (canvas) */
+  function drawSparkline(canvasId, values, color) {
+    var c = document.getElementById(canvasId);
+    if (!c) return;
+    var ctx = c.getContext('2d');
+    var w = c.offsetWidth || 120, h = c.offsetHeight || 28;
+    c.width = w; c.height = h;
+    if (!values || values.length < 2) return;
+    var min = Math.min.apply(null, values);
+    var max = Math.max.apply(null, values);
+    var range = max - min || 1;
+    ctx.clearRect(0, 0, w, h);
+    ctx.beginPath();
+    values.forEach(function(v, i) {
+      var x = (i / (values.length - 1)) * w;
+      var y = h - ((v - min) / range) * (h - 4) - 2;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    /* Последняя точка */
+    var lx = w, ly = h - ((values[values.length-1] - min) / range) * (h-4) - 2;
+    ctx.beginPath();
+    ctx.arc(lx, ly, 3, 0, Math.PI*2);
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+
   function renderSummary(reports) {
     var now = new Date();
     var inMonth = reports.filter(function(r){
@@ -620,9 +774,74 @@
       return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
     });
     var d = fmtDate(now.toISOString().slice(0,10));
+
+    var totalPositions = 0, totalOrders = 0, violCount = 0;
+    var corrSum = 0, corrN = 0, speedSum = 0, speedN = 0;
+    reports.forEach(function(r) {
+      if (r.stats) {
+        if (r.stats.positions) totalPositions += r.stats.positions;
+        if (r.stats.orders)    totalOrders   += r.stats.orders;
+        if (typeof r.stats.correction_pct === 'number') { corrSum += r.stats.correction_pct; corrN++; }
+        if (typeof r.stats.avg_position_sec === 'number') { speedSum += r.stats.avg_position_sec; speedN++; }
+      }
+      if (isViolation(r)) violCount++;
+    });
+    var avgCorr  = corrN  ? (corrSum  / corrN).toFixed(1)  : '—';
+    var avgSpeed = speedN ? Math.round(speedSum / speedN) : '—';
+
+    /* Тренд корректировок */
+    var corrTrend = '';
+    if (corrN >= 2) {
+      var last = reports[0].stats && reports[0].stats.correction_pct;
+      var prev = reports[1].stats && reports[1].stats.correction_pct;
+      if (last !== undefined && prev !== undefined) {
+        corrTrend = last > prev
+          ? '<span class="summary-cell__trend up">▲ растёт</span>'
+          : '<span class="summary-cell__trend down">▼ падает</span>';
+      }
+    }
+
     summaryEl.innerHTML =
-      '<div class="summary-cell"><div class="summary-cell__val"><em>'+inMonth.length+'</em></div><div class="summary-cell__label">Смен в '+d.monthFull+'</div></div>'+
-      '<div class="summary-cell"><div class="summary-cell__val">'+reports.length+'</div><div class="summary-cell__label">Всего смен</div></div>';
+      '<div class="summary-cell">'+
+        '<div class="summary-cell__val"><em>'+inMonth.length+'</em></div>'+
+        '<div class="summary-cell__label">Смен в '+d.monthFull+'</div>'+
+        '<canvas class="spark-canvas" id="spark-shifts" style="margin-top:10px"></canvas>'+
+      '</div>'+
+      '<div class="summary-cell">'+
+        '<div class="summary-cell__val">'+totalPositions.toLocaleString('ru')+'</div>'+
+        '<div class="summary-cell__label">Позиций собрано</div>'+
+        '<canvas class="spark-canvas" id="spark-pos" style="margin-top:10px"></canvas>'+
+      '</div>'+
+      '<div class="summary-cell">'+
+        corrTrend+
+        '<div class="summary-cell__val '+(parseFloat(avgCorr)>4?'red-val':'green-val')+'">'+avgCorr+'<span style="font-size:1.2rem">%</span></div>'+
+        '<div class="summary-cell__label">Ср. доля корректировок</div>'+
+        '<canvas class="spark-canvas" id="spark-corr" style="margin-top:10px"></canvas>'+
+      '</div>'+
+      '<div class="summary-cell">'+
+        '<div class="summary-cell__val '+(avgSpeed>38?'red-val':'green-val')+'">'+avgSpeed+'<span style="font-size:1rem;font-family:var(--font-sans);font-weight:300;color:var(--muted)"> с</span></div>'+
+        '<div class="summary-cell__label">Ср. скорость позиции</div>'+
+        '<canvas class="spark-canvas" id="spark-speed" style="margin-top:10px"></canvas>'+
+      '</div>';
+
+    /* Алерт нарушений */
+    if (alertCont) {
+      if (violCount > 0) {
+        alertCont.innerHTML = '<div class="alert-banner anim-in"><span class="alert-banner__dot"></span><span><strong>'+violCount+' из '+reports.length+' смен</strong> с нарушениями — превышение нормы корректировок (&gt;4%) или скорости (&gt;38 с)</span></div>';
+      } else {
+        alertCont.innerHTML = '';
+      }
+    }
+
+    /* Спарклайны */
+    setTimeout(function() {
+      var corrVals  = reports.slice().reverse().map(function(r){ return r.stats ? r.stats.correction_pct||0 : 0; });
+      var speedVals = reports.slice().reverse().map(function(r){ return r.stats ? r.stats.avg_position_sec||0 : 0; });
+      var posVals   = reports.slice().reverse().map(function(r){ return r.stats ? r.stats.positions||0 : 0; });
+      drawSparkline('spark-corr',  corrVals,  parseFloat(avgCorr)>4  ? 'rgba(207,102,121,.7)' : 'rgba(76,175,130,.7)');
+      drawSparkline('spark-speed', speedVals, avgSpeed>38 ? 'rgba(207,102,121,.7)' : 'rgba(76,175,130,.7)');
+      drawSparkline('spark-pos',   posVals,   'rgba(200,169,110,.6)');
+    }, 100);
   }
 
   function renderList(reports) {
@@ -634,19 +853,45 @@
     listEl.innerHTML = reports.map(function(r){
       var d = fmtDate(r.date);
       var isToday = r.date === today;
+      var viol = isViolation(r);
+      var s = r.stats || {};
+
+      /* Мини-бары */
+      var corrPct   = typeof s.correction_pct === 'number' ? s.correction_pct : null;
+      var avgSec    = typeof s.avg_position_sec === 'number' ? s.avg_position_sec : null;
+      var corrFill  = corrPct  !== null ? Math.min(100, (corrPct  / 20) * 100) : 0;
+      var speedFill = avgSec   !== null ? Math.min(100, (avgSec   / 60) * 100) : 0;
+      var corrBad   = corrPct  !== null && corrPct  > 4;
+      var speedBad  = avgSec   !== null && avgSec   > 38;
+
+      var barsHtml = '<div class="report-bars">' +
+        (corrPct!==null ?
+          '<div class="report-bar-row">'+
+            '<div class="report-bar-label">корр</div>'+
+            '<div class="report-bar-track"><div class="report-bar-fill '+(corrBad?'bad':'ok')+'" style="width:'+corrFill+'%"></div></div>'+
+            '<div class="report-bar-val '+(corrBad?'bad':'')+'">'+corrPct.toFixed(1)+'%</div>'+
+          '</div>' : '') +
+        (avgSec!==null ?
+          '<div class="report-bar-row">'+
+            '<div class="report-bar-label">скор</div>'+
+            '<div class="report-bar-track"><div class="report-bar-fill '+(speedBad?'bad':'ok')+'" style="width:'+speedFill+'%"></div></div>'+
+            '<div class="report-bar-val '+(speedBad?'bad':'')+'">'+avgSec+'с</div>'+
+          '</div>' : '') +
+      '</div>';
+
       return (
-        '<div class="report-row" data-id="'+r.id+'" role="button" tabindex="0" aria-label="Отчёт за '+r.date+'">'+
+        '<div class="report-row'+(viol?' has-violation':'')+'" data-id="'+r.id+'" role="button" tabindex="0" aria-label="Отчёт за '+r.date+'">'+
           '<div class="report-date"><strong>'+d.day+'</strong>'+d.month+' · '+d.dow+'</div>'+
           '<div class="report-meta">'+
-            '<div class="report-address">'+r.address+'</div>'+
+            '<div class="report-address">'+r.address+(isToday?' <span class="tag tag--accent" style="vertical-align:middle;margin-left:6px">Сегодня</span>':'')+'</div>'+
             '<div class="report-times">'+
-              '<div class="report-time-item"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="var(--green)" stroke-width="1.2"/><path d="M6 3.5v3l1.5 1.5" stroke="var(--green)" stroke-width="1.2" stroke-linecap="round"/></svg>Приход&nbsp;<span>'+(r.arrival?r.arrival.time:'—')+'</span></div>'+
-              '<div class="report-time-item"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="var(--red)" stroke-width="1.2"/><path d="M6 3.5v3l-1.5 1.5" stroke="var(--red)" stroke-width="1.2" stroke-linecap="round"/></svg>Уход&nbsp;<span>'+(r.departure?r.departure.time:'—')+'</span></div>'+
-              (isToday?'<span class="tag tag--accent">Сегодня</span>':'')+
+              '<div class="report-time-item"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="var(--green)" stroke-width="1.2"/><path d="M6 3.5v3l1.5 1.5" stroke="var(--green)" stroke-width="1.2" stroke-linecap="round"/></svg><span>'+(r.arrival?r.arrival.time:'—')+'</span></div>'+
+              '<div class="report-time-item"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="var(--red)" stroke-width="1.2"/><path d="M6 3.5v3l-1.5 1.5" stroke="var(--red)" stroke-width="1.2" stroke-linecap="round"/></svg><span>'+(r.departure?r.departure.time:'—')+'</span></div>'+
             '</div>'+
           '</div>'+
           '<div class="report-right">'+
-            (r.stats?'<div style="font-family:var(--font-display);font-weight:800;font-size:1.3rem;color:#fff;line-height:1;text-align:right">'+r.stats.orders_done+'<span style="font-size:.6rem;font-family:var(--font-sans);font-weight:300;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;display:block;margin-top:3px">заказов</span></div>':'')+
+            barsHtml+
+            (s.orders ? '<div class="report-right-orders">'+s.orders+'<span>заказов</span></div>' : '')+
           '</div>'+
         '</div>'
       );
@@ -659,8 +904,22 @@
     });
   }
 
+  /* Фильтр нарушений */
+  var filterBtn = document.getElementById('filter-violations');
+  if (filterBtn) {
+    filterBtn.addEventListener('click', function() {
+      showViolations = !showViolations;
+      filterBtn.classList.toggle('active', showViolations);
+      applyFilters();
+    });
+  }
+
   function applyFilters() {
-    var f = allReports.filter(function(r){ return !searchQuery || r.address.toLowerCase().includes(searchQuery.toLowerCase()); });
+    var f = allReports.filter(function(r){
+      var matchSearch = !searchQuery || r.address.toLowerCase().includes(searchQuery.toLowerCase());
+      var matchViol   = !showViolations || isViolation(r);
+      return matchSearch && matchViol;
+    });
     renderList(f);
   }
 
@@ -679,6 +938,12 @@
     drawerEl.classList.add('is-open');      drawerEl.setAttribute('aria-hidden','false');
     drawerOverlay.classList.add('is-open'); drawerOverlay.setAttribute('aria-hidden','false');
     document.body.style.overflow = 'hidden';
+    /* Анимируем прогресс-бары */
+    setTimeout(function(){
+      drawerBody.querySelectorAll('.dp-fill[data-w]').forEach(function(el){
+        el.style.width = el.dataset.w + '%';
+      });
+    }, 80);
     drawerBody.querySelectorAll('.photo-thumb[data-src]').forEach(function(t){
       t.addEventListener('click',function(){ openLightbox(t.dataset.src); });
       t.addEventListener('keydown',function(e){ if(e.key==='Enter') openLightbox(t.dataset.src); });
@@ -707,48 +972,59 @@
       if (m>0) dur=Math.floor(m/60)+' ч '+(m%60?m%60+' мин':'');
     }
 
-    var stats = '';
+    var viol = isViolation(r);
+    var statusClass = viol ? 'bad' : 'ok';
+
+    /* Прогресс-бары */
+    var progress = '';
     if (r.stats) {
       var s = r.stats;
+      var corrPct  = typeof s.correction_pct === 'number' ? s.correction_pct : null;
+      var avgSec   = typeof s.avg_position_sec === 'number' ? s.avg_position_sec : null;
+      var corrBad  = corrPct !== null && corrPct > 4;
+      var speedBad = avgSec  !== null && avgSec  > 38;
 
-      /* Доля корректировок: норма ≤ 4%, выше — красный */
-      var corrPct   = typeof s.correction_pct === 'number' ? s.correction_pct : null;
-      var corrColor = corrPct !== null && corrPct > 4 ? 'red' : 'green';
-      var corrVal   = corrPct !== null ? corrPct.toFixed(1) + '%' : '—';
+      /* Ширина бара: корр норма 4%, максимум шкалы 25%; скорость норма 38с, макс 70с */
+      var corrW  = corrPct !== null ? Math.min(100, (corrPct / 25) * 100) : 0;
+      var corrNorm = (4/25)*100;
+      var speedW = avgSec  !== null ? Math.min(100, (avgSec  / 70) * 100) : 0;
+      var speedNorm = (38/70)*100;
 
-      /* Среднее время позиции: норма ≤ 38 сек, выше — красный */
-      var avgSec    = typeof s.avg_position_sec === 'number' ? s.avg_position_sec : null;
-      var avgColor  = avgSec !== null && avgSec > 38 ? 'red' : 'green';
-      var avgVal    = avgSec !== null ? avgSec + ' сек' : '—';
+      progress = '<div class="drawer-progress-section">' +
+        '<div class="drawer-progress-title">Показатели смены</div>' +
 
-      stats =
-        '<div class="stats-section">'+
-          '<div class="stats-title">Показатели смены</div>'+
-          '<div class="stats-grid">'+
-            '<div class="stat-cell">'+
-              '<div class="stat-cell__val">'+(s.positions!==undefined?s.positions:'—')+'</div>'+
-              '<div class="stat-cell__label">Собрано позиций</div>'+
-            '</div>'+
-            '<div class="stat-cell">'+
-              '<div class="stat-cell__val">'+(s.orders!==undefined?s.orders:'—')+'</div>'+
-              '<div class="stat-cell__label">Заказов</div>'+
-            '</div>'+
-            '<div class="stat-cell">'+
-              '<div class="stat-cell__val '+corrColor+'">'+corrVal+'</div>'+
-              '<div class="stat-cell__label">Доля корректировок</div>'+
-              (corrPct!==null&&corrPct>4?'<div style="font-size:.58rem;color:var(--red);letter-spacing:.08em;margin-top:3px">▲ выше нормы (4%)</div>':'')+
-            '</div>'+
-            '<div class="stat-cell">'+
-              '<div class="stat-cell__val '+avgColor+'">'+avgVal+'</div>'+
-              '<div class="stat-cell__label">Ср. скорость позиции</div>'+
-              (avgSec!==null&&avgSec>38?'<div style="font-size:.58rem;color:var(--red);letter-spacing:.08em;margin-top:3px">▲ выше нормы (38 с)</div>':'')+
-            '</div>'+
-            (dur?'<div class="stat-cell"><div class="stat-cell__val" style="font-size:1rem">'+dur+'</div><div class="stat-cell__label">Длительность</div></div>':'')+
-          '</div>'+
-        '</div>';
+        /* Позиции */
+        (s.positions ? '<div class="dp-row"><div class="dp-label">Позиций собрано</div><div class="dp-track" style="background:transparent"><div style="font-family:var(--font-display);font-weight:800;font-size:1.1rem;color:#fff">'+s.positions+'</div></div><div class="dp-val">шт.</div></div>' : '') +
+
+        /* Заказы */
+        (s.orders ? '<div class="dp-row"><div class="dp-label">Заказов</div><div class="dp-track" style="background:transparent"><div style="font-family:var(--font-display);font-weight:800;font-size:1.1rem;color:#fff">'+s.orders+'</div></div><div class="dp-val">шт.</div></div>' : '') +
+
+        /* Корректировки */
+        (corrPct !== null ? '<div class="dp-row">'+
+          '<div class="dp-label">Корректировки <span style="color:var(--muted-2)">(норма ≤4%)</span></div>'+
+          '<div class="dp-track"><div class="dp-fill '+(corrBad?'bad':'ok')+'" data-w="'+corrW+'" style="width:0%"><div class="dp-norm" style="left:'+corrNorm+'%"></div></div></div>'+
+          '<div class="dp-val '+(corrBad?'bad':'ok')+'">'+corrPct.toFixed(1)+'%'+(corrBad?' ▲':'')+' </div>'+
+        '</div>' : '') +
+
+        /* Скорость */
+        (avgSec !== null ? '<div class="dp-row">'+
+          '<div class="dp-label">Ср. скорость <span style="color:var(--muted-2)">(норма ≤38с)</span></div>'+
+          '<div class="dp-track"><div class="dp-fill '+(speedBad?'bad':'ok')+'" data-w="'+speedW+'" style="width:0%"><div class="dp-norm" style="left:'+speedNorm+'%"></div></div></div>'+
+          '<div class="dp-val '+(speedBad?'bad':'ok')+'">'+avgSec+'с'+(speedBad?' ▲':'')+' </div>'+
+        '</div>' : '') +
+
+        (dur ? '<div class="dp-row"><div class="dp-label">Длительность смены</div><div class="dp-track" style="background:transparent"><span style="font-size:.85rem;color:var(--text)">'+dur+'</span></div><div class="dp-val"></div></div>' : '') +
+
+      '</div>';
     }
 
-    var tags = r.tags && r.tags.length
+    /* Нарушение-блок */
+    var violHtml = '';
+    if (viol && r.tags && r.tags.length) {
+      violHtml = '<div class="violation-alert"><strong>⚠ Нарушения зафиксированы</strong>'+r.tags.join(' · ')+'</div>';
+    }
+
+    var tags = (r.tags && r.tags.length && !viol)
       ? '<div class="drawer-tags">'+r.tags.map(function(t){ return '<span class="tag">'+t+'</span>'; }).join('')+'</div>'
       : '';
 
@@ -758,24 +1034,32 @@
 
     return (
       '<div class="drawer-header">'+
-        '<div class="drawer-date">'+d.dow+', '+d.day+' '+d.month+' '+d.year+'</div>'+
-        '<div class="drawer-address">'+r.address+'</div>'+
+        '<div class="drawer-status-bar '+statusClass+'"></div>'+
+        '<div class="drawer-header-content">'+
+          '<div class="drawer-date">'+d.dow+', '+d.day+' '+d.month+' '+d.year+(viol?' · <span style="color:var(--red)">нарушения</span>':'')+'</div>'+
+          '<div class="drawer-address">'+r.address+'</div>'+
+          '<div class="drawer-duration-row">'+
+            (r.arrival?'<span>Приход <strong>'+r.arrival.time+'</strong></span>':'')+
+            (r.departure?'<span>Уход <strong>'+r.departure.time+'</strong></span>':'')+
+            (dur?'<span style="color:var(--muted-2)">'+dur+'</span>':'')+
+          '</div>'+
+        '</div>'+
       '</div>'+
 
+      violHtml +
+
       '<div class="shift-blocks">'+
-        /* Приход — 1 фото ТСД */
         '<div class="shift-block">'+
-          '<div class="shift-block__label"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="var(--green)" stroke-width="1.2"/><path d="M6 3.5v3l1.5 1.5" stroke="var(--green)" stroke-width="1.2" stroke-linecap="round"/></svg>Приход</div>'+
+          '<div class="shift-block__label"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="var(--green)" stroke-width="1.2"/><path d="M6 3.5v3l1.5 1.5" stroke="var(--green)" stroke-width="1.2" stroke-linecap="round"/></svg>Приход</div>'+
           '<div class="shift-block__time">'+(r.arrival?r.arrival.time:'—')+'</div>'+
           '<div class="shift-block__photos">'+thumb(r.arrival?r.arrival.photo_tsd:null,'Фото ТСД (приход)')+'</div>'+
           (r.arrival&&r.arrival.note?'<div class="shift-block__note">'+r.arrival.note+'</div>':'')+
         '</div>'+
-        /* Уход — 3 фото: ТСД + статистика 1 + статистика 2 */
         '<div class="shift-block">'+
-          '<div class="shift-block__label"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="var(--red)" stroke-width="1.2"/><path d="M6 3.5v3l-1.5 1.5" stroke="var(--red)" stroke-width="1.2" stroke-linecap="round"/></svg>Уход</div>'+
+          '<div class="shift-block__label"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="var(--red)" stroke-width="1.2"/><path d="M6 3.5v3l-1.5 1.5" stroke="var(--red)" stroke-width="1.2" stroke-linecap="round"/></svg>Уход</div>'+
           '<div class="shift-block__time">'+(r.departure?r.departure.time:'—')+'</div>'+
           '<div class="shift-block__photos">'+
-            thumb(r.departure?r.departure.photo_tsd:null,'Фото ТСД (уход)')+
+            thumb(r.departure?r.departure.photo_tsd:null,'ТСД уход')+
             thumb(r.departure?r.departure.photo_stats1:null,'Статистика 1')+
             thumb(r.departure?r.departure.photo_stats2:null,'Статистика 2')+
           '</div>'+
@@ -783,7 +1067,8 @@
         '</div>'+
       '</div>'+
 
-      stats + tags + tg
+      progress +
+      tags + tg
     );
   }
 
@@ -806,7 +1091,7 @@
     })
     .catch(function(err){
       console.error('reports.json:', err);
-      listEl.innerHTML='<div class="empty-state"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5"/><path d="M16 10v7M16 20v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><p>Не удалось загрузить <code>reports.json</code>.<br>Файл должен лежать рядом с <code>reports.html</code>.</p></div>';
+      listEl.innerHTML='<div class="empty-state"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5"/><path d="M16 10v7M16 20v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><p>Не удалось загрузить <code>reports.json</code>.</p></div>';
     });
 
 })();
