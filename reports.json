@@ -101,5 +101,30 @@
     },
     "tags": ["Нарушении: долгое вр. сборки, несколько жб."],
     "telegram_post": "https://t.me/yourchannel/123"
-  }
-]
+  },
+
+  {
+    "id": "r-20260402",
+    "date": "2026-04-02",
+    "address": "Индустриальный пр-кт 30, СПБ",
+    "arrival": {
+      "time": "10:30",
+      "photo_tsd": "img_reports/IMG_20260402_102807.jpg",
+      "note": "Прибыл вовремя, ТСД принят у сменщика"
+    },
+    "departure": {
+      "time": "22:30",
+      "photo_tsd": "img_reports/IMG_20260402_223022.jpg",
+      "photo_stats1": "img_reports/IMG_20260402_223027.jpg",
+      "photo_stats2": "img_reports/IMG_20260402_223031.jpg",
+      "note": "Смена закрыта"
+    },
+    "stats": {
+      "positions": 424,
+      "orders": 33,
+      "correction_pct": 24.24,
+      "avg_position_sec": 55
+    },
+    "tags": ["Нарушении: долгое вр. сборки, несколько жб."],
+    "telegram_post": "https://t.me/yourchannel/123"
+  },
