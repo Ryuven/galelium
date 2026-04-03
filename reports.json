@@ -1,108 +1,30 @@
 [
   {
-    "id": "r-20260329",
-    "date": "2026-03-29",
-    "address": "ул. Бабушкина 9, СПБ",
+    "id": "r-20260403",
+    "date": "2026-04-03",
+    "address": "Индустриальный пр-кт 30, СПБ",
     "arrival": {
-      "time": "10:00",
-      "photo_tsd": "img_reports/IMG_20260329_093754.jpg",
-      "note": "Прибыл вовремя, ТСД принят у сменщика"
+      "time": "10:30",
+      "photo_tsd": "IMG_20260403_102418.jpg",
+      "note": "Прибыл вовремя."
     },
     "departure": {
-      "time": "22:00",
-      "photo_tsd": "img_reports/IMG_20260329_220005.jpg",
-      "photo_stats1": "img_reports/IMG_20260329_220013.jpg",
-      "photo_stats2": "img_reports/IMG_20260329_220015.jpg",
-      "note": "Смена закрыта"
+      "time": "22:30",
+      "photo_tsd": "IMG_20260403_223605.jpg",
+      "photo_stats1": "IMG_20260403_223612.jpg",
+      "photo_stats2": "IMG_20260403_223615.jpg",
+      "note": "Закрыл смену, лучше чем вчера даже резултад"
     },
     "stats": {
-      "positions": 535,
-      "orders": 44,
-      "correction_pct": 11.36,
-      "avg_position_sec": 53
+      "positions": 498,
+      "orders": 43,
+      "correction_pct": 9.3,
+      "avg_position_sec": 56
     },
-    "tags": ["Нарушении: долгое вр. сборки, несколько жб."],
-    "telegram_post": "https://t.me/yourchannel/123"
+    "tags": [
+      "Сегодня забыл пакет с маргаритками передать курьеру, не подписал его не взял"
+    ]
   },
-
-  {
-    "id": "r-20260330",
-    "date": "2026-03-30",
-    "address": "ул. Бабушкина 9, СПБ",
-    "arrival": {
-      "time": "10:00",
-      "photo_tsd": "img_reports/IMG_20260330_095114.jpg",
-      "note": "Прибыл вовремя, ТСД принят у сменщика"
-    },
-    "departure": {
-      "time": "22:00",
-      "photo_tsd": "img_reports/IMG_20260330_220128.jpg",
-      "photo_stats1": "img_reports/IMG_20260330_220134.jpg",
-      "photo_stats2": "img_reports/IMG_20260330_220137.jpg",
-      "note": "Смена закрыта"
-    },
-    "stats": {
-      "positions": 345,
-      "orders": 32,
-      "correction_pct": 15.63,
-      "avg_position_sec": 55
-    },
-    "tags": ["Нарушении: долгое вр. сборки, несколько жб."],
-    "telegram_post": "https://t.me/yourchannel/123"
-  },
-  
-  {
-    "id": "r-20260331",
-    "date": "2026-03-31",
-    "address": "ул. Бабушкина 9, СПБ",
-    "arrival": {
-      "time": "10:00",
-      "photo_tsd": "img_reports/IMG_20260331_095401.jpg",
-      "note": "Прибыл вовремя, ТСД принят у сменщика"
-    },
-    "departure": {
-      "time": "22:00",
-      "photo_tsd": "img_reports/IMG_20260331_220600.jpg",
-      "photo_stats1": "img_reports/IMG_20260331_220620.jpg",
-      "photo_stats2": "img_reports/IMG_20260331_220622.jpg",
-      "note": "Смена закрыта"
-    },
-    "stats": {
-      "positions": 345,
-      "orders": 33,
-      "correction_pct": 6.06,
-      "avg_position_sec": 52
-    },
-    "tags": ["Нарушении: долгое вр. сборки, несколько жб."],
-    "telegram_post": "https://t.me/yourchannel/123"
-  },
-
-  {
-    "id": "r-20260401",
-    "date": "2026-04-01",
-    "address": "ул. Бабушкина 9, СПБ",
-    "arrival": {
-      "time": "10:00",
-      "photo_tsd": "img_reports/IMG_20260401_095927.jpg",
-      "note": "Прибыл вовремя, ТСД принят у сменщика"
-    },
-    "departure": {
-      "time": "22:00",
-      "photo_tsd": "img_reports/IMG_20260401_220605.jpg",
-      "photo_stats1": "img_reports/IMG_20260401_220612.jpg",
-      "photo_stats2": "img_reports/IMG_20260401_220615.jpg",
-      "note": "Смена закрыта"
-    },
-    "stats": {
-      "positions": 368,
-      "orders": 34,
-      "correction_pct": 20.59,
-      "avg_position_sec": 53
-    },
-    "tags": ["Нарушении: долгое вр. сборки, несколько жб."],
-    "telegram_post": "https://t.me/yourchannel/123"
-  },
-
   {
     "id": "r-20260402",
     "date": "2026-04-02",
@@ -125,7 +47,117 @@
       "correction_pct": 24.24,
       "avg_position_sec": 55
     },
-    "tags": ["Нарушении: долгое вр. сборки, несколько жб."],
+    "tags": [
+      "Нарушении: долгое вр. сборки, несколько жб."
+    ],
+    "telegram_post": "https://t.me/yourchannel/123"
+  },
+  {
+    "id": "r-20260401",
+    "date": "2026-04-01",
+    "address": "ул. Бабушкина 9, СПБ",
+    "arrival": {
+      "time": "10:00",
+      "photo_tsd": "img_reports/IMG_20260401_095927.jpg",
+      "note": "Прибыл вовремя, ТСД принят у сменщика"
+    },
+    "departure": {
+      "time": "22:00",
+      "photo_tsd": "img_reports/IMG_20260401_220605.jpg",
+      "photo_stats1": "img_reports/IMG_20260401_220612.jpg",
+      "photo_stats2": "img_reports/IMG_20260401_220615.jpg",
+      "note": "Смена закрыта"
+    },
+    "stats": {
+      "positions": 368,
+      "orders": 34,
+      "correction_pct": 20.59,
+      "avg_position_sec": 53
+    },
+    "tags": [
+      "Нарушении: долгое вр. сборки, несколько жб."
+    ],
+    "telegram_post": "https://t.me/yourchannel/123"
+  },
+  {
+    "id": "r-20260331",
+    "date": "2026-03-31",
+    "address": "ул. Бабушкина 9, СПБ",
+    "arrival": {
+      "time": "10:00",
+      "photo_tsd": "img_reports/IMG_20260331_095401.jpg",
+      "note": "Прибыл вовремя, ТСД принят у сменщика"
+    },
+    "departure": {
+      "time": "22:00",
+      "photo_tsd": "img_reports/IMG_20260331_220600.jpg",
+      "photo_stats1": "img_reports/IMG_20260331_220620.jpg",
+      "photo_stats2": "img_reports/IMG_20260331_220622.jpg",
+      "note": "Смена закрыта"
+    },
+    "stats": {
+      "positions": 345,
+      "orders": 33,
+      "correction_pct": 6.06,
+      "avg_position_sec": 52
+    },
+    "tags": [
+      "Нарушении: долгое вр. сборки, несколько жб."
+    ],
+    "telegram_post": "https://t.me/yourchannel/123"
+  },
+  {
+    "id": "r-20260330",
+    "date": "2026-03-30",
+    "address": "ул. Бабушкина 9, СПБ",
+    "arrival": {
+      "time": "10:00",
+      "photo_tsd": "img_reports/IMG_20260330_095114.jpg",
+      "note": "Прибыл вовремя, ТСД принят у сменщика"
+    },
+    "departure": {
+      "time": "22:00",
+      "photo_tsd": "img_reports/IMG_20260330_220128.jpg",
+      "photo_stats1": "img_reports/IMG_20260330_220134.jpg",
+      "photo_stats2": "img_reports/IMG_20260330_220137.jpg",
+      "note": "Смена закрыта"
+    },
+    "stats": {
+      "positions": 345,
+      "orders": 32,
+      "correction_pct": 15.63,
+      "avg_position_sec": 55
+    },
+    "tags": [
+      "Нарушении: долгое вр. сборки, несколько жб."
+    ],
+    "telegram_post": "https://t.me/yourchannel/123"
+  },
+  {
+    "id": "r-20260329",
+    "date": "2026-03-29",
+    "address": "ул. Бабушкина 9, СПБ",
+    "arrival": {
+      "time": "10:00",
+      "photo_tsd": "img_reports/IMG_20260329_093754.jpg",
+      "note": "Прибыл вовремя, ТСД принят у сменщика"
+    },
+    "departure": {
+      "time": "22:00",
+      "photo_tsd": "img_reports/IMG_20260329_220005.jpg",
+      "photo_stats1": "img_reports/IMG_20260329_220013.jpg",
+      "photo_stats2": "img_reports/IMG_20260329_220015.jpg",
+      "note": "Смена закрыта"
+    },
+    "stats": {
+      "positions": 535,
+      "orders": 44,
+      "correction_pct": 11.36,
+      "avg_position_sec": 53
+    },
+    "tags": [
+      "Нарушении: долгое вр. сборки, несколько жб."
+    ],
     "telegram_post": "https://t.me/yourchannel/123"
   }
 ]
