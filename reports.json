@@ -5,14 +5,14 @@
     "address": "Индустриальный пр-кт 30, СПБ",
     "arrival": {
       "time": "10:30",
-      "photo_tsd": "IMG_20260403_102418.jpg",
+      "photo_tsd": "img_reports/IMG_20260403_102418.jpg",
       "note": "Прибыл вовремя."
     },
     "departure": {
       "time": "22:30",
-      "photo_tsd": "IMG_20260403_223605.jpg",
-      "photo_stats1": "IMG_20260403_223612.jpg",
-      "photo_stats2": "IMG_20260403_223615.jpg",
+      "photo_tsd": "img_reports/IMG_20260403_223605.jpg",
+      "photo_stats1": "img_reports/IMG_20260403_223612.jpg",
+      "photo_stats2": "img_reports/IMG_20260403_223615.jpg",
       "note": "Закрыл смену, лучше чем вчера даже резултад"
     },
     "stats": {
