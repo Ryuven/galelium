@@ -1,5 +1,28 @@
 [
   {
+    "id": "r-20260404",
+    "date": "2026-04-04",
+    "address": "ул. Бабушкина 9, СПБ",
+    "arrival": {
+      "time": "10:00",
+      "photo_tsd": "img_reports/IMG_20260404_100839.jpg",
+      "note": "Прибыл но опоздал на 4 минуты. Два дня не мог пополнить свою карту подорожник, поэтому пришлось сначало в метро остановится, и там пополнить."
+    },
+    "departure": {
+      "time": "22:00",
+      "photo_tsd": "img_reports/Screenshot_2026-04-04-22-17-20-882_com.x5.pickerapp.ff.jpg",
+      "photo_stats1": "img_reports/Screenshot_2026-04-04-22-17-28-507_com.x5.pickerapp.ff.jpg",
+      "photo_stats2": "img_reports/Screenshot_2026-04-04-22-17-32-558_com.x5.pickerapp.ff.jpg",
+      "note": "Смена закрыта, с напарником абдулло собрали неплохо."
+    },
+    "stats": {
+      "positions": 311,
+      "orders": 29,
+      "correction_pct": 10.71,
+      "avg_position_sec": 58
+    }
+  },
+  {
     "id": "r-20260403",
     "date": "2026-04-03",
     "address": "Индустриальный пр-кт 30, СПБ",
