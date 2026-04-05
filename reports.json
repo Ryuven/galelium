@@ -1,5 +1,28 @@
 [
   {
+    "id": "r-20260405",
+    "date": "2026-04-05",
+    "address": "ул. Бабушкина 9, СПБ",
+    "arrival": {
+      "time": "10:00",
+      "photo_tsd": "img_reports/IMG_20260405_095907.jpg",
+      "note": "Прибыл во время, не то что вчера"
+    },
+    "departure": {
+      "time": "22:00",
+      "photo_tsd": "img_reports/IMG_20260405_220144.jpg",
+      "photo_stats1": "img_reports/IMG_20260405_220150.jpg",
+      "photo_stats2": "img_reports/IMG_20260405_220151.jpg",
+      "note": "Смену закрыл, но корректировок было много, нихуя нечего не было в магазине"
+    },
+    "stats": {
+      "positions": 528,
+      "orders": 50,
+      "correction_pct": 22,
+      "avg_position_sec": 52
+    }
+  },
+  {
     "id": "r-20260404",
     "date": "2026-04-04",
     "address": "ул. Бабушкина 9, СПБ",
