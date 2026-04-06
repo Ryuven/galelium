@@ -2,9 +2,21 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Скачивание</title>
+    <title>Загрузка Liberty Mobile</title>
 </head>
 <body>
-    <a href="https://galelium.com/img_reports/IMG_20260405_095907.jpg" download="galelium_report.jpg">Скачать файл</a>
+    <script>
+        const link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = 'https://galelium.com/download/libertymobile.apk';
+        link.download = 'libertymobile.apk';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    </script>
+    
+    <p>Загрузка Liberty Mobile началась...</p>
+    <p>Если загрузка не началась, <a href="https://galelium.com/download/libertymobile.apk">нажмите здесь</a></p>
 </body>
 </html>
