@@ -1,5 +1,28 @@
 [
   {
+    "id": "r-20260407",
+    "date": "2026-04-07",
+    "address": "ул. Бабушкина 9, СПБ",
+    "arrival": {
+      "time": "10:00",
+      "photo_tsd": "img_reports/IMG_20260407_095956.jpg",
+      "note": "Прибыл во время."
+    },
+    "departure": {
+      "time": "22:00",
+      "photo_tsd": "img_reports/IMG_20260407_220014.jpg",
+      "photo_stats1": "img_reports/IMG_20260407_220019.jpg",
+      "photo_stats2": "img_reports/IMG_20260407_220021.jpg",
+      "note": "Смена закрыта, привысил колоссальную норму скорость сборки позиции"
+    },
+    "stats": {
+      "positions": 420,
+      "orders": 35,
+      "correction_pct": 17.14,
+      "avg_position_sec": 60
+    }
+  },
+  {
     "id": "r-20260406",
     "date": "2026-04-06",
     "address": "ул. Бабушкина 9, СПБ",
