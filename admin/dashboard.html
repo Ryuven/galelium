@@ -85,74 +85,6 @@
     img, video { display: block; max-width: 100%; }
 
     /* ═══════════════════════════════════════════════════════════════
-       ЭКРАН БЛОКИРОВКИ
-    ═══════════════════════════════════════════════════════════════ */
-    #lock {
-      position: fixed; inset: 0; z-index: 900;
-      background: var(--bg);
-      display: flex; align-items: center; justify-content: center;
-    }
-    /* Фоновая сетка */
-    #lock::before {
-      content: '';
-      position: absolute; inset: 0; pointer-events: none;
-      background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 48px 48px;
-    }
-    .lock-panel {
-      position: relative; z-index: 1;
-      width: min(400px, calc(100vw - 32px));
-      background: var(--surface);
-      border: 1px solid var(--border);
-    }
-    .lock-panel::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--accent), transparent 60%);
-    }
-    .lock-head { padding: 28px 28px 24px; border-bottom: 1px solid var(--border); }
-    .lock-corp {
-      font-size: .55rem; letter-spacing: .3em; text-transform: uppercase;
-      color: var(--muted-2); margin-bottom: 18px;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .lock-corp::before { content:''; display:block; width:18px; height:1px; background:var(--muted-3); }
-    .lock-title {
-      font-family: var(--font-display); font-weight: 800;
-      font-size: 1.7rem; color: #fff; line-height: 1; letter-spacing: -.02em;
-    }
-    .lock-title em { color: var(--accent); font-style: normal; }
-    .lock-body { padding: 22px 28px 26px; }
-    .lock-field { position: relative; margin-bottom: 10px; }
-    .lock-input {
-      width: 100%; background: var(--surface-2);
-      border: 1px solid var(--border);
-      color: var(--text); font-size: .88rem; font-weight: 400;
-      padding: 12px 44px 12px 14px; outline: none;
-      transition: border-color var(--tf);
-    }
-    .lock-input:focus { border-color: var(--accent-mid); }
-    .lock-input.shake { animation: shake .35s ease; border-color: rgba(208,96,112,.5); }
-    @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }
-    .lock-eye {
-      position: absolute; right: 0; top: 0; bottom: 0; width: 42px;
-      background: none; border: none;
-      color: var(--muted-2); display: flex; align-items: center; justify-content: center;
-      transition: color var(--tf);
-    }
-    .lock-eye:hover { color: var(--muted); }
-    .lock-submit {
-      width: 100%; padding: 12px;
-      background: var(--accent); color: #08080d;
-      font-family: var(--font-display); font-weight: 800;
-      font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
-      border: none; transition: opacity var(--tf);
-    }
-    .lock-submit:hover { opacity: .85; }
-    .lock-err { font-size: .7rem; color: var(--red); margin-top: 8px; min-height: 16px; }
-
-    /* ═══════════════════════════════════════════════════════════════
        ЛЕЙАУТ ПАНЕЛИ
     ═══════════════════════════════════════════════════════════════ */
     #shell {
@@ -807,26 +739,20 @@
 <body>
 
 <!-- ══════════════════════════════════════════════════════════════
-     ЭКРАН БЛОКИРОВКИ
+     ЗАГРУЗОЧНЫЙ ЭКРАН (пока Firebase проверяет auth)
 ══════════════════════════════════════════════════════════════ -->
-<div id="lock">
-  <div class="lock-panel">
-    <div class="lock-head">
-      <div class="lock-corp">Galelium Corporation</div>
-      <div class="lock-title">Admin<br><em>Panel</em></div>
-    </div>
-    <div class="lock-body">
-      <div class="lock-field">
-        <input type="password" id="lockInput" class="lock-input" placeholder="Введи пароль…" autocomplete="current-password" />
-        <button class="lock-eye" id="lockEye" aria-label="Показать/скрыть">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 8c1.5-3.5 4-5.5 6.5-5.5s5 2 6.5 5.5c-1.5 3.5-4 5.5-6.5 5.5S3 11.5 1.5 8z" stroke="currentColor" stroke-width="1.3"/></svg>
-        </button>
-      </div>
-      <button class="lock-submit" id="lockBtn">Войти →</button>
-      <div class="lock-err" id="lockErr"></div>
-    </div>
+<div id="auth-loader" style="position:fixed;inset:0;z-index:900;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px">
+  <div style="width:28px;height:28px;background:var(--accent);display:flex;align-items:center;justify-content:center">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L1 4.5v5L7 13l6-3.5v-5L7 1z" stroke="#0a0a0f" stroke-width="1.4" stroke-linejoin="round"/></svg>
   </div>
+  <div style="width:120px;height:2px;background:var(--surface-2);overflow:hidden">
+    <div id="auth-bar" style="height:100%;background:var(--accent);width:0%;transition:width .4s var(--ease);animation:authbar 1.6s ease-in-out infinite"></div>
+  </div>
+  <div style="font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-2)">Проверка доступа…</div>
 </div>
+<style>
+  @keyframes authbar { 0%{width:0%} 50%{width:75%} 100%{width:0%;margin-left:100%} }
+</style>
 
 <!-- ══════════════════════════════════════════════════════════════
      ОБОЛОЧКА ПАНЕЛИ
@@ -1224,6 +1150,7 @@
                 <div style="font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px">Профиль</div>
                 <div class="fg-2">
                   <div class="field"><label>Отображаемое имя</label><input type="text" id="set-name" placeholder="Администратор" /></div>
+                  <div class="field"><label>Email (Firebase)</label><input type="email" id="set-email" placeholder="admin@galelium.com" readonly style="opacity:.6;cursor:default" /></div>
                   <div class="field"><label>Email</label><input type="email" placeholder="admin@galelium.com" /></div>
                   <div class="field fg-full"><label>Описание роли</label><input type="text" placeholder="Galelium Corp · Admin" /></div>
                 </div>
@@ -1333,522 +1260,522 @@
 <!-- Тост -->
 <div class="toast" id="toast"><span class="toast-dot"></span><span id="toast-msg"></span></div>
 
-<!-- ══════════════════════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════════════════════ -->
-<script>
-(function () {
-  'use strict';
+<!-- ══════════════════════════════════════════════════════════════
+     FIREBASE + ОСНОВНОЙ СКРИПТ
+══════════════════════════════════════════════════════════════ -->
+<script type="module">
+  import { initializeApp }
+    from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js';
+  import { getAuth, onAuthStateChanged, signOut }
+    from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js';
+  import { getDatabase, ref, onValue, set, remove, push, get }
+    from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js';
 
-  /* ─────────────────────────────────────────
-     КОНФИГ  —  измени под свои нужды
-  ───────────────────────────────────────── */
-  var PASS    = 'galelium2026';   /* пароль входа */
-  var SK_AUTH = 'glm_shell_auth'; /* ключ сессии  */
-  var SK_DATA = 'glm_reports_v2'; /* ключ данных  */
+  /* ── КОНФИГ ─────────────────────────────────────────────── */
+  const firebaseConfig = {
+    apiKey:            'AIzaSyC4PKkma67vVXeZvlSv0MNRK5cQvcAvjpg',
+    authDomain:        'admingalelium.firebaseapp.com',
+    databaseURL:       'https://admingalelium-default-rtdb.firebaseio.com',
+    projectId:         'admingalelium',
+    storageBucket:     'admingalelium.firebasestorage.app',
+    messagingSenderId: '565330048254',
+    appId:             '1:565330048254:web:bab36aae480989e2bfe1af',
+    measurementId:     'G-8FRC70X54D'
+  };
 
-  /* ─────────────────────────────────────────
-     БЛОКИРОВКА
-  ───────────────────────────────────────── */
-  var lockEl   = document.getElementById('lock');
-  var shellEl  = document.getElementById('shell');
-  var lockInp  = document.getElementById('lockInput');
-  var lockErr  = document.getElementById('lockErr');
-  var eyeBtn   = document.getElementById('lockEye');
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getDatabase(app);
 
-  document.getElementById('lockBtn').addEventListener('click', tryUnlock);
-  lockInp.addEventListener('keydown', function(e){ if(e.key==='Enter') tryUnlock(); });
-  document.getElementById('sb-logout').addEventListener('click', logout);
+  /* ── AUTH GUARD: если не залогинен → login.html ─────────── */
+  const authLoader = document.getElementById('auth-loader');
+  const shellEl    = document.getElementById('shell');
 
-  eyeBtn.addEventListener('click', function(){
-    lockInp.type = lockInp.type === 'password' ? 'text' : 'password';
-  });
-
-  function tryUnlock() {
-    if (lockInp.value === PASS) {
-      sessionStorage.setItem(SK_AUTH, '1');
-      boot();
-    } else {
-      lockInp.classList.add('shake');
-      lockErr.textContent = 'Неверный пароль';
-      lockInp.value = '';
-      setTimeout(function(){ lockInp.classList.remove('shake'); lockErr.textContent = ''; }, 1500);
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      /* Не авторизован — уходим на логин */
+      window.location.replace('login.html');
+      return;
     }
-  }
-  function logout() { sessionStorage.removeItem(SK_AUTH); location.reload(); }
-  function boot() {
-    lockEl.style.display = 'none';
+    /* Авторизован — прячем лоадер, показываем панель */
+    authLoader.style.display = 'none';
     shellEl.classList.add('active');
-    initData();
-  }
-  if (sessionStorage.getItem(SK_AUTH) === '1') boot();
-  else lockInp.focus();
 
-  /* ─────────────────────────────────────────
-     ДАННЫЕ (reports.json через localStorage)
-  ───────────────────────────────────────── */
-  var reports = [];
+    /* Заполняем данные пользователя в sidebar */
+    const displayName = user.displayName || user.email || 'Администратор';
+    const initials    = displayName.charAt(0).toUpperCase();
+    setText('sb-name',   displayName);
+    setText('sb-avatar', initials);
+    const roleEl = document.getElementById('sb-user-role');
+    if (roleEl) roleEl.textContent = user.email || 'Galelium Corp';
 
-  function loadData() {
-    var raw = localStorage.getItem(SK_DATA);
-    if (raw) { try { reports = JSON.parse(raw); } catch(e){ reports = []; } }
-  }
-  function saveData() { localStorage.setItem(SK_DATA, JSON.stringify(reports)); }
+    const nameInp = document.getElementById('set-name');
+    if (nameInp && !nameInp.value) nameInp.value = displayName;
+    const emailInp = document.getElementById('set-email');
+    if (emailInp) emailInp.value = user.email || '';
 
-  function isViol(r) {
-    if (!r.stats) return false;
-    return (typeof r.stats.correction_pct   === 'number' && r.stats.correction_pct   > 4)  ||
-           (typeof r.stats.avg_position_sec  === 'number' && r.stats.avg_position_sec  > 38);
-  }
+    /* Загружаем данные из Realtime Database */
+    initFirebaseData();
+  });
 
-  function initData() {
-    loadData();
-    /* Автозагрузка JSON если пусто */
-    if (!reports.length) {
-      fetch('reports.json')
-        .then(function(r){ return r.ok ? r.json() : Promise.reject(); })
-        .then(function(data){ reports = data; saveData(); refreshAll(); toast('reports.json загружен', 'ok'); })
-        .catch(function(){ refreshAll(); });
-    } else {
+  /* ── ВЫХОД ──────────────────────────────────────────────── */
+  document.getElementById('sb-logout').addEventListener('click', async () => {
+    await signOut(auth);
+    window.location.replace('login.html');
+  });
+
+  /* ═════════════════════════════════════════════════════════
+     ДАННЫЕ — FIREBASE REALTIME DATABASE
+     Структура в RTDB: /reports/{id} = объект отчёта
+  ═════════════════════════════════════════════════════════ */
+  let reports = [];
+
+  function initFirebaseData() {
+    /* Слушаем /reports в реальном времени */
+    const reportsRef = ref(db, 'reports');
+
+    onValue(reportsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        /* RTDB хранит как объект {id: {...}}, конвертируем в массив */
+        reports = Object.entries(data).map(([key, val]) => ({
+          ...val,
+          _fbKey: key    /* сохраняем ключ Firebase для удаления/обновления */
+        })).sort((a, b) => b.date.localeCompare(a.date));
+      } else {
+        reports = [];
+        /* Если в RTDB пусто — пробуем загрузить reports.json и залить туда */
+        seedFromJSON();
+      }
       refreshAll();
-    }
-  }
-
-  function refreshAll() {
-    refreshDashboard();
-    refreshReports();
-    refreshAnalytics();
-    updateBadge();
-    updateDataSize();
-    updateSbName();
-  }
-
-  /* ─────────────────────────────────────────
-     ДАШБОРД
-  ───────────────────────────────────────── */
-  var MONTHS   = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
-  var MONTHS_F = ['Январе','Феврале','Марте','Апреле','Мае','Июне','Июле','Августе','Сентябре','Октябре','Ноябре','Декабре'];
-  var DAYS     = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
-
-  function fmtDate(s) {
-    var d = new Date(s+'T00:00:00');
-    return { d:d.getDate(), m:MONTHS[d.getMonth()], mf:MONTHS_F[d.getMonth()], dow:DAYS[d.getDay()], yr:d.getFullYear() };
-  }
-
-  function refreshDashboard() {
-    var now = new Date();
-    var inMonth = reports.filter(function(r){
-      var d = new Date(r.date+'T00:00:00');
-      return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+      toast('Данные обновлены из Firebase', 'ok');
+    }, (error) => {
+      console.error('RTDB error:', error);
+      toast('Ошибка чтения из Firebase', 'err');
+      /* Фоллбэк — localStorage */
+      const raw = localStorage.getItem('glm_reports_v2');
+      if (raw) { try { reports = JSON.parse(raw); } catch(e){ reports = []; } }
+      refreshAll();
     });
-    var viols = reports.filter(isViol).length;
-    var pos   = reports.reduce(function(s,r){ return s+(r.stats&&r.stats.positions?r.stats.positions:0); },0);
-
-    setText('d-total', reports.length);
-    setText('d-month', inMonth.length);
-    setText('d-month-name', 'В ' + MONTHS_F[now.getMonth()]);
-    setText('d-viol',  viols);
-    setText('d-pos',   pos.toLocaleString('ru'));
-
-    /* Последние 5 */
-    var recentEl = document.getElementById('d-recent-list');
-    var sorted = reports.slice().sort(function(a,b){ return b.date.localeCompare(a.date); }).slice(0,5);
-    if (!sorted.length) { recentEl.innerHTML = '<div class="empty" style="padding:24px"><p>Нет отчётов</p></div>'; }
-    else {
-      recentEl.innerHTML = sorted.map(function(r){
-        var d = fmtDate(r.date);
-        var v = isViol(r);
-        var corr = r.stats && typeof r.stats.correction_pct === 'number' ? r.stats.correction_pct.toFixed(1)+'%' : '';
-        return '<div class="row-item has-accent '+(v?'accent-red':'accent-green')+'" style="grid-template-columns:70px 1fr auto">' +
-          '<div style="font-family:var(--font-display);font-weight:700;font-size:.68rem;color:var(--muted)"><strong style="display:block;font-size:1.1rem;color:#fff;line-height:1">'+d.d+'</strong>'+d.m+' · '+d.dow+'</div>' +
-          '<div><div style="font-size:.82rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(r.address)+'</div>' +
-            '<div style="font-size:.68rem;color:var(--muted);margin-top:2px">'+(r.arrival?r.arrival.time:'')+' → '+(r.departure?r.departure.time:'')+' '+(corr?'· <span style="color:'+(v?'var(--red)':'var(--green)')+'">'+corr+'</span>':'')+'</div></div>' +
-          (v?'<span class="pill pill-red" style="flex-shrink:0"><span class="pill-dot"></span>Нарушение</span>':'<span class="pill pill-green" style="flex-shrink:0"><span class="pill-dot"></span>ОК</span>') +
-        '</div>';
-      }).join('');
-    }
-
-    /* Активность — 7 дней */
-    var actEl   = document.getElementById('d-activity');
-    var lblEl   = document.getElementById('d-activity-labels');
-    var days    = [];
-    for (var i=6; i>=0; i--) {
-      var dt = new Date(); dt.setDate(dt.getDate()-i);
-      var ds = dt.toISOString().slice(0,10);
-      var cnt= reports.filter(function(r){ return r.date===ds; }).length;
-      days.push({ s:ds, cnt:cnt, d:DAYS[dt.getDay()] });
-    }
-    var maxCnt = Math.max(1, Math.max.apply(null, days.map(function(d){ return d.cnt; })));
-    actEl.innerHTML = days.map(function(day){
-      var h = day.cnt ? Math.max(8, (day.cnt/maxCnt)*56) : 4;
-      return '<div class="ab'+(day.cnt?' filled':'')+'" style="height:'+h+'px" title="'+day.s+': '+day.cnt+' смен"></div>';
-    }).join('');
-    lblEl.innerHTML = days.map(function(day){ return '<span>'+day.d+'</span>'; }).join('');
   }
 
-  /* ─────────────────────────────────────────
-     ОТЧЁТЫ
-  ───────────────────────────────────────── */
-  var rptSearch = '', rptOnlyViol = false;
-
-  function refreshReports() {
-    var now    = new Date();
-    var inMonth= reports.filter(function(r){ var d=new Date(r.date+'T00:00:00'); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); });
-    var viols  = reports.filter(isViol);
-    var corrArr= reports.filter(function(r){ return r.stats&&typeof r.stats.correction_pct==='number'; });
-    var avgCorr= corrArr.length ? (corrArr.reduce(function(s,r){ return s+r.stats.correction_pct; },0)/corrArr.length).toFixed(1) : '—';
-
-    setText('rpt-c-total', reports.length);
-    setText('rpt-c-month', inMonth.length);
-    setText('rpt-c-viol',  viols.length);
-    setText('rpt-c-corr',  avgCorr + (avgCorr!=='—'?'%':''));
-    updateBadge();
-
-    var list = document.getElementById('rpt-list');
-    var sorted = reports.slice().sort(function(a,b){ return b.date.localeCompare(a.date); });
-    var filtered = sorted.filter(function(r){
-      var matchS = !rptSearch || r.address.toLowerCase().includes(rptSearch.toLowerCase());
-      var matchV = !rptOnlyViol || isViol(r);
-      return matchS && matchV;
-    });
-
-    if (!filtered.length) {
-      list.innerHTML = '<div class="empty"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="13" stroke="currentColor" stroke-width="1.4"/><path d="M10 16h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><p>Нет отчётов по фильтру</p></div>';
-      return;
-    }
-
-    list.innerHTML = filtered.map(function(r){
-      var d = fmtDate(r.date);
-      var v = isViol(r);
-      var s = r.stats || {};
-      var corr  = typeof s.correction_pct   === 'number' ? s.correction_pct.toFixed(1)+'%' : null;
-      var speed = typeof s.avg_position_sec  === 'number' ? s.avg_position_sec+'с'           : null;
-      var cBad  = typeof s.correction_pct   === 'number' && s.correction_pct   > 4;
-      var sBad  = typeof s.avg_position_sec  === 'number' && s.avg_position_sec  > 38;
-      var corrW  = corr  ? Math.min(100,(s.correction_pct  /20)*100) : 0;
-      var speedW = speed ? Math.min(100,(s.avg_position_sec/60)*100) : 0;
-
-      return (
-        '<div class="row-item has-accent '+(v?'accent-red':'accent-green')+'" data-id="'+esc(r.id)+'" style="grid-template-columns:80px 1fr 130px auto">' +
-          /* Дата */
-          '<div style="font-family:var(--font-display);font-weight:700;font-size:.68rem;color:var(--muted)">'+
-            '<strong style="display:block;font-size:1.1rem;color:#fff;line-height:1">'+d.d+'</strong>'+
-            d.m+' · '+d.dow+
-          '</div>' +
-          /* Мета: адрес + время */
-          '<div style="min-width:0">'+
-            '<div style="font-size:.84rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(r.address)+'</div>'+
-            '<div style="font-size:.7rem;color:var(--muted);margin-top:3px">'+
-              (r.arrival?r.arrival.time:'')+' → '+(r.departure?r.departure.time:'')+
-              (s.orders?' · <strong style="color:var(--text)">'+s.orders+'</strong> заказов':'')+
-            '</div>'+
-          '</div>' +
-          /* Прогресс-бары корр/скорость */
-          '<div class="rpt-bars-col" style="min-width:0">'+
-            (corr ?
-              '<div style="display:flex;align-items:center;gap:5px;margin-bottom:4px">'+
-                '<span style="font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);min-width:26px;flex-shrink:0">корр</span>'+
-                '<div class="prog-track" style="flex:1;min-width:30px"><div class="prog-fill '+(cBad?'red':'green')+'" style="width:'+corrW+'%"></div></div>'+
-                '<span style="font-size:.62rem;color:'+(cBad?'var(--red)':'var(--green)')+';min-width:34px;text-align:right">'+corr+'</span>'+
-              '</div>' : '') +
-            (speed ?
-              '<div style="display:flex;align-items:center;gap:5px">'+
-                '<span style="font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);min-width:26px;flex-shrink:0">скор</span>'+
-                '<div class="prog-track" style="flex:1;min-width:30px"><div class="prog-fill '+(sBad?'red':'green')+'" style="width:'+speedW+'%"></div></div>'+
-                '<span style="font-size:.62rem;color:'+(sBad?'var(--red)':'var(--green)')+';min-width:34px;text-align:right">'+speed+'</span>'+
-              '</div>' : '') +
-          '</div>' +
-          /* Кнопки действий */
-          '<div style="display:flex;gap:4px;flex-shrink:0">'+
-            '<button class="icon-btn edit-btn" data-id="'+esc(r.id)+'" title="Редактировать">'+
-              '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5l2 2-6.5 6.5H2V7.5l6.5-6z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>'+
-            '</button>'+
-            '<button class="icon-btn del del-btn" data-id="'+esc(r.id)+'" title="Удалить">'+
-              '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 3.5h8M4.5 3.5V2H7.5v1.5M5 6v2.5M7 6v2.5M3 3.5l.5 6.5h5l.5-6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
-            '</button>'+
-          '</div>'+
-        '</div>'
-      );
-    }).join('');
-
-    list.querySelectorAll('.del-btn').forEach(function(b){
-      b.addEventListener('click', function(e){
-        e.stopPropagation();
-        if (confirm('Удалить?')) {
-          reports = reports.filter(function(r){ return r.id !== b.dataset.id; });
-          saveData(); refreshAll(); toast('Отчёт удалён','err');
-        }
+  /* Первичный сид: берём reports.json и кладём в RTDB */
+  async function seedFromJSON() {
+    try {
+      const r = await fetch('reports.json');
+      if (!r.ok) return;
+      const data = await r.json();
+      if (!data || !data.length) return;
+      const reportsRef = ref(db, 'reports');
+      const obj = {};
+      data.forEach(report => {
+        const key = report.id || ('r-' + report.date.replace(/-/g,''));
+        obj[key] = report;
       });
-    });
-    list.querySelectorAll('.row-item').forEach(function(item){
-      item.addEventListener('click', function(){ openDrawer('Просмотр отчёта', item.dataset.id); });
-    });
-  }
-
-  /* Поиск + фильтр */
-  var rptSrch = document.getElementById('rpt-search');
-  if (rptSrch) rptSrch.addEventListener('input', function(){ rptSearch = this.value; refreshReports(); });
-  var rptFV = document.getElementById('rpt-filter-viol');
-  if (rptFV) rptFV.addEventListener('click', function(){
-    rptOnlyViol = !rptOnlyViol;
-    /* Используем класс вместо inline-стилей — так корректно сбрасывается */
-    this.classList.toggle('filter-active', rptOnlyViol);
-    refreshReports();
-  });
-
-  /* Загрузка JSON */
-  var rptLoad = document.getElementById('rpt-load');
-  if (rptLoad) rptLoad.addEventListener('click', function(){
-    fetch('reports.json')
-      .then(function(r){ return r.ok ? r.json() : Promise.reject(); })
-      .then(function(data){
-        data.forEach(function(r){
-          if (!reports.find(function(x){ return x.id===r.id; })) reports.push(r);
-        });
-        saveData(); refreshAll(); toast('Загружено ' + data.length + ' записей', 'ok');
-      })
-      .catch(function(){ toast('reports.json не найден', 'err'); });
-  });
-
-  /* Скачать JSON */
-  var rptExport = document.getElementById('rpt-export');
-  if (rptExport) rptExport.addEventListener('click', downloadJSON);
-
-  /* Новый отчёт — открывает дровер */
-  var rptNew = document.getElementById('rpt-new');
-  if (rptNew) rptNew.addEventListener('click', function(){ openDrawer('Новый отчёт', null); });
-
-  /* ─────────────────────────────────────────
-     АНАЛИТИКА
-  ───────────────────────────────────────── */
-  function refreshAnalytics() {
-    var corrArr  = reports.filter(function(r){ return r.stats&&typeof r.stats.correction_pct==='number'; });
-    var speedArr = reports.filter(function(r){ return r.stats&&typeof r.stats.avg_position_sec==='number'; });
-    var avgCorr  = corrArr.length  ? (corrArr.reduce(function(s,r){ return s+r.stats.correction_pct; },0)/corrArr.length).toFixed(1)  : '—';
-    var avgSpeed = speedArr.length ? Math.round(speedArr.reduce(function(s,r){ return s+r.stats.avg_position_sec; },0)/speedArr.length) : '—';
-    var totalPos = reports.reduce(function(s,r){ return s+(r.stats&&r.stats.positions?r.stats.positions:0); },0);
-
-    setText('an-avg-corr',  avgCorr  + (avgCorr!=='—'  ? '%'  : ''));
-    setText('an-avg-speed', avgSpeed + (avgSpeed!=='—' ? ' с' : ''));
-    setText('an-total-pos', totalPos.toLocaleString('ru'));
-
-    /* Sparklines рисуем после paint чтобы offsetWidth был корректен */
-    requestAnimationFrame(function(){
-      drawSparkline('chart-corr',  corrArr.map(function(r){ return r.stats.correction_pct; }),   'rgba(208,96,112,.7)');
-      drawSparkline('chart-speed', speedArr.map(function(r){ return r.stats.avg_position_sec; }), 'rgba(107,159,212,.7)');
-    });
-  }
-
-  function drawSparkline(id, values, color) {
-    var c = document.getElementById(id);
-    if (!c) return;
-    if (!values || values.length < 2) {
-      /* Если данных мало — рисуем пустой placeholder */
-      var ctx0 = c.getContext('2d');
-      var W0 = c.parentElement.offsetWidth || 300;
-      c.width = W0; c.height = 120;
-      ctx0.fillStyle = 'rgba(255,255,255,.03)';
-      ctx0.fillRect(0, 0, W0, 120);
-      return;
-    }
-    var ctx = c.getContext('2d');
-    var W = c.parentElement.offsetWidth || 300;
-    var H = 120;
-    c.width = W; c.height = H;
-    var mn = Math.min.apply(null, values), mx = Math.max.apply(null, values);
-    var range = mx - mn || 1;
-    ctx.clearRect(0,0,W,H);
-    /* Горизонтальные линии сетки */
-    ctx.strokeStyle = 'rgba(255,255,255,.04)'; ctx.lineWidth = 1;
-    for (var g=0; g<=4; g++) {
-      ctx.beginPath(); ctx.moveTo(0, (g/4)*H); ctx.lineTo(W, (g/4)*H); ctx.stroke();
-    }
-    /* Градиентная заливка под линией */
-    var grad = ctx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, color.replace('.7)', '.18)'));
-    grad.addColorStop(1, color.replace('.7)', '.0)'));
-    ctx.beginPath();
-    values.forEach(function(v,i){
-      var x = (i / (values.length - 1)) * W;
-      var y = H - ((v - mn) / range) * (H - 20) - 10;
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
-    ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
-    ctx.fillStyle = grad; ctx.fill();
-    /* Основная линия */
-    ctx.beginPath();
-    values.forEach(function(v,i){
-      var x = (i / (values.length - 1)) * W;
-      var y = H - ((v - mn) / range) * (H - 20) - 10;
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
-    ctx.strokeStyle = color; ctx.lineWidth = 1.8; ctx.stroke();
-    /* Последняя точка */
-    var lastX = W;
-    var lastY = H - ((values[values.length-1] - mn) / range) * (H - 20) - 10;
-    ctx.beginPath(); ctx.arc(lastX, lastY, 3, 0, Math.PI*2);
-    ctx.fillStyle = color; ctx.fill();
-  }
-
-  /* ─────────────────────────────────────────
-     НАВИГАЦИЯ
-  ───────────────────────────────────────── */
-  var BC_LABELS = { dash:'Дашборд', reports:'Отчёты', analytics:'Аналитика', news:'Новости', team:'Команда', careers:'Вакансии', settings:'Настройки' };
-
-  function navigate(pageId) {
-    document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-    document.querySelectorAll('.sb-link').forEach(function(l){ l.classList.remove('active'); });
-    var pg = document.getElementById('page-' + pageId);
-    if (pg) pg.classList.add('active');
-    var sb = document.querySelector('.sb-link[data-page="'+pageId+'"]');
-    if (sb) sb.classList.add('active');
-    setText('bc-page', BC_LABELS[pageId] || pageId);
-    /* Обновляем кнопку «Добавить» в topbar */
-    var newBtn = document.getElementById('tb-new-btn');
-    if (newBtn) {
-      newBtn.style.display = ['reports','news','team','careers'].includes(pageId) ? '' : 'none';
+      await set(reportsRef, obj);
+      toast('reports.json загружен в Firebase', 'ok');
+    } catch (e) {
+      /* нет файла — норм */
     }
   }
 
-  /* Клики по сайдбару */
-  document.querySelectorAll('.sb-link[data-page], .btn[data-page], .tb-btn[data-page]').forEach(function(link){
-    link.addEventListener('click', function(e){
-      e.preventDefault();
-      navigate(link.dataset.page);
-      /* Закрываем мобильный sidebar */
-      var sb = document.getElementById('sidebar');
-      sb.classList.remove('mobile-open');
-      if (sbOverlay) sbOverlay.classList.remove('open');
-      document.body.style.overflow = '';
-    });
-  });
-  /* Кнопка «Добавить» в topbar */
-  document.getElementById('tb-new-btn').addEventListener('click', function(){
-    openDrawer('Новый элемент', null);
-  });
-
-  /* Мобильный гамбургер */
-  var sbOverlay = document.getElementById('sb-overlay');
-  document.getElementById('menuBtn').addEventListener('click', function(){
-    var sb = document.getElementById('sidebar');
-    var isOpen = sb.classList.toggle('mobile-open');
-    if (sbOverlay) sbOverlay.classList.toggle('open', isOpen);
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-  });
-  if (sbOverlay) {
-    sbOverlay.addEventListener('click', function(){
-      document.getElementById('sidebar').classList.remove('mobile-open');
-      sbOverlay.classList.remove('open');
-      document.body.style.overflow = '';
-    });
+  /* Сохранить/обновить один отчёт в RTDB */
+  async function saveReport(report) {
+    const key = report._fbKey || report.id || ('r-' + report.date.replace(/-/g,''));
+    const clean = { ...report };
+    delete clean._fbKey;
+    await set(ref(db, 'reports/' + key), clean);
   }
 
-  /* Навигация в настройках */
-  document.querySelectorAll('.sn-link').forEach(function(l){
-    l.addEventListener('click', function(){
-      document.querySelectorAll('.sn-link').forEach(function(x){ x.classList.remove('active'); });
-      document.querySelectorAll('.settings-section').forEach(function(x){ x.classList.remove('active'); });
-      l.classList.add('active');
-      var sec = document.getElementById('sec-' + l.dataset.sec);
-      if (sec) sec.classList.add('active');
-    });
-  });
-
-  /* Начальная страница */
-  navigate('dash');
-
-  /* ─────────────────────────────────────────
-     ДРОВЕР
-  ───────────────────────────────────────── */
-  var droverlay = document.getElementById('droverlay');
-  var drawer    = document.getElementById('drawer');
-
-  function openDrawer(title, id) {
-    setText('dr-title', title);
-    setText('dr-sub', id ? 'ID: ' + id : 'Новая запись');
-    droverlay.classList.add('open');
-    drawer.classList.add('open');
-    /* body.overflow управляется только для мобильного sidebar — здесь не трогаем */
-  }
-  function closeDrawer() {
-    droverlay.classList.remove('open');
-    drawer.classList.remove('open');
-  }
-  droverlay.addEventListener('click', closeDrawer);
-  document.getElementById('dr-close').addEventListener('click', closeDrawer);
-  document.getElementById('dr-cancel').addEventListener('click', closeDrawer);
-  document.getElementById('dr-save').addEventListener('click', function(){ toast('Сохранено ✓','ok'); closeDrawer(); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDrawer(); });
-
-  /* ─────────────────────────────────────────
-     НАСТРОЙКИ
-  ───────────────────────────────────────── */
-  var setNameInput = document.getElementById('set-name');
-  var setSaveName  = document.getElementById('set-save-name');
-  if (setSaveName) setSaveName.addEventListener('click', function(){
-    var n = setNameInput ? setNameInput.value.trim() : '';
-    if (n) { localStorage.setItem('glm_admin_name', n); updateSbName(); toast('Имя сохранено','ok'); }
-  });
-
-  function updateSbName() {
-    var n = localStorage.getItem('glm_admin_name') || 'Администратор';
-    setText('sb-name', n);
-    var av = document.getElementById('sb-avatar');
-    if (av) av.textContent = n.slice(0,1).toUpperCase();
-    if (setNameInput && !setNameInput.value) setNameInput.value = n;
-  }
-  function updateDataSize() {
-    var el = document.getElementById('set-data-size');
-    if (el) el.textContent = reports.length + ' записей в localStorage';
+  /* Удалить отчёт из RTDB */
+  async function deleteReport(report) {
+    const key = report._fbKey || report.id;
+    await remove(ref(db, 'reports/' + key));
   }
 
-  var clearBtn = document.getElementById('set-clear-data');
-  if (clearBtn) clearBtn.addEventListener('click', function(){
-    if (confirm('Очистить все данные из localStorage?')) {
-      localStorage.removeItem(SK_DATA); reports = []; refreshAll(); toast('Данные очищены','err');
-    }
-  });
-  var exportBtn = document.getElementById('set-export');
-  if (exportBtn) exportBtn.addEventListener('click', downloadJSON);
-
+  /* ── Экспорт в JSON ──────────────────────────────────────── */
   function downloadJSON() {
-    var json = JSON.stringify(reports.slice().sort(function(a,b){ return b.date.localeCompare(a.date); }), null, 2);
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([json],{type:'application/json'}));
+    const clean = reports.map(r => { const c = {...r}; delete c._fbKey; return c; });
+    const json  = JSON.stringify(clean.sort((a,b) => b.date.localeCompare(a.date)), null, 2);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
     a.download = 'reports.json'; a.click();
     URL.revokeObjectURL(a.href);
-    toast('Файл скачан ✓','ok');
+    toast('Файл скачан ✓', 'ok');
   }
 
-  /* ─────────────────────────────────────────
-     УТИЛИТЫ
-  ───────────────────────────────────────── */
-  function updateBadge() {
-    var el = document.getElementById('sb-badge-reports');
-    if (el) el.textContent = reports.length;
-  }
+  /* ═════════════════════════════════════════════════════════
+     ВСЯ ОСТАЛЬНАЯ ЛОГИКА (навигация, рендер, утилиты)
+  ═════════════════════════════════════════════════════════ */
+  (function () {
+    'use strict';
 
-  function setText(id, val) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = val;
-  }
+    const SK_DATA = 'glm_reports_v2'; /* для кеша localStorage */
 
-  function esc(s) {
-    if (!s) return '';
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
+    function isViol(r) {
+      if (!r.stats) return false;
+      return (typeof r.stats.correction_pct  === 'number' && r.stats.correction_pct  > 4)  ||
+             (typeof r.stats.avg_position_sec === 'number' && r.stats.avg_position_sec > 38);
+    }
 
-  var toastTimer;
-  function toast(msg, type) {
-    var el = document.getElementById('toast');
-    el.className = 'toast ' + (type||'');
-    document.getElementById('toast-msg').textContent = msg;
-    clearTimeout(toastTimer);
-    setTimeout(function(){ el.classList.add('show'); }, 10);
-    toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 3000);
-  }
+    function refreshAll() {
+      refreshDashboard();
+      refreshReports();
+      refreshAnalytics();
+      updateBadge();
+      updateDataSize();
+    }
 
-})();
+    /* ── ДАШБОРД ─────────────────────────────────────────── */
+    const MONTHS   = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+    const MONTHS_F = ['Январе','Феврале','Марте','Апреле','Мае','Июне','Июле','Августе','Сентябре','Октябре','Ноябре','Декабре'];
+    const DAYS     = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+
+    function fmtDate(s) {
+      const d = new Date(s + 'T00:00:00');
+      return { d: d.getDate(), m: MONTHS[d.getMonth()], mf: MONTHS_F[d.getMonth()], dow: DAYS[d.getDay()], yr: d.getFullYear() };
+    }
+
+    function refreshDashboard() {
+      const now = new Date();
+      const inMonth = reports.filter(r => {
+        const d = new Date(r.date + 'T00:00:00');
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      });
+      const viols = reports.filter(isViol).length;
+      const pos   = reports.reduce((s, r) => s + (r.stats && r.stats.positions ? r.stats.positions : 0), 0);
+
+      setText('d-total',      reports.length);
+      setText('d-month',      inMonth.length);
+      setText('d-month-name', 'В ' + MONTHS_F[now.getMonth()]);
+      setText('d-viol',       viols);
+      setText('d-pos',        pos.toLocaleString('ru'));
+
+      /* Последние 5 */
+      const recentEl = document.getElementById('d-recent-list');
+      const sorted   = reports.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
+      if (!sorted.length) {
+        recentEl.innerHTML = '<div class="empty" style="padding:24px"><p>Нет отчётов</p></div>';
+      } else {
+        recentEl.innerHTML = sorted.map(r => {
+          const d    = fmtDate(r.date);
+          const v    = isViol(r);
+          const corr = r.stats && typeof r.stats.correction_pct === 'number'
+            ? r.stats.correction_pct.toFixed(1) + '%' : '';
+          return '<div class="row-item has-accent ' + (v ? 'accent-red' : 'accent-green') + '" style="grid-template-columns:70px 1fr auto">' +
+            '<div style="font-family:var(--font-display);font-weight:700;font-size:.68rem;color:var(--muted)"><strong style="display:block;font-size:1.1rem;color:#fff;line-height:1">' + d.d + '</strong>' + d.m + ' · ' + d.dow + '</div>' +
+            '<div><div style="font-size:.82rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(r.address) + '</div>' +
+              '<div style="font-size:.68rem;color:var(--muted);margin-top:2px">' + (r.arrival ? r.arrival.time : '') + ' → ' + (r.departure ? r.departure.time : '') + ' ' + (corr ? '· <span style="color:' + (v ? 'var(--red)' : 'var(--green)') + '">' + corr + '</span>' : '') + '</div></div>' +
+            (v ? '<span class="pill pill-red" style="flex-shrink:0"><span class="pill-dot"></span>Нарушение</span>' : '<span class="pill pill-green" style="flex-shrink:0"><span class="pill-dot"></span>ОК</span>') +
+          '</div>';
+        }).join('');
+      }
+
+      /* Активность 7 дней */
+      const actEl = document.getElementById('d-activity');
+      const lblEl = document.getElementById('d-activity-labels');
+      const days  = [];
+      for (let i = 6; i >= 0; i--) {
+        const dt  = new Date(); dt.setDate(dt.getDate() - i);
+        const ds  = dt.toISOString().slice(0, 10);
+        const cnt = reports.filter(r => r.date === ds).length;
+        days.push({ s: ds, cnt, d: DAYS[dt.getDay()] });
+      }
+      const maxCnt = Math.max(1, ...days.map(d => d.cnt));
+      actEl.innerHTML = days.map(day => {
+        const h = day.cnt ? Math.max(8, (day.cnt / maxCnt) * 56) : 4;
+        return '<div class="ab' + (day.cnt ? ' filled' : '') + '" style="height:' + h + 'px" title="' + day.s + ': ' + day.cnt + ' смен"></div>';
+      }).join('');
+      lblEl.innerHTML = days.map(day => '<span>' + day.d + '</span>').join('');
+    }
+
+    /* ── ОТЧЁТЫ ──────────────────────────────────────────── */
+    let rptSearch = '', rptOnlyViol = false;
+
+    function refreshReports() {
+      const now     = new Date();
+      const inMonth = reports.filter(r => { const d = new Date(r.date + 'T00:00:00'); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
+      const viols   = reports.filter(isViol);
+      const corrArr = reports.filter(r => r.stats && typeof r.stats.correction_pct === 'number');
+      const avgCorr = corrArr.length ? (corrArr.reduce((s, r) => s + r.stats.correction_pct, 0) / corrArr.length).toFixed(1) : '—';
+
+      setText('rpt-c-total', reports.length);
+      setText('rpt-c-month', inMonth.length);
+      setText('rpt-c-viol',  viols.length);
+      setText('rpt-c-corr',  avgCorr + (avgCorr !== '—' ? '%' : ''));
+      updateBadge();
+
+      const list     = document.getElementById('rpt-list');
+      const sorted   = reports.slice().sort((a, b) => b.date.localeCompare(a.date));
+      const filtered = sorted.filter(r => {
+        const matchS = !rptSearch || r.address.toLowerCase().includes(rptSearch.toLowerCase());
+        const matchV = !rptOnlyViol || isViol(r);
+        return matchS && matchV;
+      });
+
+      if (!filtered.length) {
+        list.innerHTML = '<div class="empty"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="13" stroke="currentColor" stroke-width="1.4"/><path d="M10 16h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><p>Нет отчётов по фильтру</p></div>';
+        return;
+      }
+
+      list.innerHTML = filtered.map(r => {
+        const d     = fmtDate(r.date);
+        const v     = isViol(r);
+        const s     = r.stats || {};
+        const corr  = typeof s.correction_pct  === 'number' ? s.correction_pct.toFixed(1) + '%' : null;
+        const speed = typeof s.avg_position_sec === 'number' ? s.avg_position_sec + 'с'           : null;
+        const cBad  = typeof s.correction_pct  === 'number' && s.correction_pct  > 4;
+        const sBad  = typeof s.avg_position_sec === 'number' && s.avg_position_sec > 38;
+        const corrW = corr  ? Math.min(100, (s.correction_pct  / 20) * 100) : 0;
+        const speedW= speed ? Math.min(100, (s.avg_position_sec / 60) * 100) : 0;
+
+        return '<div class="row-item has-accent ' + (v ? 'accent-red' : 'accent-green') + '" data-id="' + esc(r.id || r._fbKey) + '" style="grid-template-columns:80px 1fr 130px auto">' +
+          '<div style="font-family:var(--font-display);font-weight:700;font-size:.68rem;color:var(--muted)"><strong style="display:block;font-size:1.1rem;color:#fff;line-height:1">' + d.d + '</strong>' + d.m + ' · ' + d.dow + '</div>' +
+          '<div style="min-width:0"><div style="font-size:.84rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(r.address) + '</div>' +
+            '<div style="font-size:.7rem;color:var(--muted);margin-top:3px">' + (r.arrival ? r.arrival.time : '') + ' → ' + (r.departure ? r.departure.time : '') + (s.orders ? ' · <strong style="color:var(--text)">' + s.orders + '</strong> заказов' : '') + '</div></div>' +
+          '<div class="rpt-bars-col" style="min-width:0">' +
+            (corr  ? '<div style="display:flex;align-items:center;gap:5px;margin-bottom:4px"><span style="font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);min-width:26px;flex-shrink:0">корр</span><div class="prog-track" style="flex:1;min-width:30px"><div class="prog-fill ' + (cBad ? 'red' : 'green') + '" style="width:' + corrW + '%"></div></div><span style="font-size:.62rem;color:' + (cBad ? 'var(--red)' : 'var(--green)') + ';min-width:34px;text-align:right">' + corr + '</span></div>' : '') +
+            (speed ? '<div style="display:flex;align-items:center;gap:5px"><span style="font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);min-width:26px;flex-shrink:0">скор</span><div class="prog-track" style="flex:1;min-width:30px"><div class="prog-fill ' + (sBad ? 'red' : 'green') + '" style="width:' + speedW + '%"></div></div><span style="font-size:.62rem;color:' + (sBad ? 'var(--red)' : 'var(--green)') + ';min-width:34px;text-align:right">' + speed + '</span></div>' : '') +
+          '</div>' +
+          '<div style="display:flex;gap:4px">' +
+            '<button class="icon-btn edit-btn" data-id="' + esc(r.id || r._fbKey) + '" title="Редактировать"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5l2 2-6.5 6.5H2V7.5l6.5-6z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></button>' +
+            '<button class="icon-btn del del-btn" data-id="' + esc(r.id || r._fbKey) + '" title="Удалить"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 3.5h8M4.5 3.5V2H7.5v1.5M5 6v2.5M7 6v2.5M3 3.5l.5 6.5h5l.5-6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      /* Кнопки удаления — через RTDB */
+      list.querySelectorAll('.del-btn').forEach(btn => {
+        btn.addEventListener('click', async e => {
+          e.stopPropagation();
+          if (!confirm('Удалить отчёт? Данные удалятся из Firebase.')) return;
+          const id = btn.dataset.id;
+          const report = reports.find(r => (r.id || r._fbKey) === id);
+          if (!report) return;
+          try {
+            await deleteReport(report);
+            toast('Отчёт удалён из Firebase', 'err');
+            /* onValue автоматически обновит список */
+          } catch(e) {
+            toast('Ошибка удаления', 'err');
+          }
+        });
+      });
+
+      list.querySelectorAll('.row-item').forEach(item => {
+        item.addEventListener('click', () => openDrawer('Просмотр отчёта', item.dataset.id));
+      });
+    }
+
+    /* Поиск + фильтр */
+    const rptSrch = document.getElementById('rpt-search');
+    if (rptSrch) rptSrch.addEventListener('input', function() { rptSearch = this.value; refreshReports(); });
+    const rptFV = document.getElementById('rpt-filter-viol');
+    if (rptFV) rptFV.addEventListener('click', function() {
+      rptOnlyViol = !rptOnlyViol;
+      this.classList.toggle('filter-active', rptOnlyViol);
+      refreshReports();
+    });
+
+    /* Загрузить из reports.json → сохранить в Firebase */
+    const rptLoad = document.getElementById('rpt-load');
+    if (rptLoad) rptLoad.addEventListener('click', async () => {
+      try {
+        const r = await fetch('reports.json');
+        if (!r.ok) throw new Error();
+        const data = await r.json();
+        const obj  = {};
+        data.forEach(rep => { obj[rep.id || ('r-' + rep.date.replace(/-/g,''))] = rep; });
+        await set(ref(db, 'reports'), obj);
+        toast('reports.json загружен в Firebase ✓', 'ok');
+      } catch(e) {
+        toast('reports.json не найден', 'err');
+      }
+    });
+
+    const rptExport = document.getElementById('rpt-export');
+    if (rptExport) rptExport.addEventListener('click', downloadJSON);
+
+    const rptNew = document.getElementById('rpt-new');
+    if (rptNew) rptNew.addEventListener('click', () => openDrawer('Новый отчёт', null));
+
+    /* ── АНАЛИТИКА ───────────────────────────────────────── */
+    function refreshAnalytics() {
+      const corrArr  = reports.filter(r => r.stats && typeof r.stats.correction_pct  === 'number');
+      const speedArr = reports.filter(r => r.stats && typeof r.stats.avg_position_sec === 'number');
+      const avgCorr  = corrArr.length  ? (corrArr.reduce((s, r) => s + r.stats.correction_pct, 0) / corrArr.length).toFixed(1)  : '—';
+      const avgSpeed = speedArr.length ? Math.round(speedArr.reduce((s, r) => s + r.stats.avg_position_sec, 0) / speedArr.length) : '—';
+      const totalPos = reports.reduce((s, r) => s + (r.stats && r.stats.positions ? r.stats.positions : 0), 0);
+
+      setText('an-avg-corr',  avgCorr  + (avgCorr  !== '—' ? '%'  : ''));
+      setText('an-avg-speed', avgSpeed + (avgSpeed !== '—' ? ' с' : ''));
+      setText('an-total-pos', totalPos.toLocaleString('ru'));
+
+      requestAnimationFrame(() => {
+        drawSparkline('chart-corr',  corrArr.map(r  => r.stats.correction_pct),   'rgba(208,96,112,.7)');
+        drawSparkline('chart-speed', speedArr.map(r => r.stats.avg_position_sec), 'rgba(107,159,212,.7)');
+      });
+    }
+
+    function drawSparkline(id, values, color) {
+      const c = document.getElementById(id);
+      if (!c) return;
+      if (!values || values.length < 2) return;
+      const ctx = c.getContext('2d');
+      const W = c.parentElement.offsetWidth || 300, H = 120;
+      c.width = W; c.height = H;
+      const mn = Math.min(...values), mx = Math.max(...values);
+      const range = mx - mn || 1;
+      ctx.clearRect(0, 0, W, H);
+      /* Сетка */
+      ctx.strokeStyle = 'rgba(255,255,255,.04)'; ctx.lineWidth = 1;
+      for (let g = 0; g <= 4; g++) { ctx.beginPath(); ctx.moveTo(0, (g/4)*H); ctx.lineTo(W, (g/4)*H); ctx.stroke(); }
+      /* Градиент */
+      const grad = ctx.createLinearGradient(0, 0, 0, H);
+      grad.addColorStop(0, color.replace('.7)', '.15)'));
+      grad.addColorStop(1, color.replace('.7)', '.0)'));
+      ctx.beginPath();
+      values.forEach((v, i) => { const x = (i/(values.length-1))*W, y = H-((v-mn)/range)*(H-20)-10; i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+      ctx.fillStyle = grad; ctx.fill();
+      /* Линия */
+      ctx.beginPath();
+      values.forEach((v, i) => { const x=(i/(values.length-1))*W, y=H-((v-mn)/range)*(H-20)-10; i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+      ctx.strokeStyle = color; ctx.lineWidth = 1.8; ctx.stroke();
+      /* Последняя точка */
+      const lx=W, ly=H-((values[values.length-1]-mn)/range)*(H-20)-10;
+      ctx.beginPath(); ctx.arc(lx,ly,3,0,Math.PI*2); ctx.fillStyle=color; ctx.fill();
+    }
+
+    /* ── НАВИГАЦИЯ ───────────────────────────────────────── */
+    const BC_LABELS = { dash:'Дашборд', reports:'Отчёты', analytics:'Аналитика', news:'Новости', team:'Команда', careers:'Вакансии', settings:'Настройки' };
+
+    function navigate(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
+      const pg = document.getElementById('page-' + pageId);
+      if (pg) pg.classList.add('active');
+      const sb = document.querySelector('.sb-link[data-page="' + pageId + '"]');
+      if (sb) sb.classList.add('active');
+      setText('bc-page', BC_LABELS[pageId] || pageId);
+      const newBtn = document.getElementById('tb-new-btn');
+      if (newBtn) newBtn.style.display = ['reports','news','team','careers'].includes(pageId) ? '' : 'none';
+    }
+
+    document.querySelectorAll('.sb-link[data-page], .btn[data-page], .tb-btn[data-page]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        navigate(link.dataset.page);
+        const sb = document.getElementById('sidebar');
+        sb.classList.remove('mobile-open');
+        if (sbOverlay) sbOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+
+    document.getElementById('tb-new-btn').addEventListener('click', () => openDrawer('Новый элемент', null));
+
+    const sbOverlay = document.getElementById('sb-overlay');
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      const sb = document.getElementById('sidebar');
+      const isOpen = sb.classList.toggle('mobile-open');
+      if (sbOverlay) sbOverlay.classList.toggle('open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+    if (sbOverlay) {
+      sbOverlay.addEventListener('click', () => {
+        document.getElementById('sidebar').classList.remove('mobile-open');
+        sbOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    }
+
+    /* Настройки — подменю */
+    document.querySelectorAll('.sn-link').forEach(l => {
+      l.addEventListener('click', () => {
+        document.querySelectorAll('.sn-link').forEach(x => x.classList.remove('active'));
+        document.querySelectorAll('.settings-section').forEach(x => x.classList.remove('active'));
+        l.classList.add('active');
+        const sec = document.getElementById('sec-' + l.dataset.sec);
+        if (sec) sec.classList.add('active');
+      });
+    });
+
+    navigate('dash');
+
+    /* ── ДРОВЕР ──────────────────────────────────────────── */
+    const droverlay = document.getElementById('droverlay');
+    const drawer    = document.getElementById('drawer');
+
+    function openDrawer(title, id) {
+      setText('dr-title', title);
+      setText('dr-sub', id ? 'ID: ' + id : 'Новая запись · Firebase');
+      droverlay.classList.add('open');
+      drawer.classList.add('open');
+    }
+    function closeDrawer() {
+      droverlay.classList.remove('open');
+      drawer.classList.remove('open');
+    }
+    droverlay.addEventListener('click', closeDrawer);
+    document.getElementById('dr-close').addEventListener('click', closeDrawer);
+    document.getElementById('dr-cancel').addEventListener('click', closeDrawer);
+    document.getElementById('dr-save').addEventListener('click', () => { toast('Сохранено ✓', 'ok'); closeDrawer(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+    /* ── НАСТРОЙКИ ───────────────────────────────────────── */
+    const setSaveName = document.getElementById('set-save-name');
+    if (setSaveName) setSaveName.addEventListener('click', () => {
+      const n = document.getElementById('set-name')?.value.trim();
+      if (n) { localStorage.setItem('glm_admin_name', n); setText('sb-name', n); setText('sb-avatar', n.charAt(0).toUpperCase()); toast('Имя сохранено', 'ok'); }
+    });
+
+    const clearBtn = document.getElementById('set-clear-data');
+    if (clearBtn) clearBtn.addEventListener('click', async () => {
+      if (!confirm('Удалить все отчёты из Firebase? Действие необратимо.')) return;
+      await set(ref(db, 'reports'), null);
+      toast('Данные удалены из Firebase', 'err');
+    });
+
+    const exportBtn = document.getElementById('set-export');
+    if (exportBtn) exportBtn.addEventListener('click', downloadJSON);
+
+    /* ── УТИЛИТЫ ─────────────────────────────────────────── */
+    function updateBadge() {
+      const el = document.getElementById('sb-badge-reports');
+      if (el) el.textContent = reports.length;
+    }
+
+    function updateDataSize() {
+      const el = document.getElementById('set-data-size');
+      if (el) el.textContent = reports.length + ' записей в Firebase RTDB';
+    }
+
+    function setText(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    }
+
+    function esc(s) {
+      if (!s) return '';
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    let toastTimer;
+    function toast(msg, type) {
+      const el = document.getElementById('toast');
+      el.className = 'toast ' + (type || '');
+      document.getElementById('toast-msg').textContent = msg;
+      clearTimeout(toastTimer);
+      setTimeout(() => el.classList.add('show'), 10);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+    }
+
+    /* Экспортируем toast и refreshAll в window для вызова из модуля */
+    window._dash = { toast, refreshAll };
+
+  })(); /* конец IIFE */
+
 </script>
 
 </body>
