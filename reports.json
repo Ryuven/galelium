@@ -1,5 +1,28 @@
 [
   {
+    "id": "r-20260408",
+    "date": "2026-04-08",
+    "address": "ул. Бабушкина 9, СПБ",
+    "arrival": {
+      "time": "10:00",
+      "photo_tsd": "img_reports/IMG_20260408_100157.jpg",
+      "note": "Прибыл во время."
+    },
+    "departure": {
+      "time": "22:00",
+      "photo_tsd": "Img_reports/IMG_20260408_220022.jpg",
+      "photo_stats1": "img_reports/IMG_20260408_220034.jpg",
+      "photo_stats2": "img_reports/IMG_20260408_220035.jpg",
+      "note": "Смена закрыта."
+    },
+    "stats": {
+      "positions": 439,
+      "orders": 41,
+      "correction_pct": 12.2,
+      "avg_position_sec": 53
+    }
+  },
+  {
     "id": "r-20260407",
     "date": "2026-04-07",
     "address": "ул. Бабушкина 9, СПБ",
