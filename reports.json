@@ -1,5 +1,51 @@
 [
   {
+    "id": "r-20260412",
+    "date": "2026-04-12",
+    "address": "ул. Бабушкина 9, СПБ",
+    "arrival": {
+      "time": "10:00",
+      "photo_tsd": "img_reports/IMG_20260412_094726.jpg",
+      "note": "Прибыл во время, ещё и напарник классный"
+    },
+    "departure": {
+      "time": "22:00",
+      "photo_tsd": "img_reports/IMG_20260412_220002.jpg",
+      "photo_stats1": "img_reports/IMG_20260412_220007.jpg",
+      "photo_stats2": "img_reports/img_reports/IMG_20260412_220009.jpg",
+      "note": "Смену закрыл, все равно плохо."
+    },
+    "stats": {
+      "positions": 239,
+      "orders": 23,
+      "correction_pct": 21.74,
+      "avg_position_sec": 50
+    }
+  },
+  {
+    "id": "r-20260411",
+    "date": "2026-04-11",
+    "address": "ул. Бабушкина 9, СПБ",
+    "arrival": {
+      "time": "10:00",
+      "photo_tsd": "img_reports/IMG_20260411_100241.jpg",
+      "note": "Прибыл во время."
+    },
+    "departure": {
+      "time": "22:00",
+      "photo_tsd": "img_reports/IMG_20260411_220446.jpg",
+      "photo_stats1": "img_reports/IMG_20260411_220449.jpg",
+      "photo_stats2": "img_reports/IMG_20260411_220450.jpg",
+      "note": "Смену закрыл, но смена суетливая была"
+    },
+    "stats": {
+      "positions": 348,
+      "orders": 33,
+      "correction_pct": 24.24,
+      "avg_position_sec": 67
+    }
+  },
+  {
     "id": "r-20260410",
     "date": "2026-04-10",
     "address": "ул. Бабушкина 9, СПБ",
