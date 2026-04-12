@@ -1481,13 +1481,13 @@
           </p>
         </div>
         <div class="contact__channels reveal">
-          <a class="ch-link" href="mailto:info@galelium.com">
+          <a class="ch-link" href="/cdn-cgi/l/email-protection#026b6c646d4265636e676e6b776f2c616d6f">
             <div class="ch-link__icon" aria-hidden="true">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3.5" width="11" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 5l5.5 3.5L12.5 5" stroke="currentColor" stroke-width="1.2"/></svg>
             </div>
             <div>
               <div class="ch-link__type">Email</div>
-              <div class="ch-link__val">info@galelium.com</div>
+              <div class="ch-link__val"><span class="__cf_email__" data-cfemail="d4bdbab2bb94b3b5b8b1b8bda1b9fab7bbb9">[email&#160;protected]</span></div>
             </div>
             <svg class="ch-link__arr" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h9M7.5 3l4 3.5L7.5 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
@@ -1585,7 +1585,7 @@
 
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 (function () {
   'use strict';
 
@@ -1919,12 +1919,24 @@
     return d.getDate() + ' ' + M[d.getMonth()] + ' ' + d.getFullYear();
   }
 
-  fetch('news.json')
-    .then(function(r){ return r.json(); })
-    .then(function(data) {
-      var items = data.slice().sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); }).slice(0,2);
-      var grid = document.getElementById('nc-news-grid');
-      if (!grid) return;
+  /* ══════════════════════════════════════════════════════════
+     НОВОСТИ — FIRESTORE /news (с фоллбэком на news.json)
+     Документ: { title, summary, tag, date (YYYY-MM-DD),
+                  status: 'published'|'draft', createdAt }
+     ══════════════════════════════════════════════════════════ */
+  (function() {
+    var grid = document.getElementById('nc-news-grid');
+    if (!grid) return;
+
+    function renderNews(data) {
+      var items = data
+        .filter(function(n){ return n.status !== 'draft'; })
+        .sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); })
+        .slice(0, 2);
+      if (!items.length) {
+        grid.innerHTML = '<p style="padding:20px;color:var(--muted);font-size:.85rem">Новостей пока нет</p>';
+        return;
+      }
       grid.innerHTML = items.map(function(item) {
         return (
           '<a class="nc-card" href="https://galelium.com/news.html">' +
@@ -1938,11 +1950,59 @@
           '</a>'
         );
       }).join('');
-    })
-    .catch(function() {
-      var g = document.getElementById('nc-news-grid');
-      if (g) g.innerHTML = '<p style="padding:20px;color:var(--muted);font-size:.85rem">Новости временно недоступны</p>';
-    });
+    }
+
+    function fallback() {
+      fetch('news.json')
+        .then(function(r){ return r.ok ? r.json() : Promise.reject(); })
+        .then(renderNews)
+        .catch(function(){
+          grid.innerHTML = '<p style="padding:20px;color:var(--muted);font-size:.85rem">Новости временно недоступны</p>';
+        });
+    }
+
+    /* Загружаем Firestore через dynamic import */
+    Promise.all([
+      import('https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js'),
+      import('https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js')
+    ]).then(function(mods) {
+      var initializeApp = mods[0].initializeApp;
+      var getFirestore  = mods[1].getFirestore;
+      var collection    = mods[1].collection;
+      var query         = mods[1].query;
+      var where         = mods[1].where;
+      var orderBy       = mods[1].orderBy;
+      var getDocs       = mods[1].getDocs;
+
+      var app = initializeApp({
+        apiKey:            'AIzaSyC4PKkma67vVXeZvlSv0MNRK5cQvcAvjpg',
+        authDomain:        'admingalelium.firebaseapp.com',
+        projectId:         'admingalelium',
+        storageBucket:     'admingalelium.firebasestorage.app',
+        messagingSenderId: '565330048254',
+        appId:             '1:565330048254:web:bab36aae480989e2bfe1af'
+      }, 'galelium-news');
+
+      var db = getFirestore(app);
+      var q  = query(
+        collection(db, 'news'),
+        where('status', '==', 'published'),
+        orderBy('date', 'desc')
+      );
+
+      getDocs(q)
+        .then(function(snap) {
+          var items = snap.docs.map(function(d) {
+            return Object.assign({ _id: d.id }, d.data());
+          });
+          renderNews(items);
+        })
+        .catch(function(err) {
+          console.warn('Firestore news error, fallback:', err.message);
+          fallback();
+        });
+    }).catch(fallback);
+  })();
 
   /* ══════════════════════════════════════════════════════════
      ЗАГРУЗКА КАРТОЧЕК: КАРЬЕРА
@@ -1994,16 +2054,4 @@
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
-        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.1 });
-    revealEls.forEach(function(el){ io.observe(el); });
-  } else {
-    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
-  }
-
-})();
-</script>
-
-</body>
-</html>
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); i
