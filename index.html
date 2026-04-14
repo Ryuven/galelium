@@ -993,14 +993,15 @@
        Защита: если JS не сработал (Cloudflare локально и т.д.) —
        через 0.1s элементы всё равно становятся видимыми */
     .reveal {
-      opacity: 1; transform: none;
-    }
-    /* Лёгкая анимация скролла — только если observer успел до рендера */
-    .reveal.will-animate {
-      opacity: 0; transform: translateY(14px);
+      opacity: 0; transform: translateY(18px);
       transition: opacity .5s var(--ease), transform .5s var(--ease);
     }
-    .reveal.will-animate.is-visible { opacity: 1; transform: none; }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+    /* Fallback — если JS заблокирован */
+    @media (scripting: none) {
+      .reveal { opacity: 1; transform: none; }
+    }
 
     /* ════════════════════════════════════════════════════════
        ФУТЕР
@@ -1480,13 +1481,13 @@
           </p>
         </div>
         <div class="contact__channels reveal">
-          <a class="ch-link" href="/cdn-cgi/l/email-protection#1d74737b725d7a7c717871746870337e7270">
+          <a class="ch-link" href="mailto:info@galelium.com">
             <div class="ch-link__icon" aria-hidden="true">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3.5" width="11" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 5l5.5 3.5L12.5 5" stroke="currentColor" stroke-width="1.2"/></svg>
             </div>
             <div>
               <div class="ch-link__type">Email</div>
-              <div class="ch-link__val"><span class="__cf_email__" data-cfemail="1b72757d745b7c7a777e77726e7635787476">[email&#160;protected]</span></div>
+              <div class="ch-link__val">info@galelium.com</div>
             </div>
             <svg class="ch-link__arr" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h9M7.5 3l4 3.5L7.5 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
@@ -1584,7 +1585,7 @@
 
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 (function () {
   'use strict';
 
@@ -1918,24 +1919,28 @@
     return d.getDate() + ' ' + M[d.getMonth()] + ' ' + d.getFullYear();
   }
 
-  /* ── НОВОСТИ ИЗ FIRESTORE (/news, status=published) ── */
+  /* ── Новости из Firestore /news (status=published) ─────── */
   (function() {
     var grid = document.getElementById('nc-news-grid');
     if (!grid) return;
 
-    function renderNewsItems(data) {
-      var items = data
+    function renderNewsCards(items) {
+      var published = items
         .filter(function(n){ return n.status !== 'draft'; })
         .sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); })
         .slice(0, 2);
-      if (!items.length) {
+      if (!published.length) {
         grid.innerHTML = '<p style="padding:20px;color:var(--muted);font-size:.85rem">Новостей пока нет</p>';
         return;
       }
-      grid.innerHTML = items.map(function(item) {
+      grid.innerHTML = published.map(function(item) {
+        var tag = item.tag || item.category || 'Новость';
+        var url = item.slug
+          ? 'https://galelium.com/news.html?news=' + encodeURIComponent(item.slug)
+          : 'https://galelium.com/news.html';
         return (
-          '<a class="nc-card" href="https://galelium.com/news.html">' +
-            '<div class="nc-card__tag">' + (item.tag || item.category || 'Новость') + '</div>' +
+          '<a class="nc-card" href="' + url + '">' +
+            '<div class="nc-card__tag">' + tag + '</div>' +
             '<h3 class="nc-card__title">' + (item.title || '') + '</h3>' +
             (item.summary ? '<p class="nc-card__summary">' + item.summary.slice(0,120) + (item.summary.length>120?'…':'') + '</p>' : '') +
             '<div class="nc-card__foot">' +
@@ -1947,10 +1952,10 @@
       }).join('');
     }
 
-    function newsFromJSON() {
+    function fallbackJSON() {
       fetch('news.json')
         .then(function(r){ return r.ok ? r.json() : Promise.reject(); })
-        .then(renderNewsItems)
+        .then(renderNewsCards)
         .catch(function(){
           grid.innerHTML = '<p style="padding:20px;color:var(--muted);font-size:.85rem">Новости временно недоступны</p>';
         });
@@ -1961,26 +1966,25 @@
       import('https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js')
     ]).then(function(mods) {
       var app = mods[0].initializeApp({
-        apiKey:            'AIzaSyC4PKkma67vVXeZvlSv0MNRK5cQvcAvjpg',
-        authDomain:        'admingalelium.firebaseapp.com',
-        projectId:         'admingalelium',
-        storageBucket:     'admingalelium.firebasestorage.app',
-        messagingSenderId: '565330048254',
-        appId:             '1:565330048254:web:bab36aae480989e2bfe1af'
-      }, 'galelium-news');
+        apiKey:'AIzaSyC4PKkma67vVXeZvlSv0MNRK5cQvcAvjpg',
+        authDomain:'admingalelium.firebaseapp.com',
+        projectId:'admingalelium',
+        storageBucket:'admingalelium.firebasestorage.app',
+        messagingSenderId:'565330048254',
+        appId:'1:565330048254:web:bab36aae480989e2bfe1af'
+      }, 'index-news');
       var db  = mods[1].getFirestore(app);
       var q   = mods[1].query(
         mods[1].collection(db, 'news'),
-        mods[1].where('status', '==', 'published'),
-        mods[1].orderBy('date', 'desc')
+        mods[1].where('status','==','published'),
+        mods[1].orderBy('date','desc')
       );
       return mods[1].getDocs(q);
     }).then(function(snap) {
-      var items = snap.docs.map(function(d){ return Object.assign({ _id: d.id }, d.data()); });
-      renderNewsItems(items);
+      renderNewsCards(snap.docs.map(function(d){ return Object.assign({_id:d.id}, d.data()); }));
     }).catch(function(err) {
-      console.warn('Firestore news:', err && err.message);
-      newsFromJSON();
+      console.warn('Firestore news (index):', err && err.message);
+      fallbackJSON();
     });
   })();
 
@@ -2030,17 +2034,14 @@
   /* ══════════════════════════════════════════════════════════
      SCROLL REVEAL
      ══════════════════════════════════════════════════════════ */
-  /* reveal: показываем всё сразу, observer только для красоты */
   var revealEls = document.querySelectorAll('.reveal');
-  revealEls.forEach(function(el){ el.classList.add('is-visible'); });
-
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
         if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
       });
-    }, { threshold: 0.05 });
-    revealEls.forEach(function(el) { io.observe(el); });
+    }, { threshold: 0.1 });
+    revealEls.forEach(function(el){ io.observe(el); });
   } else {
     revealEls.forEach(function(el){ el.classList.add('is-visible'); });
   }
