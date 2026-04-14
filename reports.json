@@ -1,5 +1,28 @@
 [
   {
+    "id": "r-20260413",
+    "date": "2026-04-13",
+    "address": "ул. Бабушкина 9, СПБ",
+    "arrival": {
+      "time": "10:00",
+      "photo_tsd": "img_reports/IMG_20260413_101606.jpg",
+      "note": "Прибыл во время но из за дронов не мог скинуть"
+    },
+    "departure": {
+      "time": "22:00",
+      "photo_tsd": "img_reports/IMG_20260413_220000.jpg",
+      "photo_stats1": "img_reports/IMG_20260413_220005.jpg",
+      "photo_stats2": "img_reports/IMG_20260413_220007.jpg",
+      "note": "Смену закрыл, теперь щас марафон"
+    },
+    "stats": {
+      "positions": 333,
+      "orders": 42,
+      "correction_pct": 2.38,
+      "avg_position_sec": 35
+    }
+  },
+  {
     "id": "r-20260412",
     "date": "2026-04-12",
     "address": "ул. Бабушкина 9, СПБ",
