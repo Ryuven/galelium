@@ -1179,63 +1179,26 @@
 
   /* ════════════ ЗАГРУЗКА ИЗ FIRESTORE /news ════════════ */
 
-  /* Адаптер: преобразует документ Firestore → формат news.html */
-  function adaptFirestoreItem(d) {
-    var data = d.data ? d.data() : d; /* поддержка и snapshot и plain object */
-    var id   = d.id || data._id || data.slug || (data.date + '-' + (data.title||'').slice(0,20));
 
-    /* body: если строка — конвертируем Markdown в массив блоков */
-    var body = data.body;
-    if (typeof body === 'string' && body.trim()) {
-      body = body.split(/
-{2,}/).map(function(para) {
-        para = para.trim();
-        if (!para) return null;
-        if (para.startsWith('## ') || para.startsWith('### '))
-          return { type: 'heading', text: para.replace(/^#{2,3}\s+/, '') };
-        if (para.startsWith('> '))
-          return { type: 'quote', text: para.replace(/^>\s+/, '') };
-        if (para === para.toUpperCase() && para.length < 100)
-          return { type: 'lead', text: para };
-        return { type: 'paragraph', text: para.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1') };
-      }).filter(Boolean);
-    } else if (!Array.isArray(body)) {
-      body = [];
-    }
-
-    return {
-      id:       id,
-      _fsId:    d.id || data._id,   /* настоящий Firestore ID */
-      slug:     data.slug || id,
-      title:    data.title    || '',
-      category: data.tag      || data.category || 'Новость',
-      summary:  data.summary  || '',
-      date:     data.date     || '',
-      body:     body,
-      tags:     data.tags     || (data.tag ? [data.tag] : []),
-      author:   data.author   || '',
-      image:    data.image    || '',
-      readTime: data.readTime || Math.max(2, Math.ceil((data.body||'').length / 1200)),
-      featured: data.featured || false,
-      status:   data.status   || 'published',
-    };
-  }
-
-  function initNews(items) {
+  /* initNews — вызывается из module script через window._initNews */
+  window._initNews = function(items) {
     allNews = items
       .filter(function(n){ return n.status !== 'draft'; })
       .sort(function(a,b){
         if (a.featured && !b.featured) return -1;
-        if (!a.featured && b.featured) return 1;
+        if (!a.featured && b.featured) return  1;
         return new Date(b.date) - new Date(a.date);
       });
-    elLoading.style.display = 'none';
+
+    var elLoading = document.getElementById('feed-loading');
+    if (elLoading) elLoading.style.display = 'none';
+
     elCount.textContent = allNews.length;
     buildCatFilters();
     buildTagCloud();
     refresh();
 
-    /* Открыть статью из URL (?news=slug или ?news=id) */
+    /* Открыть статью из URL ?news=slug */
     var params = new URLSearchParams(window.location.search);
     var newsId = params.get('news');
     if (newsId) {
@@ -1244,41 +1207,96 @@
       });
       if (item) openModal(item);
     }
-  }
-
-  /* Загружаем все документы без where+orderBy — не нужен индекс */
-  Promise.all([
-    import('https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js'),
-    import('https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js')
-  ]).then(function(mods) {
-    var app = mods[0].initializeApp({
-      apiKey:'AIzaSyC4PKkma67vVXeZvlSv0MNRK5cQvcAvjpg',
-      authDomain:'admingalelium.firebaseapp.com',
-      projectId:'admingalelium',
-      storageBucket:'admingalelium.firebasestorage.app',
-      messagingSenderId:'565330048254',
-      appId:'1:565330048254:web:bab36aae480989e2bfe1af'
-    }, 'news-page-' + Date.now());
-    var db = mods[1].getFirestore(app);
-    /* getDocs без сложных запросов — индексы не нужны */
-    return mods[1].getDocs(mods[1].collection(db, 'news'));
-  }).then(function(snap) {
-    if (!snap || snap.empty) throw new Error('empty');
-    var items = snap.docs.map(adaptFirestoreItem);
-    initNews(items);
-  }).catch(function(err) {
-    console.warn('Firestore news.html fallback:', err && err.message);
-    fetch('news.json')
-      .then(function(r){ return r.ok ? r.json() : []; })
-      .then(function(data){ if (data.length) initNews(data); else throw new Error('no data'); })
-      .catch(function(){
-        elLoading.style.display = 'none';
-        elError.classList.add('is-visible');
-      });
-  });
+  };
 
 }());
 </script>
 
+<script type="module">
+  import { initializeApp }
+    from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js';
+  import { getFirestore, collection, getDocs }
+    from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey:            'AIzaSyC4PKkma67vVXeZvlSv0MNRK5cQvcAvjpg',
+    authDomain:        'admingalelium.firebaseapp.com',
+    projectId:         'admingalelium',
+    storageBucket:     'admingalelium.firebasestorage.app',
+    messagingSenderId: '565330048254',
+    appId:             '1:565330048254:web:bab36aae480989e2bfe1af'
+  };
+
+  /* Адаптер: Firestore doc → формат news.html */
+  function adaptDoc(d) {
+    const data = d.data();
+    const id   = data.slug || d.id;
+    let body   = data.body || '';
+
+    if (typeof body === 'string' && body.trim()) {
+      body = body.split(/\n{2,}/).map(para => {
+        para = para.trim();
+        if (!para) return null;
+        if (/^#{2,3}\s/.test(para))
+          return { type: 'heading',   text: para.replace(/^#{2,3}\s+/, '') };
+        if (para.startsWith('> '))
+          return { type: 'quote',     text: para.replace(/^>\s+/, '') };
+        return   { type: 'paragraph', text: para.replace(/\*\*(.+?)\*\*/g,'$1').replace(/\*(.+?)\*/g,'$1') };
+      }).filter(Boolean);
+    } else if (!Array.isArray(body)) {
+      body = [];
+    }
+
+    return {
+      id:       id,
+      _fsId:    d.id,
+      slug:     data.slug || d.id,
+      title:    data.title    || '',
+      category: data.tag      || data.category || 'Новость',
+      summary:  data.summary  || '',
+      date:     data.date     || '',
+      body,
+      tags:     data.tags || (data.tag ? [data.tag] : []),
+      author:   data.author   || '',
+      image:    data.image    || '',
+      readTime: data.readTime || Math.max(2, Math.ceil(String(data.body||'').length / 1200)),
+      featured: !!data.featured,
+      status:   data.status   || 'published',
+    };
+  }
+
+  const elLoading = document.getElementById('feed-loading');
+  const elError   = document.getElementById('feed-error');
+
+  function hideLoader() { if (elLoading) elLoading.style.display = 'none'; }
+  function showError()  { hideLoader(); if (elError) elError.classList.add('is-visible'); }
+
+  try {
+    const app  = initializeApp(firebaseConfig, 'news-page');
+    const db   = getFirestore(app);
+    const snap = await getDocs(collection(db, 'news'));
+
+    if (snap.empty) { showError(); }
+    else {
+      const items = snap.docs.map(adaptDoc);
+      /* Передаём в IIFE через глобальную функцию */
+      if (typeof window._initNews === 'function') {
+        window._initNews(items);
+      }
+    }
+  } catch (err) {
+    console.warn('Firestore news.html:', err.code || err.message);
+    /* Фоллбэк → news.json */
+    try {
+      const r = await fetch('news.json');
+      if (!r.ok) throw new Error('no json');
+      const data = await r.json();
+      if (typeof window._initNews === 'function') window._initNews(data);
+      else hideLoader();
+    } catch {
+      showError();
+    }
+  }
+</script>
 </body>
 </html>
