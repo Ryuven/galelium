@@ -1246,41 +1246,31 @@
     }
   }
 
+  /* Загружаем все документы без where+orderBy — не нужен индекс */
   Promise.all([
     import('https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js'),
     import('https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js')
   ]).then(function(mods) {
-    var existingApp;
-    try { existingApp = mods[0].getApp('news-page'); } catch(e) {}
-    var app = existingApp || mods[0].initializeApp({
+    var app = mods[0].initializeApp({
       apiKey:'AIzaSyC4PKkma67vVXeZvlSv0MNRK5cQvcAvjpg',
       authDomain:'admingalelium.firebaseapp.com',
       projectId:'admingalelium',
       storageBucket:'admingalelium.firebasestorage.app',
       messagingSenderId:'565330048254',
       appId:'1:565330048254:web:bab36aae480989e2bfe1af'
-    }, 'news-page');
+    }, 'news-page-' + Date.now());
     var db = mods[1].getFirestore(app);
-    var q  = mods[1].query(
-      mods[1].collection(db, 'news'),
-      mods[1].where('status', '==', 'published'),
-      mods[1].orderBy('date', 'desc')
-    );
-    return mods[1].getDocs(q);
+    /* getDocs без сложных запросов — индексы не нужны */
+    return mods[1].getDocs(mods[1].collection(db, 'news'));
   }).then(function(snap) {
-    if (snap.empty) {
-      /* Нет опубликованных — пробуем news.json */
-      return fetch('news.json')
-        .then(function(r){ return r.ok ? r.json() : []; })
-        .then(function(data){ initNews(data); });
-    }
-    initNews(snap.docs.map(adaptFirestoreItem));
+    if (!snap || snap.empty) throw new Error('empty');
+    var items = snap.docs.map(adaptFirestoreItem);
+    initNews(items);
   }).catch(function(err) {
-    console.warn('Firestore news.html:', err && err.message);
-    /* Фоллбэк на JSON */
+    console.warn('Firestore news.html fallback:', err && err.message);
     fetch('news.json')
       .then(function(r){ return r.ok ? r.json() : []; })
-      .then(function(data){ initNews(data); })
+      .then(function(data){ if (data.length) initNews(data); else throw new Error('no data'); })
       .catch(function(){
         elLoading.style.display = 'none';
         elError.classList.add('is-visible');

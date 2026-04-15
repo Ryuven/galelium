@@ -1972,18 +1972,16 @@
         storageBucket:'admingalelium.firebasestorage.app',
         messagingSenderId:'565330048254',
         appId:'1:565330048254:web:bab36aae480989e2bfe1af'
-      }, 'index-news');
+      }, 'index-news-' + Date.now());
       var db  = mods[1].getFirestore(app);
-      var q   = mods[1].query(
-        mods[1].collection(db, 'news'),
-        mods[1].where('status','==','published'),
-        mods[1].orderBy('date','desc')
-      );
-      return mods[1].getDocs(q);
+      /* Без where+orderBy — не нужен составной индекс Firestore */
+      return mods[1].getDocs(mods[1].collection(db, 'news'));
     }).then(function(snap) {
-      renderNewsCards(snap.docs.map(function(d){ return Object.assign({_id:d.id}, d.data()); }));
+      if (!snap || snap.empty) throw new Error('empty');
+      var items = snap.docs.map(function(d){ return Object.assign({_id:d.id}, d.data()); });
+      renderNewsCards(items);
     }).catch(function(err) {
-      console.warn('Firestore news (index):', err && err.message);
+      console.warn('Firestore news (index) fallback:', err && err.message);
       fallbackJSON();
     });
   })();
