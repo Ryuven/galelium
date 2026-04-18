@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Рейтинг недели | Galelium Corporation</title>
+  <meta name="description" content="Еженедельный рейтинг сборщиков Galelium Corporation." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+        onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" /></noscript>
+
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --bg:         #0a0a0f;
+      --surface:    #111118;
+      --sf2:        #16161f;
+      --sf3:        #1c1c28;
+      --border:     rgba(255,255,255,.07);
+      --border-h:   rgba(255,255,255,.12);
+      --accent:     #c8a96e;
+      --ad:         rgba(200,169,110,.10);
+      --am:         rgba(200,169,110,.32);
+      --text:       #e8e6e0;
+      --muted:      #7a7870;
+      --muted2:     #4a4845;
+      --green:      #4caf82;
+      --gd:         rgba(76,175,130,.12);
+      --red:        #cf6679;
+      --rd:         rgba(207,102,121,.10);
+      --gold:       #c8a96e;
+      --silver:     #9daab8;
+      --bronze:     #b87c4a;
+      --font:       'DM Sans', system-ui, sans-serif;
+      --display:    'Syne', sans-serif;
+      --nav-h: 64px;
+      --max:   1100px;
+      --px:    clamp(16px,5vw,48px);
+      --ease:  cubic-bezier(.4,0,.2,1);
+      --spring:cubic-bezier(.32,.72,0,1);
+    }
+
+    *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0 }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100% }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); font-weight: 300;
+           font-size: 1rem; line-height: 1.7; overflow-x: hidden; -webkit-font-smoothing: antialiased }
+    a { color: inherit }
+    ul[role="list"] { list-style: none }
+    img { display: block; max-width: 100% }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp   { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+    @keyframes scaleIn  { from{opacity:0;transform:scale(.96)} to{opacity:1;transform:scale(1)} }
+    @keyframes loaderF  { 0%{width:0%;margin-left:0} 50%{width:60%} 100%{width:0%;margin-left:100%} }
+    @keyframes rowIn    { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+    .ain { opacity:0; animation: fadeUp .28s var(--ease) both }
+
+    /* ── SKIP ── */
+    .skip { position:absolute;top:-999px;left:16px;z-index:9999;background:var(--accent);color:#0a0a0f;
+            font-family:var(--display);font-weight:800;font-size:.75rem;letter-spacing:.1em;
+            text-transform:uppercase;padding:10px 20px;text-decoration:none;transition:top .14s }
+    .skip:focus { top:12px }
+
+    /* ── NAV ── */
+    .site-nav {
+      position: fixed; inset: 0 0 auto; z-index: 200; height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding-inline: var(--px);
+      background: rgba(10,10,15,.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family:var(--display);font-weight:800;font-size:1rem;letter-spacing:.06em;
+                text-transform:uppercase;color:var(--text);text-decoration:none;transition:opacity .14s }
+    .nav-logo:hover { opacity:.65 }
+    .nav-list { display:flex;gap:28px;list-style:none }
+    .nav-list a { color:var(--muted);text-decoration:none;font-size:.73rem;font-weight:400;
+                  letter-spacing:.09em;text-transform:uppercase;white-space:nowrap;
+                  padding-bottom:2px;border-bottom:1px solid transparent;transition:color .14s,border-color .14s }
+    .nav-list a:hover { color:var(--text) }
+    .nav-list a[aria-current="page"] { color:var(--accent);border-color:var(--accent) }
+    .nav-btn { display:none;align-items:center;justify-content:center;width:36px;height:36px;
+               background:none;border:none;cursor:pointer;color:var(--text);z-index:201 }
+    .ham { display:block;width:20px;height:14px;position:relative }
+    .ham span { display:block;width:20px;height:2px;background:currentColor;border-radius:1px;
+                position:absolute;left:0;transform-origin:center;
+                transition:transform .24s var(--ease),opacity .18s,top .24s var(--ease) }
+    .ham span:nth-child(1){top:0}.ham span:nth-child(2){top:6px}.ham span:nth-child(3){top:12px}
+    .nav-btn.is-open .ham span:nth-child(1){top:6px;transform:rotate(45deg)}
+    .nav-btn.is-open .ham span:nth-child(2){opacity:0;transform:scaleX(0)}
+    .nav-btn.is-open .ham span:nth-child(3){top:6px;transform:rotate(-45deg)}
+    .nav-mobile { display:none;position:fixed;inset:var(--nav-h) 0 0;z-index:199;
+                  background:rgba(10,10,15,.98);flex-direction:column;overflow-y:auto;
+                  opacity:0;transform:translateY(-8px);
+                  transition:opacity .22s var(--ease),transform .22s var(--ease);pointer-events:none }
+    .nav-mobile.is-open { display:flex;opacity:1;transform:none;pointer-events:auto }
+    .nav-mobile__inner { flex:1;padding:8px var(--px) 28px }
+    .nav-mobile__item { display:block;border-bottom:1px solid var(--border) }
+    .nav-mobile__item:first-child { border-top:1px solid var(--border) }
+    .nav-mobile__item a { display:flex;align-items:center;justify-content:space-between;
+                          padding:18px 0;font-size:.92rem;font-weight:400;letter-spacing:.04em;
+                          text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .14s }
+    .nav-mobile__item a:hover { color:var(--text) }
+    .nav-mobile__footer { padding:18px var(--px) 28px;border-top:1px solid var(--border);
+                          display:flex;gap:16px;flex-wrap:wrap }
+    .nav-mobile__footer a { font-size:.68rem;color:var(--muted2);text-decoration:none;
+                            letter-spacing:.06em;text-transform:uppercase;transition:color .14s }
+    .nav-overlay { position:fixed;inset:var(--nav-h) 0 0;background:rgba(5,5,10,.5);
+                   z-index:150;opacity:0;pointer-events:none;transition:opacity .24s }
+    .nav-overlay.is-open { opacity:1;pointer-events:auto }
+
+    /* ── HERO ── */
+    /* ═══ HERO ═══════════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      padding-top: var(--nav-h);
+      min-height: calc(var(--nav-h) + 340px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    /* Фоновый градиент */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 70% at 60% 30%, rgba(200,169,110,.055) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 10% 80%, rgba(76,175,130,.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Сетка (grid overlay) */
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.024) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.024) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 100% at 60% 0%, black 0%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 100% at 60% 0%, black 0%, transparent 80%);
+      pointer-events: none;
+    }
+
+    .hero__canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      display: block; pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Топ-строка с eyebrow */
+    .hero__top {
+      position: relative; z-index: 2;
+      width: 100%; max-width: var(--max);
+      margin-inline: auto;
+      padding-inline: var(--px);
+      padding-top: clamp(32px,5vw,56px);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .hero__tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--accent);
+    }
+    .hero__tag-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px var(--ad);
+      flex-shrink: 0;
+    }
+    .hero__period {
+      font-size: .62rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted2); display: flex; align-items: center; gap: 8px;
+    }
+    .hero__period-val {
+      color: var(--muted); font-family: var(--display); font-weight: 700;
+      letter-spacing: 0; text-transform: none; font-size: .76rem;
+    }
+
+    /* Основной контент hero */
+    .hero__inner {
+      position: relative; z-index: 2;
+      width: 100%; max-width: var(--max);
+      margin-inline: auto;
+      padding-inline: var(--px);
+      padding-bottom: clamp(44px,6vw,68px);
+      padding-top: clamp(20px,3vw,32px);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 32px;
+    }
+
+    .hero__left {}
+
+    /* Разделитель перед заголовком */
+    .hero__rule {
+      width: 40px; height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      margin-bottom: 18px;
+    }
+
+    .hero__title {
+      font-family: var(--display); font-weight: 800;
+      font-size: clamp(2.6rem,6vw,4.4rem);
+      line-height: 1; color: #fff;
+      letter-spacing: -.03em;
+      margin-bottom: 20px;
+    }
+    .hero__title em { color: var(--accent); font-style: normal; display: block }
+    .hero__title span { display: block; color: rgba(255,255,255,.55); font-size: .52em; letter-spacing: .04em; font-weight: 700; margin-bottom: 6px; text-transform: uppercase }
+
+    .hero__lead {
+      font-size: clamp(.84rem,1.2vw,.94rem);
+      color: var(--muted);
+      line-height: 1.78;
+      max-width: 420px;
+    }
+
+    /* Блок с датой недели — правая сторона */
+    .week-block {
+      display: flex; flex-direction: column;
+      padding: 0;
+      min-width: 200px;
+      align-self: end;
+    }
+    .week-block__top {
+      font-size: .52rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted2); margin-bottom: 10px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .week-block__top::before {
+      content: ''; display: block; width: 16px; height: 1px; background: var(--muted2);
+    }
+    .week-block__title {
+      font-family: var(--display); font-weight: 800;
+      font-size: 1rem; color: #fff; line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .week-block__dates {
+      font-size: .72rem; color: var(--accent);
+      letter-spacing: .02em;
+    }
+    /* Декоративная линия под датой */
+    .week-block__line {
+      margin-top: 14px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--am), transparent);
+      width: 100%;
+    }
+
+
+
+    /* ── ОБЩАЯ СТАТИСТИКА (4 KPI) ── */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 2px;
+      border-bottom: 1px solid var(--border);
+    }
+    .kpi-cell {
+      background: var(--surface); padding: 22px 20px;
+      position: relative; overflow: hidden;
+      transition: background .14s;
+    }
+    .kpi-cell:hover { background: var(--sf2) }
+    .kpi-cell::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent 60%);
+      opacity: 0; transition: opacity .24s;
+    }
+    .kpi-cell:hover::before { opacity: 1 }
+    .kpi-val {
+      font-family: var(--display); font-weight: 800;
+      font-size: clamp(1.5rem,2.8vw,2.2rem); color: #fff;
+      line-height: 1; letter-spacing: -.02em; margin-bottom: 6px;
+    }
+    .kpi-val.g { color: var(--green) }
+    .kpi-val.a { color: var(--accent) }
+    .kpi-label { font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2) }
+    .kpi-delta { font-size:.68rem;margin-top:5px }
+
+    /* ── TEAM QUALITY BAR ── */
+    .quality-bar {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 18px var(--px);
+    }
+    .quality-bar__inner {
+      max-width: var(--max); margin-inline: auto;
+      display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 12px 28px;
+      align-items: center;
+    }
+    .qb-label { font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);white-space:nowrap }
+    .qb-track { height:4px;background:var(--sf3);border-radius:2px;overflow:hidden;position:relative }
+    .qb-fill { height:100%;border-radius:2px;transition:width 1.2s var(--spring) }
+    .qb-fill.ok { background:var(--green) }.qb-fill.bad { background:var(--red) }
+    .qb-norm { position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.2) }
+    .qb-val { font-family:var(--display);font-weight:700;font-size:.86rem;white-space:nowrap;text-align:right }
+
+    /* ── PODIUM ── */
+    .podium-section {
+      padding-block: clamp(44px,6vw,72px);
+      border-bottom: 1px solid var(--border);
+    }
+    .podium-section .container { max-width: var(--max); margin-inline: auto; padding-inline: var(--px) }
+
+    .podium-head {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 14px; margin-bottom: clamp(24px,3.5vw,36px); flex-wrap: wrap;
+    }
+    .sec-eyebrow { font-size:.6rem;font-weight:400;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:8px }
+    .sec-title { font-family:var(--display);font-weight:800;font-size:clamp(1.2rem,2.5vw,1.7rem);color:#fff;line-height:1.1;letter-spacing:-.01em }
+    .sec-title em { color:var(--accent);font-style:normal }
+
+    /* Filter tabs */
+    .tabs { display:flex;gap:2px;flex-wrap:wrap }
+    .tab { padding:6px 14px;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+           background:var(--surface);border:1px solid var(--border);color:var(--muted);
+           cursor:pointer;transition:border-color .14s,color .14s,background .14s }
+    .tab:hover { border-color:var(--border-h);color:var(--text) }
+    .tab.on { background:var(--ad);border-color:var(--am);color:var(--accent) }
+
+    /* Podium cards grid */
+    .podium { display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:2px;align-items:end }
+
+    .pc {
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; padding: 28px 20px 24px;
+      position: relative; overflow: hidden;
+      transition: border-color .24s, background .24s;
+    }
+    .pc:hover { border-color:var(--border-h) }
+    .pc::before { content:'';position:absolute;top:0;left:0;right:0;height:2px }
+    .r1::before { background: linear-gradient(90deg,var(--gold),rgba(200,169,110,.08)) }
+    .r2::before { background: linear-gradient(90deg,var(--silver),rgba(157,170,184,.06)) }
+    .r3::before { background: linear-gradient(90deg,var(--bronze),rgba(184,124,74,.06)) }
+    .r1 { background: linear-gradient(180deg,rgba(200,169,110,.065) 0%,var(--surface) 50%) }
+
+    /* Rank number */
+    .pc-rank {
+      font-family: var(--display); font-weight: 800;
+      font-size: 2.6rem; line-height: 1; letter-spacing: -.04em;
+      margin-bottom: 16px; opacity: .6;
+    }
+    .r1 .pc-rank { color:var(--gold);opacity:1;font-size:3rem }
+    .r2 .pc-rank { color:var(--silver) }
+    .r3 .pc-rank { color:var(--bronze) }
+
+    /* Avatar */
+    .pc-av {
+      width: 60px; height: 60px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--display); font-weight: 800; font-size: 1.4rem;
+      margin-bottom: 14px; border: 2px solid; flex-shrink: 0;
+    }
+    .r1 .pc-av { background:rgba(200,169,110,.14);border-color:var(--am);color:var(--gold) }
+    .r2 .pc-av { background:rgba(157,170,184,.09);border-color:rgba(157,170,184,.26);color:var(--silver) }
+    .r3 .pc-av { background:rgba(184,124,74,.09);border-color:rgba(184,124,74,.26);color:var(--bronze) }
+
+    .pc-name { font-family:var(--display);font-weight:700;font-size:clamp(.88rem,1.4vw,.98rem);color:#fff;line-height:1.2;margin-bottom:3px }
+    .pc-role { font-size:.62rem;color:var(--muted);margin-bottom:18px;letter-spacing:.04em }
+
+    /* Score badge */
+    /* Главная метрика подиума */
+    .pc-main-metric {
+      width: 100%; margin-bottom: 14px;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 14px 16px;
+      background: var(--sf3); border: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .pc-main-metric::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    }
+    .r1 .pc-main-metric::before { background: var(--gold) }
+    .r2 .pc-main-metric::before { background: var(--silver) }
+    .r3 .pc-main-metric::before { background: var(--bronze) }
+    .pc-main-metric__val { font-family:var(--display);font-weight:800;font-size:2rem;color:#fff;line-height:1;letter-spacing:-.02em }
+    .r1 .pc-main-metric__val { color:var(--accent) }
+    .pc-main-metric__key { font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted2) }
+
+    /* Stats mini grid */
+    .pc-stats { display:grid;grid-template-columns:1fr 1fr;gap:4px;width:100%;margin-bottom:14px }
+    .pcs { background:var(--sf2);border:1px solid var(--border);padding:8px 6px;text-align:center }
+    .pcs__v { font-family:var(--display);font-weight:700;font-size:.94rem;color:#fff;line-height:1;margin-bottom:3px }
+    .pcs__v.g { color:var(--green) }
+    .pcs__k { font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2) }
+
+    /* Streak 7d */
+    /* Streak — минималистичные полоски */
+    .pc-streak { width:100%;margin-top:14px }
+    .pc-streak__head { display:flex;justify-content:space-between;align-items:center;margin-bottom:7px }
+    .pc-streak__lbl { font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2) }
+    .pc-streak__days { display:flex;gap:2px;align-items:flex-end;height:20px }
+    .pc-streak__d {
+      width:100%; max-width:14px; border-radius:1px;
+      transition: opacity .2s;
+    }
+    .pc-streak__day-label { font-size:.46rem;color:var(--muted2);letter-spacing:.06em;text-align:center;margin-top:3px;flex:1 }
+
+    /* Perf bars */
+    .pc-bar { width:100%;margin-top:8px }
+    .pc-bar__h { display:flex;justify-content:space-between;font-size:.58rem;color:var(--muted2);margin-bottom:4px }
+    .pc-bar__t { height:3px;background:var(--sf3);border-radius:2px;overflow:hidden }
+    .pc-bar__f { height:100%;border-radius:2px;transition:width 1.2s var(--spring) }
+    .ok { background:var(--green) }.bad { background:var(--red) }
+
+    /* ── TABLE ── */
+    .table-section { padding-block: clamp(40px,6vw,68px) }
+    .table-section .container { max-width:var(--max);margin-inline:auto;padding-inline:var(--px) }
+    .table-head { display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:clamp(18px,3vw,28px);flex-wrap:wrap }
+
+    .rtw { background:var(--surface);border:1px solid var(--border);overflow:hidden }
+    .rt { width:100%;border-collapse:collapse }
+    .rt thead { background:var(--sf2) }
+    .rt th { padding:9px 14px;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;
+             color:var(--muted2);text-align:left;border-bottom:1px solid var(--border);font-weight:400;white-space:nowrap }
+    .rt th:first-child { width:50px;text-align:center }
+    .rt td { padding:12px 14px;font-size:.82rem;vertical-align:middle;border-bottom:1px solid var(--border);transition:background .12s }
+    .rt td:first-child { text-align:center }
+    .rt tbody tr:hover td { background:var(--sf2) }
+    .rt tbody tr:last-child td { border-bottom:none }
+
+    .rn { font-family:var(--display);font-weight:800;font-size:.86rem;color:var(--muted2) }
+    .rn.top { color:var(--accent) }
+    .rw { display:flex;align-items:center;gap:10px;min-width:0 }
+    .rav { width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+           font-family:var(--display);font-weight:800;font-size:.68rem;
+           background:var(--ad);border:1px solid var(--am);color:var(--accent);flex-shrink:0 }
+    .rwn { font-size:.82rem;color:var(--text) }
+    .rwm { font-size:.64rem;color:var(--muted);margin-top:1px }
+
+    /* Score в таблице */
+    .rscore { font-family:var(--display);font-weight:800;font-size:.92rem }
+    .rscore.top { color:var(--accent) }
+
+    /* mini progress */
+    .mp { display:flex;align-items:center;gap:5px }
+    .mpt { flex:1;height:3px;background:var(--sf3);min-width:28px;border-radius:2px;overflow:hidden }
+    .mpf { height:100%;border-radius:2px;transition:width .8s var(--spring) }
+    .mpv { font-size:.68rem;white-space:nowrap;font-family:var(--display);font-weight:700 }
+    .mpv.ok { color:var(--green) }.mpv.bad { color:var(--red) }
+
+    /* streak mini */
+    /* Streak в таблице — вертикальные бары */
+    .mst { display:flex;gap:2px;height:14px;align-items:flex-end }
+    .mst-d { width:6px;border-radius:1px 1px 0 0;flex-shrink:0;min-height:2px }
+
+    /* pills */
+    .pill { display:inline-flex;align-items:center;gap:4px;font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px }
+    .pill-g { color:var(--green);background:var(--gd);border:1px solid rgba(76,175,130,.2) }
+    .pill-r { color:var(--red);background:var(--rd);border:1px solid rgba(207,102,121,.2) }
+    .pd { width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0 }
+
+    /* loader */
+    .loader { text-align:center;padding:52px 24px;display:flex;flex-direction:column;align-items:center;gap:12px }
+    .lbar { width:100px;height:2px;background:var(--sf2);overflow:hidden }
+    .lbar-f { height:100%;background:var(--accent);animation:loaderF 1.4s ease-in-out infinite }
+    .ltxt { font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2) }
+    .empty { text-align:center;padding:48px 24px;color:var(--muted);font-size:.84rem }
+
+    /* footer */
+    .site-footer { border-top:1px solid var(--border);padding-inline:var(--px);margin-top:80px }
+    .footer-top { display:flex;align-items:flex-start;justify-content:space-between;gap:40px;padding-block:40px;border-bottom:1px solid var(--border);flex-wrap:wrap }
+    .f-logo { font-family:var(--display);font-weight:800;font-size:.9rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text);text-decoration:none;display:block;margin-bottom:10px;transition:opacity .14s }
+    .f-logo:hover { opacity:.65 }
+    .f-tagline { font-size:.78rem;color:var(--muted);max-width:240px;line-height:1.6 }
+    .footer-nav { display:flex;gap:48px;flex-wrap:wrap }
+    .fn-t { font-family:var(--display);font-weight:700;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-bottom:16px }
+    .footer-nav-group ul { list-style:none;display:flex;flex-direction:column;gap:11px }
+    .footer-nav-group a { font-size:.78rem;color:var(--muted);text-decoration:none;transition:color .14s }
+    .footer-nav-group a:hover { color:var(--text) }
+    .footer-bottom { display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:20px;flex-wrap:wrap }
+    .f-copy { font-size:.68rem;color:var(--muted2) }
+    .f-legal { display:flex;gap:20px;list-style:none }
+    .f-legal a { font-size:.65rem;color:var(--muted2);text-decoration:none;letter-spacing:.06em;text-transform:uppercase;transition:color .14s }
+    .f-legal a:hover { color:var(--muted) }
+
+    /* RESPONSIVE */
+    @media(max-width:900px) {
+      .kpi-row { grid-template-columns:repeat(2,1fr) }
+      .quality-bar__inner { grid-template-columns:auto 1fr;grid-template-rows:auto auto }
+      .podium { grid-template-columns:1fr 1fr 1fr }
+      .rt th:nth-child(5),.rt td:nth-child(5),
+      .rt th:nth-child(7),.rt td:nth-child(7) { display:none }
+    }
+    @media(max-width:640px) {
+      .nav-list { display:none } .nav-btn { display:flex }
+      .hero__inner { grid-template-columns:1fr;gap:24px }
+      .hero__top { flex-direction:column;align-items:flex-start;gap:8px }
+      .week-block { min-width:0 }
+      .kpi-row { grid-template-columns:1fr 1fr }
+      .podium { grid-template-columns:1fr;align-items:start }
+      .r1 { order:-1 }
+      .rt th:nth-child(4),.rt td:nth-child(4),
+      .rt th:nth-child(6),.rt td:nth-child(6) { display:none }
+      .footer-top { flex-direction:column;gap:28px;padding-block:32px }
+      .footer-nav { flex-direction:column;gap:24px }
+      .footer-bottom { flex-direction:column;align-items:flex-start;gap:10px }
+    }
+    @media(max-width:480px) { .kpi-row { grid-template-columns:1fr } }
+
+    /* ── SPARKLINES ── */
+    .spark-wrap {
+      width: 100%; margin-top: 12px;
+    }
+    .spark-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 8px;
+    }
+    .spark-label { font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);width:60px;flex-shrink:0 }
+    .spark-canvas { flex:1;height:24px;display:block }
+    .spark-val { font-family:var(--display);font-weight:700;font-size:.76rem;width:44px;text-align:right;flex-shrink:0 }
+    .spark-val.ok { color:var(--green) }
+    .spark-val.bad { color:var(--red) }
+
+    /* ── ДИАГРАММА команды ── */
+    .team-chart-wrap {
+      background: var(--surface); border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border); padding: 28px var(--px);
+    }
+    .team-chart-wrap .container { max-width:var(--max);margin-inline:auto }
+    .tchart-head { display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:24px;flex-wrap:wrap }
+    .tchart-title { font-family:var(--display);font-weight:700;font-size:.96rem;color:#fff }
+    .tchart-sub { font-size:.62rem;color:var(--muted);margin-top:3px }
+    .tchart-grid { display:grid;grid-template-columns:1fr 1fr;gap:20px }
+    .tchart-cell { }
+    .tchart-cell__label { display:flex;justify-content:space-between;font-size:.64rem;margin-bottom:8px }
+    .tchart-cell__name { color:var(--muted) }
+    .tchart-cell__val { font-family:var(--display);font-weight:700 }
+    canvas.tchart-canvas { width:100%;height:52px;display:block }
+
+    /* hero sizes — см. основной CSS */
+
+    /* KPI cells — убираем лишнее, делаем чище */
+    .kpi-cell { border-right: 1px solid var(--border) }
+    .kpi-cell:last-child { border-right: none }
+    .kpi-row { border-bottom: 1px solid var(--border) !important }
+
+    /* Подиум — rank число крупнее и стильнее */
+    .pc-rank {
+      font-family: var(--display); font-weight: 800;
+      font-size: 1rem !important; letter-spacing: .14em; text-transform: uppercase;
+      margin-bottom: 16px !important; opacity: 1 !important;
+      padding: 3px 12px; border: 1px solid;
+    }
+    .r1 .pc-rank { color:var(--gold);border-color:var(--am);background:var(--ad) }
+    .r2 .pc-rank { color:var(--silver);border-color:rgba(157,170,184,.2);background:rgba(157,170,184,.06) }
+    .r3 .pc-rank { color:var(--bronze);border-color:rgba(184,124,74,.2);background:rgba(184,124,74,.06) }
+
+    /* Аватар — чуть больше в центральной */
+    .r1 .pc-av { width:72px;height:72px;font-size:1.7rem }
+
+    /* Table — score col */
+    .rt td.score-col { font-family:var(--display);font-weight:700;font-size:.88rem }
+
+    /* Row hover highlight */
+    .rt tbody tr { cursor:default;transition:background .1s }
+  </style>
+</head>
+<body>
+
+<a class="skip" href="#main">Перейти к содержимому</a>
+<div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
+
+<nav class="site-nav" aria-label="Основная навигация">
+  <a href="https://galelium.com" class="nav-logo">Galelium Corp.</a>
+  <ul class="nav-list" role="list">
+    <li><a href="https://galelium.com/#about">О нас</a></li>
+    <li><a href="https://galelium.com/news.html">Новости</a></li>
+    <li><a href="https://galelium.com/reports.html">Отчёты</a></li>
+    <li><a href="https://galelium.com/workers.html" aria-current="page">Рейтинг</a></li>
+    <li><a href="https://galelium.com/#contact">Контакты</a></li>
+  </ul>
+  <button class="nav-btn" id="nav-btn" aria-expanded="false" aria-label="Открыть меню">
+    <span class="ham"><span></span><span></span><span></span></span>
+  </button>
+</nav>
+
+<div class="nav-mobile" id="nav-mobile" role="dialog" aria-label="Меню" aria-hidden="true">
+  <div class="nav-mobile__inner">
+    <ul role="list">
+      <li class="nav-mobile__item"><a href="https://galelium.com/#about">О нас <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+      <li class="nav-mobile__item"><a href="https://galelium.com/news.html">Новости <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+      <li class="nav-mobile__item"><a href="https://galelium.com/workers.html" aria-current="page">Рейтинг <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+    </ul>
+  </div>
+  <div class="nav-mobile__footer">
+    <a href="https://galelium.com/privacy.html">Конфиденциальность</a>
+    <a href="https://galelium.com/terms.html">Условия</a>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- ═══ HERO ═══════════════════════════════════════════════════ -->
+  <section class="hero">
+    <canvas class="hero__canvas" id="hero-canvas"></canvas>
+
+    <!-- Eyebrow строка -->
+    <div class="hero__top">
+      <div class="hero__tag ain" style="animation-delay:.0s">
+        <span class="hero__tag-dot"></span>
+        Galelium Corporation · Операции
+      </div>
+      <div class="hero__period ain" style="animation-delay:.05s">
+        Период
+        <span class="hero__period-val" id="wk-dates">—</span>
+      </div>
+    </div>
+
+    <!-- Основной блок -->
+    <div class="hero__inner">
+      <div class="hero__left">
+        <div class="hero__rule ain" style="animation-delay:.06s"></div>
+        <h1 class="hero__title ain" style="animation-delay:.08s">
+          <span>Результаты</span>
+          <em>Недели</em>
+        </h1>
+        <p class="hero__lead ain" style="animation-delay:.13s">
+          Общий рейтинг, командная статистика и показатели эффективности сборщиков за прошедшую неделю.
+        </p>
+      </div>
+
+      <div class="week-block ain" style="animation-delay:.16s">
+        <div class="week-block__top">Период</div>
+        <div class="week-block__title" id="wk-title">Загрузка…</div>
+        <div class="week-block__dates" id="wk-dates-right">—</div>
+        <div class="week-block__line"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TOP-3 PODIUM ══════════════════════════════════════════ -->
+  <section class="podium-section">
+    <div class="container">
+      <div class="podium-head ain" style="animation-delay:.06s">
+        <div>
+          <span class="sec-eyebrow">Общий рейтинг недели</span>
+          <div class="sec-title">Топ <em>3</em> сборщика</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+          <div style="font-size:.6rem;color:var(--muted2);letter-spacing:.12em;text-transform:uppercase">
+            Общий счёт = заказы · смены · позиции · качество
+          </div>
+          <div class="tabs" id="score-metric-tabs">
+            <button class="tab on" data-m="total">Общий</button>
+            <button class="tab" data-m="orders">Заказы</button>
+            <button class="tab" data-m="shifts">Смены</button>
+            <button class="tab" data-m="positions">Позиции</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="podium ain" style="animation-delay:.12s" id="podium">
+        <div class="loader" style="grid-column:1/-1">
+          <div class="lbar"><div class="lbar-f"></div></div>
+          <div class="ltxt">Загрузка из Firestore…</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <hr style="border:none;border-top:1px solid var(--border)" />
+
+  <!-- ═══ KPI ROW ════════════════════════════════════════════════ -->
+  <div class="kpi-row" id="kpi-row">
+    <div class="kpi-cell ain" style="animation-delay:.04s">
+      <div class="kpi-val" id="kpi-shifts">—</div>
+      <div class="kpi-label">Смен за неделю</div>
+      <div class="kpi-delta" id="kpi-shifts-d"></div>
+    </div>
+    <div class="kpi-cell ain" style="animation-delay:.08s">
+      <div class="kpi-val g" id="kpi-orders">—</div>
+      <div class="kpi-label">Заказов выполнено</div>
+      <div class="kpi-delta" id="kpi-orders-d"></div>
+    </div>
+    <div class="kpi-cell ain" style="animation-delay:.12s">
+      <div class="kpi-val" id="kpi-positions">—</div>
+      <div class="kpi-label">Позиций собрано</div>
+      <div class="kpi-delta" id="kpi-positions-d"></div>
+    </div>
+    <div class="kpi-cell ain" style="animation-delay:.16s">
+      <div class="kpi-val a" id="kpi-active">—</div>
+      <div class="kpi-label">Активных сборщиков</div>
+      <div class="kpi-delta" id="kpi-active-d"></div>
+    </div>
+  </div>
+
+  <!-- ═══ QUALITY BAR ═══════════════════════════════════════════ -->
+  <div class="quality-bar ain" style="animation-delay:.2s">
+    <div class="quality-bar__inner">
+      <span class="qb-label">Ср. корректировки<br><span id="qb-corr-norm" style="color:var(--muted2)">норма ≤ 4%</span></span>
+      <div class="qb-track">
+        <div class="qb-fill ok" id="qb-corr-f" style="width:0%"></div>
+        <div class="qb-norm" style="left:20%"></div>
+      </div>
+      <div class="qb-val" id="qb-corr-v">—</div>
+
+      <span class="qb-label">Ср. скорость позиции<br><span style="color:var(--muted2)">норма ≤ 38 с</span></span>
+      <div class="qb-track">
+        <div class="qb-fill ok" id="qb-speed-f" style="width:0%"></div>
+        <div class="qb-norm" style="left:54.3%"></div>
+      </div>
+      <div class="qb-val" id="qb-speed-v">—</div>
+    </div>
+  </div>
+
+  <!-- ═══ TEAM CHART ══════════════════════════════════════════════ -->
+  <div class="team-chart-wrap ain" style="animation-delay:.22s" id="team-chart-block">
+    <div class="container">
+      <div class="tchart-head">
+        <div>
+          <div class="tchart-title">Динамика команды за неделю</div>
+          <div class="tchart-sub">Ежедневные показатели · пн — вс</div>
+        </div>
+        <div style="font-size:.6rem;color:var(--muted2);letter-spacing:.12em;text-transform:uppercase" id="tchart-week-label"></div>
+      </div>
+      <div class="tchart-grid">
+        <div class="tchart-cell">
+          <div class="tchart-cell__label">
+            <span class="tchart-cell__name">Смены по дням</span>
+            <span class="tchart-cell__val" id="tchart-shifts-val" style="color:var(--accent)">—</span>
+          </div>
+          <canvas class="tchart-canvas" id="tchart-shifts"></canvas>
+        </div>
+        <div class="tchart-cell">
+          <div class="tchart-cell__label">
+            <span class="tchart-cell__name">Заказы по дням</span>
+            <span class="tchart-cell__val" id="tchart-orders-val" style="color:var(--green)">—</span>
+          </div>
+          <canvas class="tchart-canvas" id="tchart-orders"></canvas>
+        </div>
+        <div class="tchart-cell">
+          <div class="tchart-cell__label">
+            <span class="tchart-cell__name">Корр. % ср. по дням</span>
+            <span class="tchart-cell__val" id="tchart-corr-val">—</span>
+          </div>
+          <canvas class="tchart-canvas" id="tchart-corr"></canvas>
+        </div>
+        <div class="tchart-cell">
+          <div class="tchart-cell__label">
+            <span class="tchart-cell__name">Скорость ср. по дням</span>
+            <span class="tchart-cell__val" id="tchart-speed-val">—</span>
+          </div>
+          <canvas class="tchart-canvas" id="tchart-speed"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FULL TABLE ════════════════════════════════════════════ -->
+  <section class="table-section">
+    <div class="container">
+      <div class="table-head ain" style="animation-delay:.06s">
+        <div>
+          <span class="sec-eyebrow">Все участники</span>
+          <div class="sec-title">Полный <em>рейтинг</em></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <div style="position:relative">
+            <svg width="12" height="12" viewBox="0 0 13 13" fill="none" style="position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--muted2);pointer-events:none">
+              <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M9 9l2.5 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            <input type="search" id="rank-search" placeholder="Поиск…"
+              style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:.8rem;padding:7px 12px 7px 28px;outline:none;width:160px;transition:border-color .14s;font-family:var(--font)"
+              onfocus="this.style.borderColor='var(--am)'"
+              onblur="this.style.borderColor='var(--border)'" />
+          </div>
+          <div class="tabs" id="sort-tabs">
+            <button class="tab on" data-s="total">Общий</button>
+            <button class="tab" data-s="orders">Заказы</button>
+            <button class="tab" data-s="shifts">Смены</button>
+            <button class="tab" data-s="positions">Позиции</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="rtw ain" style="animation-delay:.12s">
+        <table class="rt">
+          <thead><tr>
+            <th>#</th>
+            <th>Сборщик</th>
+            <th>Смен</th>
+            <th>Заказов</th>
+            <th>Позиций</th>
+            <th>Корр.</th>
+            <th>Пн—Вс</th>
+          </tr></thead>
+          <tbody id="rank-tbody">
+            <tr><td colspan="8"><div class="loader"><div class="lbar"><div class="lbar-f"></div></div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="rank-footer" style="margin-top:10px;font-size:.62rem;color:var(--muted2);text-align:right"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-top">
+    <div>
+      <a href="https://galelium.com" class="f-logo">Galelium Corp.</a>
+      <p class="f-tagline">Холдинговая корпорация. Инвестиции, технологии, развитие.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Навигация в футере">
+      <div class="footer-nav-group">
+        <p class="fn-t">Компания</p>
+        <ul role="list">
+          <li><a href="https://galelium.com/#about">О нас</a></li>
+          <li><a href="https://galelium.com/news.html">Новости</a></li>
+          <li><a href="https://galelium.com/reports.html">Отчёты</a></li>
+        </ul>
+      </div>
+      <div class="footer-nav-group">
+        <p class="fn-t">Правовые</p>
+        <ul role="list">
+          <li><a href="https://galelium.com/privacy.html">Конфиденциальность</a></li>
+          <li><a href="https://galelium.com/terms.html">Условия</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span class="f-copy">© 2025–2026 Galelium Corporation. Все права защищены.</span>
+    <ul class="f-legal" role="list">
+      <li><a href="https://galelium.com/privacy.html">Конфиденциальность</a></li>
+      <li><a href="https://galelium.com/terms.html">Условия</a></li>
+    </ul>
+  </div>
+</footer>
+
+<!-- NAV JS -->
+<script>
+(function(){
+  var btn=document.getElementById('nav-btn'),mob=document.getElementById('nav-mobile'),ovl=document.getElementById('nav-overlay');
+  if(!btn||!mob)return;
+  function o(){mob.classList.add('is-open');mob.setAttribute('aria-hidden','false');btn.classList.add('is-open');btn.setAttribute('aria-expanded','true');btn.setAttribute('aria-label','Закрыть');if(ovl)ovl.classList.add('is-open');document.body.style.overflow='hidden'}
+  function c(){mob.classList.remove('is-open');mob.setAttribute('aria-hidden','true');btn.classList.remove('is-open');btn.setAttribute('aria-expanded','false');btn.setAttribute('aria-label','Открыть меню');if(ovl)ovl.classList.remove('is-open');document.body.style.overflow=''}
+  btn.addEventListener('click',function(){mob.classList.contains('is-open')?c():o()});
+  if(ovl)ovl.addEventListener('click',c);
+  mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',c)});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mob.classList.contains('is-open')){c();btn.focus()}});
+}());
+</script>
+
+<!-- HERO CANVAS ANIMATION -->
+<script>
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+
+  function resize(){
+    const W = canvas.offsetWidth, H = canvas.offsetHeight;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    ctx.scale(dpr, dpr);
+  }
+  resize();
+  window.addEventListener('resize', ()=>{ ctx.setTransform(1,0,0,1,0,0); resize(); });
+
+  /* ── Горизонтальные линии-данные (как chart) ── */
+  const LINES = 5;
+  const lines = Array.from({length: LINES}, (_, i) => ({
+    y:      0.15 + (i / (LINES - 1)) * 0.7,  /* вертикальная позиция 15%–85% */
+    phase:  Math.random() * Math.PI * 2,
+    speed:  0.005 + Math.random() * 0.006,
+    amp:    14 + Math.random() * 22,
+    freq:   0.3 + Math.random() * 0.4,
+    alpha:  0.04 + i * 0.015,
+    width:  0.6 + Math.random() * 0.6,
+    color:  i % 2 === 0 ? '200,169,110' : '76,175,130',
+  }));
+
+  /* ── Точки-нейроны ── */
+  const DOTS = 28;
+  const dots = Array.from({length: DOTS}, () => ({
+    x:      Math.random(),
+    y:      Math.random(),
+    r:      1 + Math.random() * 2.5,
+    alpha:  0.04 + Math.random() * 0.12,
+    pulse:  Math.random() * Math.PI * 2,
+    pSpeed: 0.008 + Math.random() * 0.01,
+    vx:     (Math.random() - .5) * 0.00015,
+    vy:     (Math.random() - .5) * 0.0001,
+  }));
+
+  /* ── Связи между близкими точками ── */
+  const MAX_DIST = 0.18;
+
+  let raf, t = 0;
+
+  function frame(){
+    const W = canvas.width / dpr, H = canvas.height / dpr;
+    ctx.clearRect(0, 0, W, H);
+
+    t += 0.01;
+
+    /* Линии-волны */
+    lines.forEach(ln => {
+      ln.phase += ln.speed;
+      const y0 = ln.y * H;
+      ctx.beginPath();
+      const steps = 80;
+      for(let s = 0; s <= steps; s++){
+        const px = (s / steps) * W;
+        const wave1 = Math.sin(ln.phase + s * ln.freq * 0.2) * ln.amp;
+        const wave2 = Math.sin(ln.phase * 0.7 + s * ln.freq * 0.1) * ln.amp * 0.4;
+        const py = y0 + wave1 + wave2;
+        s === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      }
+      ctx.strokeStyle = `rgba(${ln.color},${ln.alpha})`;
+      ctx.lineWidth   = ln.width;
+      ctx.stroke();
+    });
+
+    /* Связи */
+    for(let i = 0; i < dots.length; i++){
+      for(let j = i + 1; j < dots.length; j++){
+        const dx = dots[i].x - dots[j].x;
+        const dy = dots[i].y - dots[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < MAX_DIST){
+          const alpha = (1 - dist / MAX_DIST) * 0.06;
+          ctx.beginPath();
+          ctx.moveTo(dots[i].x * W, dots[i].y * H);
+          ctx.lineTo(dots[j].x * W, dots[j].y * H);
+          ctx.strokeStyle = `rgba(200,169,110,${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    /* Точки */
+    dots.forEach(d => {
+      d.pulse += d.pSpeed;
+      d.x = Math.max(0, Math.min(1, d.x + d.vx));
+      d.y = Math.max(0, Math.min(1, d.y + d.vy));
+      if(d.x <= 0 || d.x >= 1) d.vx *= -1;
+      if(d.y <= 0 || d.y >= 1) d.vy *= -1;
+
+      const pulse = (Math.sin(d.pulse) * 0.5 + 0.5);
+      const r = d.r * (0.7 + pulse * 0.3);
+      const a = d.alpha * (0.5 + pulse * 0.5);
+
+      /* Glow */
+      const grd = ctx.createRadialGradient(d.x*W, d.y*H, 0, d.x*W, d.y*H, r*4);
+      grd.addColorStop(0, `rgba(200,169,110,${a * 0.5})`);
+      grd.addColorStop(1, `rgba(200,169,110,0)`);
+      ctx.beginPath();
+      ctx.arc(d.x*W, d.y*H, r*4, 0, Math.PI*2);
+      ctx.fillStyle = grd;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(d.x*W, d.y*H, r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(200,169,110,${a})`;
+      ctx.fill();
+    });
+
+    raf = requestAnimationFrame(frame);
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    if(entries[0].isIntersecting){ cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); }
+    else { cancelAnimationFrame(raf); }
+  });
+  obs.observe(canvas.parentElement);
+}());
+</script>
+
+<!-- FIREBASE + RANKING -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js';
+import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js';
+
+const app = initializeApp({
+  apiKey:            'AIzaSyC4PKkma67vVXeZvlSv0MNRK5cQvcAvjpg',
+  authDomain:        'admingalelium.firebaseapp.com',
+  projectId:         'admingalelium',
+  storageBucket:     'admingalelium.firebasestorage.app',
+  messagingSenderId: '565330048254',
+  appId:             '1:565330048254:web:bab36aae480989e2bfe1af'
+}, 'workers-v3');
+const db = getFirestore(app);
+
+/* ── Константы ── */
+const CORR  = 4;
+const SPEED = 38;
+const MO    = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+const DAYS  = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+
+/* ── Состояние ── */
+let workers = [], reports = [], ranked = [];
+let weekOffset = -0;       /* -1 = прошлая, 0 = текущая */
+let podiumMetric = 'total';
+let sortMetric   = 'total';
+let searchQ      = '';
+
+/* ── Утилиты ── */
+const esc  = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const fmt  = n => n==null||isNaN(n) ? '—' : Number(n).toLocaleString('ru');
+const setT = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+const setH = (id,v) => { const e=document.getElementById(id); if(e) e.innerHTML=v; };
+
+/* Диапазон недели: пн–вс */
+function weekRange(offset=0){
+  const now = new Date(), day = now.getDay();
+  const diff = day===0 ? -6 : 1-day;
+  const mon  = new Date(now); mon.setDate(now.getDate()+diff+offset*7); mon.setHours(0,0,0,0);
+  const sun  = new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59,999);
+  return {mon, sun};
+}
+const iso = d => d.toISOString().slice(0,10);
+const sd  = d => d.getDate()+' '+MO[d.getMonth()];
+
+/* ── Загрузка ── */
+async function load(){
+  const [us, rs] = await Promise.all([
+    getDocs(collection(db,'users')),
+    getDocs(collection(db,'reports'))
+  ]);
+  workers = us.docs.map(d=>({_id:d.id,...d.data()}))
+                   .filter(w=>!w.role||w.role==='worker'||w.role==='senior');
+  reports = rs.docs.map(d=>({_id:d.id,...d.data()}));
+  renderAll();
+}
+
+/* ── Агрегация ── */
+function build(){
+  const {mon,sun} = weekRange(weekOffset);
+  const ms=iso(mon), ss=iso(sun);
+
+  ranked = workers.map(w => {
+    const wr = reports.filter(r => r.uid===w._id && r.date>=ms && r.date<=ss);
+    const n  = wr.length;
+    const orders    = wr.reduce((s,r)=>s+(r.stats?.orders    ??0),0);
+    const positions = wr.reduce((s,r)=>s+(r.stats?.positions ??0),0);
+    const viols     = wr.filter(r =>
+      (typeof r.stats?.correction_pct   ==='number' && r.stats.correction_pct   >CORR)  ||
+      (typeof r.stats?.avg_position_sec ==='number' && r.stats.avg_position_sec >SPEED)
+    ).length;
+    const cA = wr.filter(r=>typeof r.stats?.correction_pct  ==='number');
+    const sA = wr.filter(r=>typeof r.stats?.avg_position_sec==='number');
+    const avgC  = cA.length ? cA.reduce((s,r)=>s+r.stats.correction_pct,  0)/cA.length : null;
+    const avgS  = sA.length ? sA.reduce((s,r)=>s+r.stats.avg_position_sec,0)/sA.length : null;
+
+    /* ── Штраф за незаполненные смены ──────────────────────────────
+       Смена без stats (нет корр., скорости, заказов) — это хуже
+       чем явное нарушение: вводим unfilledShifts как виртуальные нарушения.
+       Формула:  если смена есть, но нет НИКАКИХ stats → считается нарушением.
+       Это хуже 21% корректировки, потому что uncertainty > known bad. */
+    const unfilledShifts = wr.filter(r =>
+      !r.stats ||
+      (r.stats.correction_pct   == null &&
+       r.stats.avg_position_sec == null &&
+       !r.stats.orders && !r.stats.positions)
+    ).length;
+
+    /* Реальные нарушения + штраф за незаполненные */
+    const effectiveViols = viols + unfilledShifts;
+
+    /* quality: -100% нарушений (включая незаполненные), бонус за хорошую корр. */
+    const quality = n ? Math.max(0, Math.round(
+      100
+      - (effectiveViols / n) * 100
+      + (avgC !== null && avgC < CORR ? (CORR - avgC) * 3 : 0)
+    )) : 0;
+
+    /* Если у сборщика есть смены, но ВСЕ незаполнены → в самый конец */
+    const allUnfilled = n > 0 && unfilledShifts === n;
+    /* Если вообще нет смен */
+    const hasAnyData = orders > 0 || positions > 0 || avgC !== null || avgS !== null || n > 0;
+
+    /* Общий счёт:
+       orders/10 + shifts*5 + positions/100 + quality/2
+       Незаполненные → quality близко к 0 → totalScore низкий */
+    const totalScore = !hasAnyData ? -999 :
+                       allUnfilled ? -(unfilledShifts * 5) :  /* отрицательный */
+                       Math.round(orders/10 + n*5 + positions/100 + quality/2);
+
+    /* Streak пн–вс: 'ok'|'bad'|'unfilled'|'none' */
+    const streak = Array.from({length:7}, (_,i) => {
+      const d=new Date(mon); d.setDate(mon.getDate()+i);
+      const r=wr.find(x=>x.date===iso(d));
+      if(!r) return 'none';
+      /* Смена без stats → хуже нарушения */
+      const noStats = !r.stats ||
+        (r.stats.correction_pct==null && r.stats.avg_position_sec==null &&
+         !r.stats.orders && !r.stats.positions);
+      if(noStats) return 'unfilled';
+      return ((typeof r.stats?.correction_pct==='number'&&r.stats.correction_pct>CORR)||
+              (typeof r.stats?.avg_position_sec==='number'&&r.stats.avg_position_sec>SPEED))
+             ? 'bad' : 'ok';
+    });
+
+    /* Есть ли хоть какие-то реальные данные за неделю */
+    const hasStats = n > 0 && !allUnfilled;
+    return {...w, shifts:n, orders, positions, viols, avgC, avgS, quality, totalScore, streak, hasStats};
+  });
+}
+
+/* ── Сортировка ── */
+function sorted(m){
+  return [...ranked].sort((a,b)=>{
+    if(m==='total')     return b.totalScore - a.totalScore;
+    if(m==='orders')    return b.orders     - a.orders;
+    if(m==='shifts')    return b.shifts     - a.shifts;
+    if(m==='positions') return b.positions  - a.positions;
+    return 0;
+  });
+}
+
+/* ── Навигация по неделям ── */
+function updateWeekNav(){
+  const {mon,sun} = weekRange(weekOffset);
+  const isLast = weekOffset===-1, isCur = weekOffset===0;
+  const title = isLast ? 'Прошлая неделя' : isCur ? 'Текущая неделя' : sd(mon)+' — '+sd(sun);
+  setT('wk-title', title);
+  setT('wk-dates', sd(mon)+' — '+sd(sun)+' '+sun.getFullYear());
+  setT('wk-dates-right', sd(mon)+' — '+sd(sun)+' '+sun.getFullYear());
+
+
+}
+
+/* ── KPI ── */
+function renderKpi(){
+  const {mon,sun}=weekRange(weekOffset), {mon:pm,sun:ps}=weekRange(weekOffset-1);
+  const ms=iso(mon),ss=iso(sun),pms=iso(pm),pss=iso(ps);
+  const wr=reports.filter(r=>r.date>=ms&&r.date<=ss);
+  const pr=reports.filter(r=>r.date>=pms&&r.date<=pss);
+
+  const sh=wr.length, ord=wr.reduce((s,r)=>s+(r.stats?.orders??0),0);
+  const pos=wr.reduce((s,r)=>s+(r.stats?.positions??0),0);
+  const act=new Set(wr.map(r=>r.uid)).size;
+  const psh=pr.length, pord=pr.reduce((s,r)=>s+(r.stats?.orders??0),0), ppos=pr.reduce((s,r)=>s+(r.stats?.positions??0),0);
+
+  function delta(cur,prev){
+    if(!prev) return '';
+    const d=cur-prev, p=Math.round(Math.abs(d)/prev*100);
+    return `<span style="color:${d>=0?'var(--green)':'var(--red)'}">${d>=0?'+ ':'– '}${p}% vs прошлой</span>`;
+  }
+
+  setT('kpi-shifts',   fmt(sh));     setH('kpi-shifts-d',   delta(sh,psh));
+  setT('kpi-orders',   fmt(ord));    setH('kpi-orders-d',   delta(ord,pord));
+  setT('kpi-positions',fmt(pos));    setH('kpi-positions-d',delta(pos,ppos));
+  setT('kpi-active',   act+' / '+workers.length); setT('kpi-active-d','');
+
+  /* Quality bars */
+  const cA=ranked.filter(w=>w.avgC!==null), sA=ranked.filter(w=>w.avgS!==null);
+  const tC=cA.length?cA.reduce((s,w)=>s+w.avgC,0)/cA.length:null;
+  const tS=sA.length?sA.reduce((s,w)=>s+w.avgS,0)/sA.length:null;
+
+  const cf=document.getElementById('qb-corr-f'), sf=document.getElementById('qb-speed-f');
+  const cv=document.getElementById('qb-corr-v'), sv=document.getElementById('qb-speed-v');
+
+  if(tC!==null&&cf){ const w=Math.min(100,(tC/20)*100),bad=tC>CORR; setTimeout(()=>cf.style.width=w+'%',100); cf.className='qb-fill '+(bad?'bad':'ok'); if(cv){cv.textContent=tC.toFixed(1)+'%';cv.style.color=bad?'var(--red)':'var(--green)';} }
+  else if(cv) cv.textContent='—';
+  if(tS!==null&&sf){ const w=Math.min(100,(tS/70)*100),bad=tS>SPEED; setTimeout(()=>sf.style.width=w+'%',150); sf.className='qb-fill '+(bad?'bad':'ok'); if(sv){sv.textContent=Math.round(tS)+'с';sv.style.color=bad?'var(--red)':'var(--green)';} }
+  else if(sv) sv.textContent='—';
+}
+
+/* ── PODIUM ── */
+function renderPodium(){
+  const el=document.getElementById('podium'); if(!el) return;
+  const top3 = sorted(podiumMetric).slice(0,3).filter(w=>w.shifts>0);
+
+  if(!top3.length){
+    el.innerHTML='<div class="empty" style="grid-column:1/-1">За эту неделю смен не найдено</div>';
+    return;
+  }
+
+  /* Расстановка: 2—1—3 */
+  const ord=top3.length>=3?[top3[1],top3[0],top3[2]]:top3.length===2?[top3[1],top3[0]]:[top3[0]];
+  const rks=top3.length>=3?[2,1,3]:top3.length===2?[2,1]:[1];
+  const cls=['r2','r1','r3'];
+  const del=[.10,.04,.16];
+
+  function mVal(w,m){
+    if(m==='total')     return w.totalScore;
+    if(m==='orders')    return fmt(w.orders);
+    if(m==='shifts')    return w.shifts;
+    if(m==='positions') return fmt(w.positions);
+  }
+  const mLbl={total:'очков',orders:'заказов',shifts:'смен',positions:'позиций'};
+
+  el.innerHTML = ord.map((w,i)=>{
+    if(!w) return '';
+    const rank=rks[i], c=cls[i]||'r3';
+    const init=(w.displayName||w.email||'?').charAt(0).toUpperCase();
+    const name=w.displayName||w.email?.split('@')[0]||'—';
+    const vPct=w.shifts?Math.round((w.viols/w.shifts)*100):0;
+    const cOk=w.avgC===null||w.avgC<=CORR, sOk=w.avgS===null||w.avgS<=SPEED;
+    const cW=w.avgC?Math.min(100,(w.avgC/20)*100):0, sW=w.avgS?Math.min(100,(w.avgS/70)*100):0;
+
+    /* Streak: 4 статуса — ok/bad/unfilled/none */
+    const streakH=w.streak.map((s,si)=>{
+      const ht = s==='ok'?'100%' : s==='bad'?'62%' : s==='unfilled'?'38%' : '15%';
+      const bg = s==='ok'?'var(--green)' : s==='bad'?'var(--red)' : s==='unfilled'?'rgba(200,169,110,.55)' : 'var(--border-h)';
+      const op = s==='none' ? .35 : 1;
+      const tip = s==='ok'?'Норма' : s==='bad'?'Нарушение' : s==='unfilled'?'Не заполнено' : 'Нет смены';
+      return `<div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;flex:1;height:100%;gap:3px">
+        <div class="pc-streak__d" title="${DAYS[si]}: ${tip}" style="height:${ht};background:${bg};opacity:${op}"></div>
+        <div class="pc-streak__day-label">${DAYS[si].charAt(0)}</div>
+      </div>`;
+    }).join('');
+
+    return `<div class="pc ${c}" style="animation:scaleIn .3s ${del[i]}s var(--spring) both">
+      <div class="pc-rank">${rank}</div>
+      <div class="pc-av">${esc(init)}</div>
+      <div class="pc-name">${esc(name)}</div>
+      <div class="pc-role">${esc(w.role||'сборщик')}${w.location?' · '+esc(w.location):''}</div>
+
+      <div class="pc-main-metric">
+        <div class="pc-main-metric__val">${mVal(w,podiumMetric)}</div>
+        <div class="pc-main-metric__key">${mLbl[podiumMetric]}</div>
+      </div>
+
+      <div class="pc-stats">
+        ${podiumMetric!=='orders'  ?`<div class="pcs"><div class="pcs__v g">${fmt(w.orders)}</div><div class="pcs__k">заказов</div></div>`:''}
+        ${podiumMetric!=='shifts'  ?`<div class="pcs"><div class="pcs__v">${w.shifts}</div><div class="pcs__k">смен</div></div>`:''}
+        <div class="pcs"><div class="pcs__v ${vPct>20?'r':vPct===0&&w.shifts>0?'g':''}">${vPct}%</div><div class="pcs__k">нарушений</div></div>
+        <div class="pcs"><div class="pcs__v ${w.quality>=80?'g':''}">${w.quality}</div><div class="pcs__k">качество</div></div>
+      </div>
+
+      ${w.avgC!==null?`<div class="pc-bar"><div class="pc-bar__h"><span>Корр. ${w.avgC.toFixed(1)}%</span><span style="color:${cOk?'var(--green)':'var(--red)'}">≤${CORR}%</span></div><div class="pc-bar__t"><div class="pc-bar__f ${cOk?'ok':'bad'}" style="width:${cW}%"></div></div></div>`:''}
+      ${w.avgS!==null?`<div class="pc-bar"><div class="pc-bar__h"><span>Скор. ${Math.round(w.avgS)}с</span><span style="color:${sOk?'var(--green)':'var(--red)'}">≤${SPEED}с</span></div><div class="pc-bar__t"><div class="pc-bar__f ${sOk?'ok':'bad'}" style="width:${sW}%"></div></div></div>`:''}
+
+      <div class="pc-streak">
+        <div class="pc-streak__head">
+          <span class="pc-streak__lbl">Активность недели</span>
+          <span style="font-size:.52rem;color:var(--muted2)">
+            ${(w.streak.filter(s=>s==='unfilled').length>0?'<span style="color:rgba(200,169,110,.75)">'+w.streak.filter(s=>s==='unfilled').length+' незап.</span> ':'')}${w.viols>0?'<span style="color:var(--red)">'+w.viols+' нар.</span>':'<span style="color:var(--green)">норма</span>'}
+          </span>
+        </div>
+        <div class="pc-streak__days">${streakH}</div>
+      </div>
+
+      ${w.shifts >= 2 ? `
+      <div class="spark-wrap">
+        <div class="spark-row">
+          <span class="spark-label">Корр.</span>
+          <canvas class="spark-canvas" id="spark-corr-${esc(w._id)}"></canvas>
+          <span class="spark-val ${w.avgC!==null&&w.avgC>4?'bad':'ok'}">${w.avgC!==null?w.avgC.toFixed(1)+'%':'—'}</span>
+        </div>
+        <div class="spark-row">
+          <span class="spark-label">Скор.</span>
+          <canvas class="spark-canvas" id="spark-speed-${esc(w._id)}"></canvas>
+          <span class="spark-val ${w.avgS!==null&&w.avgS>38?'bad':'ok'}">${w.avgS!==null?Math.round(w.avgS)+'с':'—'}</span>
+        </div>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+/* ── TABLE ── */
+function renderTable(){
+  const tbody=document.getElementById('rank-tbody'), footer=document.getElementById('rank-footer');
+  if(!tbody) return;
+
+  let list = sorted(sortMetric);
+  if(searchQ){const lq=searchQ.toLowerCase();list=list.filter(w=>(w.displayName||'').toLowerCase().includes(lq)||(w.email||'').toLowerCase().includes(lq));}
+
+  const with_s=list.filter(w=>w.shifts>0), no_s=list.filter(w=>w.shifts===0);
+  const all=[...with_s,...no_s];
+
+  if(!all.length){ tbody.innerHTML='<tr><td colspan="8"><div class="empty">Нет сборщиков</div></td></tr>'; return; }
+
+  tbody.innerHTML = all.map((w,i)=>{
+    const rank=i+1, top=rank<=3&&w.shifts>0;
+    const init=(w.displayName||w.email||'?').charAt(0).toUpperCase();
+    const name=w.displayName||w.email?.split('@')[0]||'—';
+    const cBad=w.avgC!==null&&w.avgC>CORR, sBad=w.avgS!==null&&w.avgS>SPEED;
+    const cW=w.avgC?Math.min(100,(w.avgC/20)*100):0;
+    const vPct=w.shifts?Math.round((w.viols/w.shifts)*100):0;
+    const dim=w.shifts===0?'opacity:.35;':'';
+    /* Streak в таблице: ok/bad/unfilled/none */
+    const streakH=w.streak.map((s,si)=>{
+      const ht=s==='ok'?'14px':s==='bad'?'9px':s==='unfilled'?'6px':'2px';
+      const bg=s==='ok'?'var(--green)':s==='bad'?'var(--red)':s==='unfilled'?'rgba(200,169,110,.6)':'var(--border-h)';
+      const op=s==='none'?.3:.9;
+      const tip=s==='ok'?'Норма':s==='bad'?'Нарушение':s==='unfilled'?'Не заполнено':'Нет смены';
+      return `<div class="mst-d" title="${DAYS[si]}: ${tip}" style="height:${ht};background:${bg};opacity:${op}"></div>`;
+    }).join('');
+
+    return `<tr style="animation:rowIn .18s ${Math.min(i*.02,.22)}s var(--ease) both;${dim}">
+      <td><span class="rn${top?' top':''}">${rank}</span></td>
+      <td><div class="rw"><div class="rav">${esc(init)}</div><div><div class="rwn">${esc(name)}</div><div class="rwm">${esc(w.role||'сборщик')}${w.location?' · '+esc(w.location):''}</div></div></div></td>
+      <td style="font-family:var(--display);font-weight:700;color:${w.shifts>0?'#fff':'var(--muted2)'};font-size:.88rem">${w.shifts}</td>
+      <td style="font-family:var(--display);font-weight:700;color:${w.orders>0?'var(--green)':'var(--muted2)'};font-size:.88rem">${fmt(w.orders)||0}</td>
+      <td style="font-size:.78rem;color:var(--muted)">${fmt(w.positions)||'—'}</td>
+      <td>${w.avgC!==null
+        ?`<div class="mp"><div class="mpt"><div class="mpf ${cBad?'bad':'ok'}" style="width:${cW}%"></div></div><span class="mpv ${cBad?'bad':'ok'}">${w.avgC.toFixed(1)}%</span></div>`
+        :'<span style="color:var(--muted2);font-size:.7rem">—</span>'}</td>
+      <td>
+        <div class="mst">${streakH}</div>
+        ${w.shifts===0?'<div style="font-size:.57rem;color:var(--muted2);margin-top:3px">нет смен</div>'
+          :vPct>0?`<div style="font-size:.57rem;color:var(--red);margin-top:3px">${vPct}% нар.</div>`
+          :'<div style="font-size:.57rem;color:var(--green);margin-top:3px">норма</div>'}
+      </td>
+    </tr>`;
+  }).join('');
+
+  if(footer){
+    const {mon,sun}=weekRange(weekOffset);
+    footer.textContent=`${with_s.length} из ${workers.length} сборщиков работали · ${sd(mon)} — ${sd(sun)}`;
+  }
+}
+
+/* ── Render all ── */
+function renderAll(){
+  build();
+  updateWeekNav();
+  renderKpi();
+  renderTeamChart();
+  renderPodium();
+  renderTable();
+  /* Sparklines — уже через RAF внутри функции */
+  renderPodiumSparklines();
+}
+
+/* ── Events ── */
+
+document.querySelectorAll('#score-metric-tabs .tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('#score-metric-tabs .tab').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    podiumMetric=btn.dataset.m;
+    renderPodium();
+  });
+});
+document.querySelectorAll('#sort-tabs .tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('#sort-tabs .tab').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    sortMetric=btn.dataset.s;
+    renderTable();
+  });
+});
+let st;
+document.getElementById('rank-search')?.addEventListener('input',function(){
+  clearTimeout(st);
+  st=setTimeout(()=>{ searchQ=this.value; renderTable(); },200);
+});
+
+/* ── drawSparkline (как в reports.html) ── */
+/* ── drawSparkline: надёжный рендер с retry при width=0 ── */
+function drawSparkline(canvasId, values, color, norm, _retries) {
+  const c = document.getElementById(canvasId);
+  if(!c) return;
+  if(!values || values.filter(v=>v>0).length < 1) return;
+
+  const W = c.getBoundingClientRect().width || c.offsetWidth;
+  /* Если ширина 0 — canvas ещё не отрисован, повторяем через RAF (макс 8 попыток) */
+  if(W < 2) {
+    const tries = (_retries||0) + 1;
+    if(tries > 8) return;
+    requestAnimationFrame(() => drawSparkline(canvasId, values, color, norm, tries));
+    return;
+  }
+
+  const H = c.offsetHeight || 48;
+  c.width  = Math.ceil(W * (window.devicePixelRatio||1));
+  c.height = Math.ceil(H * (window.devicePixelRatio||1));
+  c.style.width  = W + 'px';
+  c.style.height = H + 'px';
+
+  const ctx = c.getContext('2d');
+  ctx.scale(window.devicePixelRatio||1, window.devicePixelRatio||1);
+
+  const mn = Math.min(...values), mx = Math.max(...values);
+  const range = mx - mn || 1;
+  const pad = 4;
+
+  function xOf(i) { return (i / (values.length - 1)) * W; }
+  function yOf(v) { return H - ((v - mn) / range) * (H - pad*2) - pad; }
+
+  ctx.clearRect(0, 0, W, H);
+
+  /* Градиентная заливка */
+  const grad = ctx.createLinearGradient(0, 0, 0, H);
+  /* Парсим цвет для прозрачности */
+  const baseColor = color.replace(/,([\d.]+)\)$/, ',');
+  grad.addColorStop(0, baseColor + '.14)');
+  grad.addColorStop(1, baseColor + '.0)');
+
+  ctx.beginPath();
+  values.forEach((v,i) => { i===0 ? ctx.moveTo(xOf(i),yOf(v)) : ctx.lineTo(xOf(i),yOf(v)); });
+  ctx.lineTo(xOf(values.length-1), H);
+  ctx.lineTo(0, H);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  /* Сглаженная линия через квадратичные кривые Безье */
+  ctx.beginPath();
+  ctx.moveTo(xOf(0), yOf(values[0]));
+  for(let i = 1; i < values.length - 1; i++){
+    const mx = (xOf(i) + xOf(i+1)) / 2;
+    const my = (yOf(values[i]) + yOf(values[i+1])) / 2;
+    ctx.quadraticCurveTo(xOf(i), yOf(values[i]), mx, my);
+  }
+  ctx.lineTo(xOf(values.length-1), yOf(values[values.length-1]));
+  ctx.strokeStyle = color;
+  ctx.lineWidth   = 1.6;
+  ctx.lineJoin    = 'round';
+  ctx.lineCap     = 'round';
+  ctx.stroke();
+
+  /* Линия нормы (пунктир) */
+  if(norm != null && norm >= mn && norm <= mx){
+    const ny = yOf(norm);
+    ctx.beginPath();
+    ctx.moveTo(0, ny); ctx.lineTo(W, ny);
+    ctx.strokeStyle = 'rgba(255,255,255,.22)';
+    ctx.lineWidth   = 1;
+    ctx.setLineDash([3, 5]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  /* Точка последнего значения */
+  const lv = values[values.length - 1];
+  if(lv > 0){
+    const lx = xOf(values.length - 1), ly = yOf(lv);
+    ctx.beginPath();
+    ctx.arc(lx, ly, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    /* Glow */
+    ctx.beginPath();
+    ctx.arc(lx, ly, 5, 0, Math.PI * 2);
+    ctx.fillStyle = color.replace(/,([\d.]+)\)$/, ',.08)');
+    ctx.fill();
+  }
+}
+
+/* ── Командная диаграмма по дням ── */
+function renderTeamChart(){
+  const {mon,sun}=weekRange(weekOffset);
+  const label=document.getElementById('tchart-week-label');
+  if(label) label.textContent=iso(mon)+' — '+iso(sun);
+  const days=Array.from({length:7},(_,i)=>{ const d=new Date(mon); d.setDate(mon.getDate()+i); return iso(d); });
+  const wr=reports.filter(r=>r.date>=iso(mon)&&r.date<=iso(sun));
+  const shiftsD=days.map(ds=>wr.filter(r=>r.date===ds).length);
+  const ordersD=days.map(ds=>wr.filter(r=>r.date===ds).reduce((s,r)=>s+(r.stats?.orders??0),0));
+  const corrD=days.map(ds=>{const rr=wr.filter(r=>r.date===ds&&typeof r.stats?.correction_pct==='number'); return rr.length?rr.reduce((s,r)=>s+r.stats.correction_pct,0)/rr.length:0;});
+  const speedD=days.map(ds=>{const rr=wr.filter(r=>r.date===ds&&typeof r.stats?.avg_position_sec==='number'); return rr.length?rr.reduce((s,r)=>s+r.stats.avg_position_sec,0)/rr.length:0;});
+  if(!shiftsD.some(v=>v>0)){
+    const b=document.getElementById('team-chart-block');
+    if(b) b.style.display='none';
+    return;
+  }
+
+  /* Текстовые значения ставим сразу */
+  const tS=shiftsD.reduce((s,v)=>s+v,0), tO=ordersD.reduce((s,v)=>s+v,0);
+  const cArr=corrD.filter(v=>v>0), sArr=speedD.filter(v=>v>0);
+  const aC=cArr.length?cArr.reduce((s,v)=>s+v,0)/cArr.length:null;
+  const aS=sArr.length?sArr.reduce((s,v)=>s+v,0)/sArr.length:null;
+  const sv=document.getElementById('tchart-shifts-val'); if(sv) sv.textContent=tS+' смен';
+  const ov=document.getElementById('tchart-orders-val'); if(ov) ov.textContent=tO+' заказов';
+  const cv=document.getElementById('tchart-corr-val'); if(cv){cv.textContent=aC?aC.toFixed(1)+'%':'нет данных';cv.style.color=aC&&aC>4?'var(--red)':'var(--green)';}
+  const spv=document.getElementById('tchart-speed-val'); if(spv){spv.textContent=aS?Math.round(aS)+'с':'нет данных';spv.style.color=aS&&aS>38?'var(--red)':'var(--green)';}
+
+  /* Canvas — через RAF чтобы layout успел примениться */
+  const cBad=corrD.some(v=>v>4), sBad=speedD.some(v=>v>38);
+  requestAnimationFrame(()=>{
+    drawSparkline('tchart-shifts', shiftsD, 'rgba(200,169,110,.8)');
+    drawSparkline('tchart-orders', ordersD, 'rgba(76,175,130,.8)');
+    drawSparkline('tchart-corr',   corrD,   cBad?'rgba(207,102,121,.8)':'rgba(76,175,130,.8)', 4);
+    drawSparkline('tchart-speed',  speedD,  sBad?'rgba(207,102,121,.8)':'rgba(76,175,130,.8)', 38);
+  });
+}
+
+/* ── Sparklines в карточках подиума ── */
+function renderPodiumSparklines(){
+  const {mon,sun}=weekRange(weekOffset);
+  const ms=iso(mon), ss=iso(sun);
+  const days=Array.from({length:7},(_,i)=>{ const d=new Date(mon); d.setDate(mon.getDate()+i); return iso(d); });
+  /* RAF чтобы DOM подиума точно отрисован */
+  requestAnimationFrame(()=>{
+    ranked.filter(w=>w.shifts>=2).forEach(w=>{
+      const wr=reports.filter(r=>r.uid===w._id&&r.date>=ms&&r.date<=ss);
+      const cD=days.map(ds=>{const r=wr.find(x=>x.date===ds); return r&&typeof r.stats?.correction_pct==='number'?r.stats.correction_pct:0;});
+      const sD=days.map(ds=>{const r=wr.find(x=>x.date===ds); return r&&typeof r.stats?.avg_position_sec==='number'?r.stats.avg_position_sec:0;});
+      drawSparkline('spark-corr-'+w._id,  cD, w.avgC!==null&&w.avgC>4?'rgba(207,102,121,.7)':'rgba(76,175,130,.7)',  4);
+      drawSparkline('spark-speed-'+w._id, sD, w.avgS!==null&&w.avgS>38?'rgba(207,102,121,.7)':'rgba(76,175,130,.7)', 38);
+    });
+  });
+}
+
+
+/* ── Start ── */
+try { await load(); }
+catch(err){
+  console.error('Firestore:', err);
+  document.getElementById('podium').innerHTML=`<div class="empty" style="grid-column:1/-1;color:var(--red)">Ошибка загрузки: ${esc(err.message||'')}</div>`;
+  document.getElementById('rank-tbody').innerHTML=`<tr><td colspan="8"><div class="empty" style="color:var(--red)">${esc(err.message||'')}</div></td></tr>`;
+}
+</script>
+
+</body>
+</html>
