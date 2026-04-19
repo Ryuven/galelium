@@ -257,8 +257,6 @@
       width: 100%;
     }
 
-
-
     /* ── ОБЩАЯ СТАТИСТИКА (4 KPI) ── */
     .kpi-row {
       display: grid;
@@ -440,8 +438,6 @@
     .rwm { font-size:.64rem;color:var(--muted);margin-top:1px }
 
     /* Score в таблице */
-    .rscore { font-family:var(--display);font-weight:800;font-size:.92rem }
-    .rscore.top { color:var(--accent) }
 
     /* mini progress */
     .mp { display:flex;align-items:center;gap:5px }
@@ -627,7 +623,7 @@
           <em>Недели</em>
         </h1>
         <p class="hero__lead ain" style="animation-delay:.13s">
-          Общий рейтинг, командная статистика и показатели эффективности сборщиков за прошедшую неделю.
+          Общий рейтинг, командная статистика и показатели эффективности за прошедшую неделю.
         </p>
       </div>
 
@@ -650,10 +646,10 @@
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
           <div style="font-size:.6rem;color:var(--muted2);letter-spacing:.12em;text-transform:uppercase">
-            Общий счёт = заказы · смены · позиции · качество
+            Рейтинг по сумме показателей за неделю
           </div>
           <div class="tabs" id="score-metric-tabs">
-            <button class="tab on" data-m="total">Общий</button>
+            <button class="tab on" data-m="total">Рейтинг</button>
             <button class="tab" data-m="orders">Заказы</button>
             <button class="tab" data-m="shifts">Смены</button>
             <button class="tab" data-m="positions">Позиции</button>
@@ -669,8 +665,6 @@
       </div>
     </div>
   </section>
-
-
 
   <hr style="border:none;border-top:1px solid var(--border)" />
 
@@ -780,7 +774,7 @@
               onblur="this.style.borderColor='var(--border)'" />
           </div>
           <div class="tabs" id="sort-tabs">
-            <button class="tab on" data-s="total">Общий</button>
+            <button class="tab on" data-s="total">Рейтинг</button>
             <button class="tab" data-s="orders">Заказы</button>
             <button class="tab" data-s="shifts">Смены</button>
             <button class="tab" data-s="positions">Позиции</button>
@@ -791,16 +785,16 @@
       <div class="rtw ain" style="animation-delay:.12s">
         <table class="rt">
           <thead><tr>
-            <th>#</th>
+            <th style="width:44px">#</th>
             <th>Сборщик</th>
-            <th>Смен</th>
-            <th>Заказов</th>
-            <th>Позиций</th>
-            <th>Корр.</th>
-            <th>Пн—Вс</th>
+            <th style="width:56px">Смен</th>
+            <th style="width:72px">Заказов</th>
+            <th style="width:72px">Позиций</th>
+            <th style="width:88px">Корр.</th>
+            <th style="width:88px">Пн—Вс</th>
           </tr></thead>
           <tbody id="rank-tbody">
-            <tr><td colspan="8"><div class="loader"><div class="lbar"><div class="lbar-f"></div></div></div></td></tr>
+            <tr><td colspan="7"><div class="loader"><div class="lbar"><div class="lbar-f"></div></div></div></td></tr>
           </tbody>
         </table>
       </div>
@@ -1062,39 +1056,58 @@ function build(){
     const avgC  = cA.length ? cA.reduce((s,r)=>s+r.stats.correction_pct,  0)/cA.length : null;
     const avgS  = sA.length ? sA.reduce((s,r)=>s+r.stats.avg_position_sec,0)/sA.length : null;
 
-    /* ── Штраф за незаполненные смены ──────────────────────────────
-       Смена без stats (нет корр., скорости, заказов) — это хуже
-       чем явное нарушение: вводим unfilledShifts как виртуальные нарушения.
-       Формула:  если смена есть, но нет НИКАКИХ stats → считается нарушением.
-       Это хуже 21% корректировки, потому что uncertainty > known bad. */
-    const unfilledShifts = wr.filter(r =>
+    /* ── Классификация смен ─────────────────────────────────────────
+       Смена считается "заполненной" если указана хотя бы корр.% ИЛИ скорость.
+       Заказы/позиции без корр./скорости = частично заполнена = тоже проблема.
+       Приоритет рейтинга: заполненные без нарушений > заполненные с нарушениями
+                           > частично > полностью пустые > нет смен */
+
+    /* Смена "пустая": нет ни корр.%, ни скорости сборки */
+    const emptyShifts = wr.filter(r =>
+      !r.stats ||
+      (r.stats.correction_pct   == null &&
+       r.stats.avg_position_sec == null)
+    ).length;
+    /* Смена "полностью пустая": нет вообще ничего */
+    const fullyEmptyShifts = wr.filter(r =>
       !r.stats ||
       (r.stats.correction_pct   == null &&
        r.stats.avg_position_sec == null &&
        !r.stats.orders && !r.stats.positions)
     ).length;
+    /* Для обратной совместимости */
+    const unfilledShifts = emptyShifts;
 
-    /* Реальные нарушения + штраф за незаполненные */
-    const effectiveViols = viols + unfilledShifts;
+    /* Реальные нарушения + штраф за смены без корр./скорости */
+    const effectiveViols = viols + emptyShifts;
 
-    /* quality: -100% нарушений (включая незаполненные), бонус за хорошую корр. */
+    /* quality: учитываем все проблемные смены */
     const quality = n ? Math.max(0, Math.round(
       100
       - (effectiveViols / n) * 100
       + (avgC !== null && avgC < CORR ? (CORR - avgC) * 3 : 0)
     )) : 0;
 
-    /* Если у сборщика есть смены, но ВСЕ незаполнены → в самый конец */
-    const allUnfilled = n > 0 && unfilledShifts === n;
-    /* Если вообще нет смен */
-    const hasAnyData = orders > 0 || positions > 0 || avgC !== null || avgS !== null || n > 0;
+    const allEmpty    = n > 0 && emptyShifts === n;      /* все смены без корр./скор. */
+    const allUnfilled = n > 0 && fullyEmptyShifts === n; /* все смены вообще пустые */
 
-    /* Общий счёт:
-       orders/10 + shifts*5 + positions/100 + quality/2
-       Незаполненные → quality близко к 0 → totalScore низкий */
-    const totalScore = !hasAnyData ? -999 :
-                       allUnfilled ? -(unfilledShifts * 5) :  /* отрицательный */
-                       Math.round(orders/10 + n*5 + positions/100 + quality/2);
+    /* ── totalScore ──────────────────────────────────────────────────
+       Базовая формула: orders/10 + shifts*5 + positions/100 + quality/2
+       НО: смены без корр./скорости тянут вниз через quality (effectiveViols).
+       Дополнительный жёсткий штраф за каждую пустую смену — чтобы
+       1 смена без данных не могла обогнать любого кто заполнял отчёты. */
+    const EMPTY_PENALTY = 8; /* штраф за каждую смену без корр./скор. */
+
+    const totalScore =
+      n === 0            ? -999 :                          /* нет смен — в самый конец */
+      allUnfilled        ? -(fullyEmptyShifts * 10) :      /* все пустые — отрицательный */
+      Math.round(
+        orders/10
+        + n * 5
+        + positions/100
+        + quality/2
+        - emptyShifts * EMPTY_PENALTY                      /* жёсткий штраф за пустые */
+      );
 
     /* Streak пн–вс: 'ok'|'bad'|'unfilled'|'none' */
     const streak = Array.from({length:7}, (_,i) => {
@@ -1120,6 +1133,10 @@ function build(){
 /* ── Сортировка ── */
 function sorted(m){
   return [...ranked].sort((a,b)=>{
+    /* Сначала те у кого есть смены */
+    if(a.shifts === 0 && b.shifts > 0) return 1;
+    if(a.shifts > 0 && b.shifts === 0) return -1;
+    /* Среди работавших — по выбранной метрике */
     if(m==='total')     return b.totalScore - a.totalScore;
     if(m==='orders')    return b.orders     - a.orders;
     if(m==='shifts')    return b.shifts     - a.shifts;
@@ -1135,8 +1152,7 @@ function updateWeekNav(){
   const title = isLast ? 'Прошлая неделя' : isCur ? 'Текущая неделя' : sd(mon)+' — '+sd(sun);
   setT('wk-title', title);
   setT('wk-dates', sd(mon)+' — '+sd(sun)+' '+sun.getFullYear());
-  setT('wk-dates-right', sd(mon)+' — '+sd(sun)+' '+sun.getFullYear());
-
+  setT('wk-dates-right', sd(mon)+' — '+sd(sun)+' '+sun.getFullYear()); /* hero right block */
 
 }
 
@@ -1194,12 +1210,12 @@ function renderPodium(){
   const del=[.10,.04,.16];
 
   function mVal(w,m){
-    if(m==='total')     return w.totalScore;
+    if(m==='total')     return fmt(w.orders); /* Рейтинг — показываем заказы как главный */
     if(m==='orders')    return fmt(w.orders);
     if(m==='shifts')    return w.shifts;
     if(m==='positions') return fmt(w.positions);
   }
-  const mLbl={total:'очков',orders:'заказов',shifts:'смен',positions:'позиций'};
+  const mLbl={total:'заказов',orders:'заказов',shifts:'смен',positions:'позиций'};
 
   el.innerHTML = ord.map((w,i)=>{
     if(!w) return '';
@@ -1281,7 +1297,7 @@ function renderTable(){
   const with_s=list.filter(w=>w.shifts>0), no_s=list.filter(w=>w.shifts===0);
   const all=[...with_s,...no_s];
 
-  if(!all.length){ tbody.innerHTML='<tr><td colspan="8"><div class="empty">Нет сборщиков</div></td></tr>'; return; }
+  if(!all.length){ tbody.innerHTML='<tr><td colspan="7"><div class="empty">Нет сборщиков</div></td></tr>'; return; }
 
   tbody.innerHTML = all.map((w,i)=>{
     const rank=i+1, top=rank<=3&&w.shifts>0;
@@ -1506,13 +1522,12 @@ function renderPodiumSparklines(){
   });
 }
 
-
 /* ── Start ── */
 try { await load(); }
 catch(err){
   console.error('Firestore:', err);
   document.getElementById('podium').innerHTML=`<div class="empty" style="grid-column:1/-1;color:var(--red)">Ошибка загрузки: ${esc(err.message||'')}</div>`;
-  document.getElementById('rank-tbody').innerHTML=`<tr><td colspan="8"><div class="empty" style="color:var(--red)">${esc(err.message||'')}</div></td></tr>`;
+  document.getElementById('rank-tbody').innerHTML=`<tr><td colspan="7"><div class="empty" style="color:var(--red)">${esc(err.message||'')}</div></td></tr>`;
 }
 </script>
 
