@@ -1003,7 +1003,7 @@ const DAYS  = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
 
 /* ── Состояние ── */
 let workers = [], reports = [], ranked = [];
-let weekOffset = -0;       /* -1 = прошлая, 0 = текущая */
+let weekOffset = -1;       /* -1 = прошлая, 0 = текущая */
 let podiumMetric = 'total';
 let sortMetric   = 'total';
 let searchQ      = '';
@@ -1032,7 +1032,7 @@ async function load(){
     getDocs(collection(db,'reports'))
   ]);
   workers = us.docs.map(d=>({_id:d.id,...d.data()}))
-                   .filter(w=>!w.role||w.role==='worker'||w.role==='senior');
+                   ; /* загружаем всех, admin исключим только из топ-3 */
   reports = rs.docs.map(d=>({_id:d.id,...d.data()}));
   renderAll();
 }
@@ -1056,58 +1056,52 @@ function build(){
     const avgC  = cA.length ? cA.reduce((s,r)=>s+r.stats.correction_pct,  0)/cA.length : null;
     const avgS  = sA.length ? sA.reduce((s,r)=>s+r.stats.avg_position_sec,0)/sA.length : null;
 
-    /* ── Классификация смен ─────────────────────────────────────────
-       Смена считается "заполненной" если указана хотя бы корр.% ИЛИ скорость.
-       Заказы/позиции без корр./скорости = частично заполнена = тоже проблема.
-       Приоритет рейтинга: заполненные без нарушений > заполненные с нарушениями
-                           > частично > полностью пустые > нет смен */
+    /* ── ТИРЫ рейтинга (жёсткое разделение, не штраф) ─────────────
+       Тир 0 (лучший): есть смены И хотя бы одна с корр.% или скоростью
+       Тир 1:          есть смены, НО ни одна не содержит корр./скорость
+       Тир 2 (худший): нет смен вообще
+       Внутри Тира 0 — сортировка по реальным показателям.
+       Тир 1 ВСЕГДА ниже любого Тира 0, независимо от заказов и смен. */
 
-    /* Смена "пустая": нет ни корр.%, ни скорости сборки */
-    const emptyShifts = wr.filter(r =>
-      !r.stats ||
-      (r.stats.correction_pct   == null &&
-       r.stats.avg_position_sec == null)
+    /* Смена "заполненная": есть хотя бы одно из (корр.% ИЛИ скорость) */
+    const filledShifts = wr.filter(r =>
+      r.stats &&
+      (typeof r.stats.correction_pct   === 'number' ||
+       typeof r.stats.avg_position_sec === 'number')
     ).length;
-    /* Смена "полностью пустая": нет вообще ничего */
-    const fullyEmptyShifts = wr.filter(r =>
-      !r.stats ||
-      (r.stats.correction_pct   == null &&
-       r.stats.avg_position_sec == null &&
-       !r.stats.orders && !r.stats.positions)
-    ).length;
-    /* Для обратной совместимости */
-    const unfilledShifts = emptyShifts;
+    const emptyShifts    = n - filledShifts; /* смены без корр./скор. */
+    const unfilledShifts = emptyShifts;      /* алиас */
 
-    /* Реальные нарушения + штраф за смены без корр./скорости */
+    /* Эффективные нарушения: реальные + пустые смены (uncertainty = bad) */
     const effectiveViols = viols + emptyShifts;
 
-    /* quality: учитываем все проблемные смены */
+    /* quality только по заполненным данным */
     const quality = n ? Math.max(0, Math.round(
       100
       - (effectiveViols / n) * 100
       + (avgC !== null && avgC < CORR ? (CORR - avgC) * 3 : 0)
     )) : 0;
 
-    const allEmpty    = n > 0 && emptyShifts === n;      /* все смены без корр./скор. */
-    const allUnfilled = n > 0 && fullyEmptyShifts === n; /* все смены вообще пустые */
+    /* Тир определяет группу — сортировка ТОЛЬКО внутри тира */
+    const tier =
+      n === 0          ? 2 :   /* нет смен */
+      filledShifts > 0 ? 0 :   /* есть хоть одна заполненная */
+                         1;    /* все смены без корр./скор. */
 
-    /* ── totalScore ──────────────────────────────────────────────────
-       Базовая формула: orders/10 + shifts*5 + positions/100 + quality/2
-       НО: смены без корр./скорости тянут вниз через quality (effectiveViols).
-       Дополнительный жёсткий штраф за каждую пустую смену — чтобы
-       1 смена без данных не могла обогнать любого кто заполнял отчёты. */
-    const EMPTY_PENALTY = 8; /* штраф за каждую смену без корр./скор. */
+    /* Внутренний счёт (имеет смысл только в Тире 0) */
+    const innerScore = Math.round(
+      orders/10 + n*5 + positions/100 + quality/2
+    );
 
+    /* totalScore: Тир 0 → [1000+], Тир 1 → [0..999 по смен/заказам], Тир 2 → -999
+       Тир 0 начинается с 10000 — гарантированно выше любого Тира 1 */
     const totalScore =
-      n === 0            ? -999 :                          /* нет смен — в самый конец */
-      allUnfilled        ? -(fullyEmptyShifts * 10) :      /* все пустые — отрицательный */
-      Math.round(
-        orders/10
-        + n * 5
-        + positions/100
-        + quality/2
-        - emptyShifts * EMPTY_PENALTY                      /* жёсткий штраф за пустые */
-      );
+      tier === 2 ? -999 :
+      tier === 1 ? Math.round(orders/10 + n*5 + positions/100) :  /* без бонуса quality */
+      10000 + innerScore;  /* Тир 0: 10000+ — всегда выше Тира 1 */
+
+    const allUnfilled = tier === 1;
+    const allEmpty    = tier === 1;
 
     /* Streak пн–вс: 'ok'|'bad'|'unfilled'|'none' */
     const streak = Array.from({length:7}, (_,i) => {
@@ -1126,17 +1120,17 @@ function build(){
 
     /* Есть ли хоть какие-то реальные данные за неделю */
     const hasStats = n > 0 && !allUnfilled;
-    return {...w, shifts:n, orders, positions, viols, avgC, avgS, quality, totalScore, streak, hasStats};
+    const isAdmin = w.role === 'admin';
+    return {...w, shifts:n, orders, positions, viols, avgC, avgS, quality, totalScore, tier, streak, hasStats, isAdmin};
   });
 }
 
 /* ── Сортировка ── */
 function sorted(m){
   return [...ranked].sort((a,b)=>{
-    /* Сначала те у кого есть смены */
-    if(a.shifts === 0 && b.shifts > 0) return 1;
-    if(a.shifts > 0 && b.shifts === 0) return -1;
-    /* Среди работавших — по выбранной метрике */
+    /* 1. Сначала разделяем по тирам: Тир 0 > Тир 1 > Тир 2 */
+    if(a.tier !== b.tier) return a.tier - b.tier;
+    /* 2. Внутри тира — по выбранной метрике */
     if(m==='total')     return b.totalScore - a.totalScore;
     if(m==='orders')    return b.orders     - a.orders;
     if(m==='shifts')    return b.shifts     - a.shifts;
@@ -1196,7 +1190,10 @@ function renderKpi(){
 /* ── PODIUM ── */
 function renderPodium(){
   const el=document.getElementById('podium'); if(!el) return;
-  const top3 = sorted(podiumMetric).slice(0,3).filter(w=>w.shifts>0);
+  /* Admins не участвуют в топ-3 — они не сборщики */
+  const top3 = sorted(podiumMetric)
+    .filter(w => w.shifts > 0 && w.role !== 'admin')
+    .slice(0, 3);
 
   if(!top3.length){
     el.innerHTML='<div class="empty" style="grid-column:1/-1">За эту неделю смен не найдено</div>';
