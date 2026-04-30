@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" style="visibility:hidden">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -1125,38 +1125,63 @@
 
 
     /* ════════════════════════════════════════════════════════
-       LANG SWITCHER
+       LANG SWITCHER — в меню и футере
        ════════════════════════════════════════════════════════ */
-    .lang-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      height: 30px; padding: 0 10px;
+
+    /* Компонент переключателя */
+    .lang-switcher {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .lang-switcher__label {
+      font-size: .6rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--muted-2);
+    }
+    .lang-switcher__btns {
+      display: flex; gap: 2px;
+    }
+    .lang-opt {
       background: none;
       border: 1px solid var(--border);
       color: var(--muted);
       font-family: var(--font-display); font-weight: 800;
-      font-size: .58rem; letter-spacing: .14em;
-      cursor: pointer; flex-shrink: 0;
+      font-size: .55rem; letter-spacing: .14em;
+      padding: 4px 9px;
+      cursor: pointer;
       transition: border-color var(--t-fast), color var(--t-fast), background var(--t-fast);
-      position: relative; overflow: hidden;
     }
-    .lang-btn:hover { border-color: var(--border-h); color: var(--text); background: rgba(255,255,255,.03); }
-    .lang-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-    /* Slide animation on switch */
-    .lang-btn.switching #lang-label { animation: langSlide .22s var(--ease) both; }
-    @keyframes langSlide {
-      0%  { opacity:0; transform: translateY(-6px); }
-      100%{ opacity:1; transform: translateY(0); }
+    .lang-opt:hover { border-color: var(--border-h); color: var(--text); }
+    .lang-opt.active {
+      border-color: var(--accent-mid);
+      color: var(--accent);
+      background: var(--accent-dim);
     }
-    /* Page transition flash */
-    body.lang-transition * { transition: none !important; }
-    body::after {
-      content: ''; pointer-events: none;
-      position: fixed; inset: 0; z-index: 9998;
-      background: rgba(200,169,110,.04);
-      opacity: 0;
-      transition: opacity .18s ease;
+    .lang-opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    /* Мобильный — в nav-mobile__footer */
+    .nav-mobile__footer .lang-switcher {
+      width: 100%;
+      padding: 14px 0 10px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 10px;
     }
-    body.lang-flash::after { opacity: 1; }
+
+    /* Десктопный — в footer */
+    .footer-lang-row {
+      max-width: var(--max);
+      margin-inline: auto;
+      padding: 16px var(--px) 0;
+      border-top: 1px solid var(--border);
+    }
+    .lang-switcher--footer .lang-switcher__label {
+      font-size: .58rem;
+    }
+
+    /* Анимация контента при переключении */
+    @keyframes langFade { 0%{opacity:.4} 100%{opacity:1} }
+    html.lang-switching [data-i18n],
+    html.lang-switching [data-i18n-placeholder] {
+      animation: langFade .2s ease both;
+    }
   </style>
 </head>
 <body>
@@ -1204,9 +1229,6 @@
       <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 10l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
     </button>
     <a href="#contact" class="nav-cta" data-i18n="nav.cta">Связаться</a>
-    <button class="lang-btn" id="lang-btn" aria-label="Switch language" title="Switch language">
-      <span id="lang-label">RU</span>
-    </button>
     <button class="nav-btn" id="nav-btn"
             aria-controls="nav-mobile"
             aria-expanded="false"
@@ -1261,8 +1283,16 @@
     </div>
   </div>
   <div class="nav-mobile__footer">
-    <a href="https://galelium.com/privacy.html">Конфиденциальность</a>
-    <a href="https://galelium.com/terms.html">Условия</a>
+    <!-- Переключатель языка в мобильном меню -->
+    <div class="lang-switcher" id="lang-switcher-mobile">
+      <span class="lang-switcher__label" id="lang-switcher-label">Язык</span>
+      <div class="lang-switcher__btns">
+        <button class="lang-opt" data-lang="ru" id="lang-opt-ru">RU</button>
+        <button class="lang-opt" data-lang="en" id="lang-opt-en">EN</button>
+      </div>
+    </div>
+    <a href="https://galelium.com/privacy.html" data-i18n="footer.privacy">Конфиденциальность</a>
+    <a href="https://galelium.com/terms.html" data-i18n="footer.terms">Условия</a>
     <a href="/cdn-cgi/l/email-protection#6b02050d042b0c0a070e07021e0645080406"><span class="__cf_email__" data-cfemail="c3aaada5ac83a4a2afa6afaab6aeeda0acae">[email&#160;protected]</span></a>
   </div>
 </div>
@@ -1387,7 +1417,7 @@
           <div class="hub-card__title"><span data-i18n="hub.c2_title">Наши активы</span></div>
           <div class="hub-card__desc"><span data-i18n="hub.c2_desc">Портфель из 15+ компаний. Технологии, инфраструктура, финансовые сервисы — отбор через строгий due diligence.</span></div>
           <div class="hub-card__foot">
-            <span class="hub-card__arrow">Перейти <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="hub-card__arrow"><span data-i18n="hub.arrow_go">Перейти</span> <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="hub-card__badge">$200M+</span>
           </div>
         </a>
@@ -1401,7 +1431,7 @@
           <div class="hub-card__title"><span data-i18n="hub.c3_title">Как мы работаем</span></div>
           <div class="hub-card__desc"><span data-i18n="hub.c3_desc">Пять направлений: стратегический контроль, целевые инвестиции, партнёрская сеть, аналитика, операционная поддержка.</span></div>
           <div class="hub-card__foot">
-            <span class="hub-card__arrow">Подробнее <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="hub-card__arrow"><span data-i18n="hub.arrow_more">Подробнее</span> <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
         </a>
 
@@ -1411,10 +1441,10 @@
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><circle cx="11" cy="6" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 13c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M11 10c1.657 0 3 1.343 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
           </div>
           <div class="hub-card__tag"><span data-i18n="hub.c4_tag">Люди</span></div>
-          <div class="hub-card__title">Команда</div>
+          <div class="hub-card__title" data-i18n="hub.c4_title">Команда</div>
           <div class="hub-card__desc"><span data-i18n="hub.c4_desc">Профессионалы с опытом в private equity, M&A и операционном управлении.</span></div>
           <div class="hub-card__foot">
-            <span class="hub-card__arrow">Познакомиться <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="hub-card__arrow"><span data-i18n="hub.arrow_meet">Познакомиться</span> <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
         </a>
 
@@ -1424,10 +1454,10 @@
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 5.5h7M4.5 8h5M4.5 10.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
           </div>
           <div class="hub-card__tag"><span data-i18n="hub.c5_tag">Медиа</span></div>
-          <div class="hub-card__title">Новости</div>
+          <div class="hub-card__title" data-i18n="hub.c5_title">Новости</div>
           <div class="hub-card__desc"><span data-i18n="hub.c5_desc">Сделки, аналитика рынков, корпоративные обновления — всё актуальное о деятельности Galelium.</span></div>
           <div class="hub-card__foot">
-            <span class="hub-card__arrow">Читать <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="hub-card__arrow"><span data-i18n="hub.arrow_read">Читать</span> <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
         </a>
 
@@ -1437,10 +1467,10 @@
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="4.5" y="1.5" width="7" height="4" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="1.5" y="5.5" width="13" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 9.5h13" stroke="currentColor" stroke-width="1.2"/></svg>
           </div>
           <div class="hub-card__tag"><span data-i18n="hub.c6_tag">Карьера</span></div>
-          <div class="hub-card__title">Вакансии</div>
+          <div class="hub-card__title" data-i18n="hub.c6_title">Вакансии</div>
           <div class="hub-card__desc"><span data-i18n="hub.c6_desc">Открытые позиции в Galelium Corporation и портфельных компаниях.</span></div>
           <div class="hub-card__foot">
-            <span class="hub-card__arrow">Смотреть вакансии <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="hub-card__arrow"><span data-i18n="hub.arrow_jobs">Смотреть вакансии</span> <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
         </a>
 
@@ -1450,10 +1480,10 @@
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="1.5" width="12" height="13" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M5 5.5h6M5 8h6M5 10.5h3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
           </div>
           <div class="hub-card__tag"><span data-i18n="hub.c7_tag">Рабочие данные</span></div>
-          <div class="hub-card__title">Отчёты смен</div>
+          <div class="hub-card__title" data-i18n="hub.c7_title">Отчёты смен</div>
           <div class="hub-card__desc"><span data-i18n="hub.c7_desc">Ежедневные отчёты о рабочих сменах, статистика заказов.</span></div>
           <div class="hub-card__foot">
-            <span class="hub-card__arrow">Открыть <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="hub-card__arrow"><span data-i18n="hub.arrow_open">Открыть</span> <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
         </a>
 
@@ -1464,11 +1494,11 @@
           </div>
           <div class="hub-card__body">
             <div class="hub-card__tag"><span data-i18n="hub.c8_tag">Прямой контакт</span></div>
-            <div class="hub-card__title">Связаться с нами</div>
+            <div class="hub-card__title" data-i18n="hub.c8_title">Связаться с нами</div>
             <div class="hub-card__desc"><span data-i18n="hub.c8_desc">Инвестиционные предложения, партнёрства, со-инвестирование — рассматриваем каждый запрос.</span></div>
           </div>
           <div class="hub-card__foot">
-            <span class="hub-card__arrow">Написать <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="hub-card__arrow"><span data-i18n="hub.arrow_write">Написать</span> <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5.5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
         </a>
 
@@ -1589,6 +1619,16 @@
         </ul>
       </div>
     </nav>
+  </div>
+  <!-- Desktop lang switcher in footer -->
+  <div class="footer-lang-row">
+    <div class="lang-switcher lang-switcher--footer" id="lang-switcher-footer">
+      <span class="lang-switcher__label" id="lang-switcher-footer-label">Язык</span>
+      <div class="lang-switcher__btns">
+        <button class="lang-opt" data-lang="ru">RU</button>
+        <button class="lang-opt" data-lang="en">EN</button>
+      </div>
+    </div>
   </div>
   <div class="footer-bottom">
     <span class="f-copy" data-i18n="footer.copy">© 2025–2026 Galelium Corporation. Все права защищены.</span>
@@ -2083,47 +2123,49 @@
 
 })();
 
-  /* ══════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════
      ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА (i18n)
-     Добавить новый язык: скопируй блок en в новый ключ,
-     переведи строки, добавь кнопку в LANGS.
+     Чтобы добавить язык: скопируй блок en, назови новым ключом,
+     переведи строки, добавь ключ в LANGS.
      ══════════════════════════════════════════════════════════ */
   (function () {
     'use strict';
 
-    /* ── 1. Словари ─────────────────────────────────────────── */
-    var LANGS = ['ru', 'en'];
+    var LANGS  = ['ru', 'en'];
     var LABELS = { ru: 'RU', en: 'EN' };
+    var LANG_NAMES = { ru: 'Русский', en: 'English' };
 
+    /* ── Словари ────────────────────────────────────────────── */
     var dict = {
       ru: {
-        /* Meta */
         '_title':       'Galelium Corporation — Стратегические инвестиции и управление активами',
         '_description': 'Galelium Corporation — холдинговая корпорация. Стратегические инвестиции, управление активами и развитие портфельных компаний.',
         '_html_lang':   'ru',
         /* Nav */
-        'nav.about':      'О нас',
-        'nav.how':        'Как работаем',
-        'nav.news':       'Новости',
-        'nav.contact':    'Контакты',
-        'nav.cta':        'Связаться',
-        'nav.cta_long':   'Связаться с нами',
+        'nav.about':    'О нас',
+        'nav.how':      'Как работаем',
+        'nav.news':     'Новости',
+        'nav.contact':  'Контакты',
+        'nav.cta':      'Связаться',
+        'nav.cta_long': 'Связаться с нами',
+        /* Lang switcher label */
+        'lang.label':   'Язык',
         /* Hero */
-        'hero.label':     'Холдинговая корпорация',
-        'hero.title_1':   'Капитал,',
-        'hero.title_2':   'который',
-        'hero.title_3':   'работает',
-        'hero.sub':       'Galelium Corporation — холдинговая структура нового поколения. Стратегические инвестиции, управление активами и развитие портфельных компаний по всему миру.',
-        'hero.btn_primary':   'Обсудить сотрудничество',
-        'hero.btn_secondary': 'Исследовать',
-        'hero.live':          'Активен',
-        'hero.aum_label': 'Активы под управлением',
-        'hero.aum_sub':   'в портфеле и под управлением',
-        'hero.aum_note':  '«Устойчивый рост через дисциплинированный отбор активов»',
-        'hero.stat1':     'Портфельных<br>компаний',
-        'hero.stat2':     'Рынков<br>присутствия',
-        'hero.stat3':     'Средний<br>MOIC',
-        'hero.scroll':    'Далее',
+        'hero.label':        'Холдинговая корпорация',
+        'hero.title_1':      'Капитал,',
+        'hero.title_2':      'который',
+        'hero.title_3':      'работает',
+        'hero.sub':          'Galelium Corporation — холдинговая структура нового поколения. Стратегические инвестиции, управление активами и развитие портфельных компаний по всему миру.',
+        'hero.btn_primary':  'Обсудить сотрудничество',
+        'hero.btn_secondary':'Исследовать',
+        'hero.live':         'Активен',
+        'hero.aum_label':    'Активы под управлением',
+        'hero.aum_sub':      'в портфеле и под управлением',
+        'hero.aum_note':     '«Устойчивый рост через дисциплинированный отбор активов»',
+        'hero.stat1':        'Портфельных<br>компаний',
+        'hero.stat2':        'Рынков<br>присутствия',
+        'hero.stat3':        'Средний<br>MOIC',
+        'hero.scroll':       'Далее',
         /* Hub */
         'hub.label':    'Разделы корпорации',
         'hub.c1_tag':   'О корпорации',
@@ -2136,22 +2178,35 @@
         'hub.c3_title': 'Как мы работаем',
         'hub.c3_desc':  'Пять направлений: стратегический контроль, целевые инвестиции, партнёрская сеть, аналитика, операционная поддержка.',
         'hub.c4_tag':   'Люди',
+        'hub.c4_title': 'Команда',
         'hub.c4_desc':  'Профессионалы с опытом в private equity, M&A и операционном управлении.',
         'hub.c5_tag':   'Медиа',
+        'hub.c5_title': 'Новости',
         'hub.c5_desc':  'Сделки, аналитика рынков, корпоративные обновления — всё актуальное о деятельности Galelium.',
         'hub.c6_tag':   'Карьера',
+        'hub.c6_title': 'Вакансии',
         'hub.c6_desc':  'Открытые позиции в Galelium Corporation и портфельных компаниях.',
         'hub.c7_tag':   'Рабочие данные',
+        'hub.c7_title': 'Отчёты смен',
         'hub.c7_desc':  'Ежедневные отчёты о рабочих сменах, статистика заказов.',
         'hub.c8_tag':   'Прямой контакт',
+        'hub.c8_title': 'Связаться с нами',
         'hub.c8_desc':  'Инвестиционные предложения, партнёрства, со-инвестирование — рассматриваем каждый запрос.',
+        /* Hub card arrows */
+        'hub.arrow_go':   'Перейти',
+        'hub.arrow_more': 'Подробнее',
+        'hub.arrow_meet': 'Познакомиться',
+        'hub.arrow_read': 'Читать',
+        'hub.arrow_jobs': 'Смотреть вакансии',
+        'hub.arrow_open': 'Открыть',
+        'hub.arrow_write':'Написать',
         /* News */
-        'news.eyebrow':   'Новости и обновления',
-        'news.title':     'Последние',
-        'news.title_em':  'события',
-        'news.all':       'Все новости',
-        'news.all_link':  'Все новости и аналитика Galelium Corporation',
-        'news.go':        'Перейти',
+        'news.eyebrow':  'Новости и обновления',
+        'news.title':    'Последние',
+        'news.title_em': 'события',
+        'news.all':      'Все новости',
+        'news.all_link': 'Все новости и аналитика Galelium Corporation',
+        'news.go':       'Перейти',
         /* Contact */
         'contact.eyebrow':  'Для инвесторов и партнёров',
         'contact.title':    'Готовы обсудить',
@@ -2165,6 +2220,8 @@
         'footer.write':       'Написать нам',
         'footer.copy':        '© 2025–2026 Galelium Corporation. Все права защищены.',
         'footer.legal_toggle':'Правовая информация и оговорки',
+        'footer.privacy':     'Конфиденциальность',
+        'footer.terms':       'Условия',
         /* Search */
         'search.placeholder': 'Поиск по сайту…',
         'search.hint':        'Нажмите <kbd>Ctrl</kbd><kbd>K</kbd> чтобы открыть · <kbd>Esc</kbd> закрыть',
@@ -2173,33 +2230,34 @@
       },
 
       en: {
-        /* Meta */
         '_title':       'Galelium Corporation — Strategic Investments & Asset Management',
         '_description': 'Galelium Corporation — holding corporation. Strategic investments, asset management and portfolio company development.',
         '_html_lang':   'en',
         /* Nav */
-        'nav.about':      'About',
-        'nav.how':        'How We Work',
-        'nav.news':       'News',
-        'nav.contact':    'Contact',
-        'nav.cta':        'Get in Touch',
-        'nav.cta_long':   'Contact Us',
+        'nav.about':    'About',
+        'nav.how':      'How We Work',
+        'nav.news':     'News',
+        'nav.contact':  'Contact',
+        'nav.cta':      'Get in Touch',
+        'nav.cta_long': 'Contact Us',
+        /* Lang switcher label */
+        'lang.label':   'Language',
         /* Hero */
-        'hero.label':     'Holding Corporation',
-        'hero.title_1':   'Capital',
-        'hero.title_2':   'that',
-        'hero.title_3':   'works',
-        'hero.sub':       'Galelium Corporation — a next-generation holding structure. Strategic investments, asset management and portfolio company development worldwide.',
-        'hero.btn_primary':   'Discuss Partnership',
-        'hero.btn_secondary': 'Explore',
-        'hero.live':          'Active',
-        'hero.aum_label': 'Assets Under Management',
-        'hero.aum_sub':   'in portfolio and under management',
-        'hero.aum_note':  '"Sustainable growth through disciplined asset selection"',
-        'hero.stat1':     'Portfolio<br>Companies',
-        'hero.stat2':     'Markets<br>Present',
-        'hero.stat3':     'Average<br>MOIC',
-        'hero.scroll':    'Scroll',
+        'hero.label':        'Holding Corporation',
+        'hero.title_1':      'Capital',
+        'hero.title_2':      'that',
+        'hero.title_3':      'works',
+        'hero.sub':          'Galelium Corporation — a next-generation holding structure. Strategic investments, asset management and portfolio company development worldwide.',
+        'hero.btn_primary':  'Discuss Partnership',
+        'hero.btn_secondary':'Explore',
+        'hero.live':         'Active',
+        'hero.aum_label':    'Assets Under Management',
+        'hero.aum_sub':      'in portfolio and under management',
+        'hero.aum_note':     '"Sustainable growth through disciplined asset selection"',
+        'hero.stat1':        'Portfolio<br>Companies',
+        'hero.stat2':        'Markets<br>Present',
+        'hero.stat3':        'Average<br>MOIC',
+        'hero.scroll':       'Scroll',
         /* Hub */
         'hub.label':    'Corporation Sections',
         'hub.c1_tag':   'About',
@@ -2212,22 +2270,35 @@
         'hub.c3_title': 'How We Work',
         'hub.c3_desc':  'Five pillars: strategic control, targeted investments, partner network, analytics, operational support.',
         'hub.c4_tag':   'People',
+        'hub.c4_title': 'Team',
         'hub.c4_desc':  'Professionals with expertise in private equity, M&A and operational management.',
         'hub.c5_tag':   'Media',
-        'hub.c5_desc':  'Deals, market analytics, corporate updates — everything current about Galelium\'s activities.',
+        'hub.c5_title': 'News',
+        'hub.c5_desc':  "Deals, market analytics, corporate updates — everything current about Galelium's activities.",
         'hub.c6_tag':   'Careers',
+        'hub.c6_title': 'Vacancies',
         'hub.c6_desc':  'Open positions at Galelium Corporation and portfolio companies.',
         'hub.c7_tag':   'Work Data',
+        'hub.c7_title': 'Shift Reports',
         'hub.c7_desc':  'Daily shift reports and order statistics.',
         'hub.c8_tag':   'Direct Contact',
+        'hub.c8_title': 'Get in Touch',
         'hub.c8_desc':  'Investment proposals, partnerships, co-investment — we review every request.',
+        /* Hub card arrows */
+        'hub.arrow_go':   'View',
+        'hub.arrow_more': 'Details',
+        'hub.arrow_meet': 'Meet the team',
+        'hub.arrow_read': 'Read',
+        'hub.arrow_jobs': 'Browse openings',
+        'hub.arrow_open': 'Open',
+        'hub.arrow_write':'Write',
         /* News */
-        'news.eyebrow':   'News & Updates',
-        'news.title':     'Latest',
-        'news.title_em':  'events',
-        'news.all':       'All News',
-        'news.all_link':  'All news and analytics from Galelium Corporation',
-        'news.go':        'View',
+        'news.eyebrow':  'News & Updates',
+        'news.title':    'Latest',
+        'news.title_em': 'events',
+        'news.all':      'All News',
+        'news.all_link': 'All news and analytics from Galelium Corporation',
+        'news.go':       'View',
         /* Contact */
         'contact.eyebrow':  'For Investors & Partners',
         'contact.title':    'Ready to discuss',
@@ -2241,6 +2312,8 @@
         'footer.write':       'Write to Us',
         'footer.copy':        '© 2025–2026 Galelium Corporation. All rights reserved.',
         'footer.legal_toggle':'Legal Information & Disclaimers',
+        'footer.privacy':     'Privacy Policy',
+        'footer.terms':       'Terms of Use',
         /* Search */
         'search.placeholder': 'Search the site…',
         'search.hint':        'Press <kbd>Ctrl</kbd><kbd>K</kbd> to open · <kbd>Esc</kbd> to close',
@@ -2249,107 +2322,98 @@
       }
     };
 
-    /* ── 2. Читаем сохранённый язык ─────────────────────────── */
+    /* ── Читаем сохранённый язык ────────────────────────────── */
     function getLang() {
-      /* Приоритет: ?lang=, localStorage, браузер */
       var param = new URLSearchParams(location.search).get('lang');
       if (param && dict[param]) return param;
       var saved = localStorage.getItem('glm_lang');
       if (saved && dict[saved]) return saved;
-      /* Определяем по браузерному языку */
       var nav = (navigator.language || 'ru').slice(0, 2).toLowerCase();
       return dict[nav] ? nav : 'ru';
     }
 
     var currentLang = getLang();
 
-    /* ── 3. Применяем язык ──────────────────────────────────── */
-    function applyLang(lang, animate) {
+    /* ── Применяем язык ─────────────────────────────────────── */
+    function applyLang(lang) {
       var d = dict[lang];
       if (!d) return;
 
-      /* html[lang] */
+      /* <html lang=""> */
       document.documentElement.lang = d['_html_lang'] || lang;
 
-      /* <title> */
+      /* Снимаем visibility:hidden сразу после первого применения */
+      document.documentElement.style.visibility = '';
+
+      /* <title> и meta */
       if (d['_title']) document.title = d['_title'];
-
-      /* meta description */
       var metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc && d['_description']) metaDesc.setAttribute('content', d['_description']);
-
-      /* og:locale */
+      if (metaDesc && d['_description']) metaDesc.content = d['_description'];
       var ogLocale = document.querySelector('meta[property="og:locale"]');
-      if (ogLocale) ogLocale.setAttribute('content', lang === 'ru' ? 'ru_RU' : 'en_US');
+      if (ogLocale) ogLocale.content = lang === 'ru' ? 'ru_RU' : 'en_US';
 
-      /* Все data-i18n элементы */
+      /* Все [data-i18n] */
       document.querySelectorAll('[data-i18n]').forEach(function(el) {
         var key = el.getAttribute('data-i18n');
-        if (d[key] !== undefined) {
-          /* Используем innerHTML чтобы <br> и <kbd> работали */
-          el.innerHTML = d[key];
-        }
+        if (d[key] !== undefined) el.innerHTML = d[key];
       });
 
-      /* Плейсхолдеры (search input) */
+      /* Плейсхолдеры */
       document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
         var key = el.getAttribute('data-i18n-placeholder');
         if (d[key] !== undefined) el.placeholder = d[key];
       });
 
-      /* Обновляем кнопку */
-      var label = document.getElementById('lang-label');
-      if (label) {
-        if (animate) {
-          var btn = document.getElementById('lang-btn');
-          btn.classList.add('switching');
-          setTimeout(function(){ btn.classList.remove('switching'); }, 300);
-        }
-        label.textContent = LABELS[lang] || lang.toUpperCase();
-      }
+      /* Метка переключателя (lang.label) */
+      document.querySelectorAll('.lang-switcher__label').forEach(function(el) {
+        if (d['lang.label']) el.textContent = d['lang.label'];
+      });
+
+      /* Активная кнопка языка */
+      document.querySelectorAll('.lang-opt').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+        btn.setAttribute('aria-pressed', btn.dataset.lang === lang ? 'true' : 'false');
+        btn.title = LANG_NAMES[btn.dataset.lang] || '';
+      });
+
+      /* URL без перезагрузки */
+      var url = new URL(location.href);
+      if (lang === 'ru') { url.searchParams.delete('lang'); }
+      else { url.searchParams.set('lang', lang); }
+      history.replaceState(null, '', url.toString());
 
       /* Сохраняем */
       localStorage.setItem('glm_lang', lang);
       currentLang = lang;
-
-      /* Обновляем ?lang= в URL (без перезагрузки) */
-      var url = new URL(location.href);
-      if (lang === 'ru') {
-        url.searchParams.delete('lang');
-      } else {
-        url.searchParams.set('lang', lang);
-      }
-      history.replaceState(null, '', url.toString());
     }
 
-    /* ── 4. Переключатель ───────────────────────────────────── */
-    function nextLang() {
-      var idx = LANGS.indexOf(currentLang);
-      return LANGS[(idx + 1) % LANGS.length];
+    /* ── Переключение с анимацией ───────────────────────────── */
+    function switchLang(lang) {
+      if (lang === currentLang) return;
+      document.documentElement.classList.add('lang-switching');
+      applyLang(lang);
+      setTimeout(function() {
+        document.documentElement.classList.remove('lang-switching');
+      }, 250);
     }
 
-    /* Flash эффект при переключении */
-    function flashSwitch(lang) {
-      document.body.classList.add('lang-flash');
-      setTimeout(function() { document.body.classList.remove('lang-flash'); }, 200);
-      applyLang(lang, true);
-    }
-
-    /* ── 5. Init ────────────────────────────────────────────── */
-    document.addEventListener('DOMContentLoaded', function() {
-      var btn = document.getElementById('lang-btn');
-      if (btn) {
+    /* ── Навешиваем обработчики после DOM ───────────────────── */
+    function bindButtons() {
+      document.querySelectorAll('.lang-opt').forEach(function(btn) {
         btn.addEventListener('click', function() {
-          flashSwitch(nextLang());
+          switchLang(this.dataset.lang);
         });
-      }
+      });
+    }
 
-      /* Применяем язык сразу */
-      applyLang(currentLang, false);
-    });
+    /* ── Init: применяем ДО DOMContentLoaded чтобы нет flash ── */
+    applyLang(currentLang);
 
-    /* Применяем немедленно (до DOMContentLoaded) чтобы не было мигания */
-    applyLang(currentLang, false);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bindButtons);
+    } else {
+      bindButtons();
+    }
 
   })();
 
