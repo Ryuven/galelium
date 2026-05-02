@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" style="visibility:hidden">
 <!--
   Galelium Corporation — Новости
   Данные: news.json (лежит рядом с файлом)
@@ -25,15 +25,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Новости | Galelium Corporation</title>
-  <meta name="description" content="Последние новости Galelium Corporation — сделки, портфель, стратегия и аналитика холдинга." />
+  <title id="page-title">Новости | Galelium Corporation</title>
+  <meta id="meta-desc" name="description" content="Последние новости Galelium Corporation — сделки, портфель, стратегия и аналитика холдинга." />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://galelium.com/news.html" />
+  <link id="meta-canonical" rel="canonical" href="https://galelium.com/news.html" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://galelium.com/news.html" />
-  <meta property="og:title" content="Новости | Galelium Corporation" />
-  <meta property="og:description" content="Последние новости Galelium Corporation." />
+  <meta id="meta-og-url" property="og:url" content="https://galelium.com/news.html" />
+  <meta id="meta-og-title" property="og:title" content="Новости | Galelium Corporation" />
+  <meta id="meta-og-desc" property="og:description" content="Последние новости Galelium Corporation." />
   <meta property="og:locale" content="ru_RU" />
+  <meta property="og:image" content="https://galelium.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://galelium.com/og-image.png" />
+  <link rel="alternate" hreflang="ru" href="https://galelium.com/news.html">
+  <link rel="alternate" hreflang="en" href="https://galelium.com/news.html?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://galelium.com/news.html">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"CollectionPage","name":"Новости — Galelium Corporation","url":"https://galelium.com/news.html","description":"Последние новости Galelium Corporation","publisher":{"@type":"Organization","name":"Galelium Corporation","url":"https://galelium.com"}}
+  </script>
+
+  <!-- JSON-LD: filled dynamically when article opens -->
+  <script type="application/ld+json" id="article-ld"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -68,7 +82,20 @@
       --t-slow: .4s;
     }
 
+
+    /* ── Lang switching animation ── */
+    @keyframes langFade { 0%{opacity:.35} 100%{opacity:1} }
+    html.lang-switching [data-i18n-text],
+    html.lang-switching [data-i18n-placeholder] {
+      animation: langFade .22s ease both;
+    }
+    /* Lang opt active state */
+    .lang-opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .lang-opt { transition: border-color var(--t-fast), color var(--t-fast), background var(--t-fast); }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
+    }
     html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     body {
       background: var(--bg); color: var(--text);
@@ -92,6 +119,13 @@
       text-decoration: none; transition: top var(--t-fast);
     }
     .skip:focus { top: 12px; }
+
+    .nav-overlay {
+      position: fixed; inset: var(--nav-h) 0 0;
+      background: rgba(5,5,10,.5); z-index: 150;
+      opacity: 0; pointer-events: none; transition: opacity var(--t) ease;
+    }
+    .nav-overlay.is-open { opacity: 1; pointer-events: auto; }
 
     /* ── Навигация ── */
     .site-nav {
@@ -641,7 +675,7 @@
 </head>
 <body>
 
-<a class="skip" href="#main">Перейти к содержимому</a>
+<a class="skip" href="#main" data-i18n-text="misc.skip">Перейти к содержимому</a>
 <div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
 <div class="toast" id="toast" aria-live="polite"></div>
 
@@ -649,11 +683,11 @@
 <nav class="site-nav" aria-label="Основная навигация">
   <a href="https://galelium.com" class="nav-logo" aria-label="Galelium Corp. — на главную">Galelium Corp.</a>
   <ul class="nav-list" id="nav-list-desktop" role="list">
-    <li><a href="https://galelium.com/#about">О нас</a></li>
-    <li><a href="https://galelium.com/#how-we-work">Как работаем</a></li>
-    <li><a href="https://galelium.com/news.html" aria-current="page">Новости</a></li>
-    <li><a href="https://galelium.com/careers.html">Карьера</a></li>
-    <li><a href="https://galelium.com/#contact">Контакты</a></li>
+    <li><a href="https://galelium.com/#about" data-i18n-text="nav.about">О нас</a></li>
+    <li><a href="https://galelium.com/#how-we-work" data-i18n-text="nav.how">Как работаем</a></li>
+    <li><a href="https://galelium.com/news.html" aria-current="page" data-i18n-text="nav.news">Новости</a></li>
+    <li><a href="https://galelium.com/careers.html" data-i18n-text="nav.careers">Карьера</a></li>
+    <li><a href="https://galelium.com/#contact" data-i18n-text="nav.contact">Контакты</a></li>
   </ul>
   <button class="nav-btn" id="nav-btn" aria-controls="nav-mobile" aria-expanded="false" aria-label="Открыть меню">
     <span class="ham" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -663,31 +697,40 @@
 <div class="nav-mobile" id="nav-mobile" role="dialog" aria-label="Меню" aria-hidden="true">
   <div class="nav-mobile__inner">
     <ul role="list">
-      <li class="nav-mobile__item"><a href="https://galelium.com/#about">О нас <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
-      <li class="nav-mobile__item"><a href="https://galelium.com/#how-we-work">Как работаем <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
-      <li class="nav-mobile__item"><a href="https://galelium.com/news.html" aria-current="page">Новости <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
-      <li class="nav-mobile__item"><a href="https://galelium.com/careers.html">Карьера <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
-      <li class="nav-mobile__item"><a href="https://galelium.com/#contact">Контакты <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+      <li class="nav-mobile__item"><a href="https://galelium.com/#about" data-i18n-text="nav.about">О нас <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+      <li class="nav-mobile__item"><a href="https://galelium.com/#how-we-work" data-i18n-text="nav.how">Как работаем <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+      <li class="nav-mobile__item"><a href="https://galelium.com/news.html" aria-current="page" data-i18n-text="nav.news">Новости <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+      <li class="nav-mobile__item"><a href="https://galelium.com/careers.html" data-i18n-text="nav.careers">Карьера <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+      <li class="nav-mobile__item"><a href="https://galelium.com/#contact" data-i18n-text="nav.contact">Контакты <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
     </ul>
-    <div class="nav-mobile__cta"><a href="https://galelium.com/#contact">Связаться <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h9M7.5 3l4 3.5L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="nav-mobile__cta"><a href="https://galelium.com/#contact" data-i18n-text="nav.cta_long">Связаться <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h9M7.5 3l4 3.5L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
   </div>
   <div class="nav-mobile__footer">
-    <a href="https://galelium.com/privacy.html">Конфиденциальность</a>
-    <a href="https://galelium.com/terms.html">Условия</a>
+    <div class="lang-switcher" style="width:100%;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:12px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2)" data-i18n-text="lang.label">Язык</span>
+      <div style="display:flex;gap:2px">
+        <button class="lang-opt" data-lang="ru" style="background:none;border:1px solid var(--border);color:var(--muted);font-family:var(--font-display);font-weight:800;font-size:.55rem;letter-spacing:.14em;padding:4px 9px;cursor:pointer">RU</button>
+        <button class="lang-opt" data-lang="en" style="background:none;border:1px solid var(--border);color:var(--muted);font-family:var(--font-display);font-weight:800;font-size:.55rem;letter-spacing:.14em;padding:4px 9px;cursor:pointer">EN</button>
+      </div>
+    </div>
+    <a href="https://galelium.com/privacy.html" data-i18n-text="footer.privacy">Конфиденциальность</a>
+    <a href="https://galelium.com/terms.html" data-i18n-text="footer.terms">Условия</a>
     <a href="mailto:info@galelium.com">info@galelium.com</a>
   </div>
 </div>
+
+<div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
 
 <main id="main">
 
   <!-- Шапка -->
   <header class="news-header">
     <div>
-      <span class="news-header__eyebrow anim-in" style="animation-delay:.0s">Galelium Corporation</span>
-      <h1 class="news-header__title anim-in" style="animation-delay:.07s">Новости &amp; <em>аналитика</em></h1>
+      <span class="news-header__eyebrow anim-in" style="animation-delay:.0s" data-i18n-text="header.eyebrow">Galelium Corporation</span>
+      <h1 class="news-header__title anim-in" style="animation-delay:.07s"><span data-i18n-text="header.title">Новости</span> &amp; <em data-i18n-text="header.title_em">аналитика</em></h1>
     </div>
     <div class="news-header__right anim-in" style="animation-delay:.13s">
-      <div class="news-header__count"><strong id="news-count">—</strong> материалов</div>
+      <div class="news-header__count"><strong id="news-count">—</strong> <span data-i18n-text="header.materials">материалов</span></div>
     </div>
   </header>
 
@@ -700,7 +743,7 @@
           <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.2"/>
           <path d="M9 9l3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
         </svg>
-        <input class="search-input" id="search-input" type="search" placeholder="Поиск…" aria-label="Поиск по новостям" autocomplete="off" />
+        <input class="search-input" id="search-input" type="search" placeholder="Поиск…" data-i18n-placeholder="controls.search" aria-label="Поиск по новостям" autocomplete="off" />
       </div>
 
       <div class="ctrl-sep" aria-hidden="true"></div>
@@ -712,9 +755,9 @@
 
       <!-- Сортировка -->
       <select class="sort-select" id="sort-select" aria-label="Сортировка">
-        <option value="date-desc">Новые первые</option>
-        <option value="date-asc">Старые первые</option>
-        <option value="read-asc">Быстрее читать</option>
+        <option value="date-desc" data-i18n-text="sort.date_desc">Новые первые</option>
+        <option value="date-asc" data-i18n-text="sort.date_asc">Старые первые</option>
+        <option value="read-asc" data-i18n-text="sort.read_asc">Быстрее читать</option>
       </select>
 
       <div class="ctrl-sep" aria-hidden="true"></div>
@@ -731,30 +774,30 @@
     </div>
 
     <div class="controls-meta">
-      <span>Показано: <strong id="shown-count">—</strong></span>
-      <button class="reset-btn is-hidden" id="reset-btn">Сбросить</button>
+      <span><span data-i18n-text="controls.shown">Показано</span>: <strong id="shown-count">—</strong></span>
+      <button class="reset-btn is-hidden" id="reset-btn" data-i18n-text="controls.reset">Сбросить</button>
     </div>
   </div>
 
   <!-- Тег-облако -->
   <div class="tag-cloud">
-    <span class="tag-cloud__label">Темы</span>
+    <span class="tag-cloud__label" data-i18n-text="controls.topics">Темы</span>
     <div class="tag-cloud__tags" id="tag-cloud" role="group" aria-label="Фильтр по тегам"></div>
   </div>
 
   <!-- Лента -->
   <div class="news-feed">
     <div class="feed-loading" id="feed-loading" aria-live="polite">
-      <div class="spinner" aria-hidden="true"></div>Загрузка…
+      <div class="spinner" aria-hidden="true"></div><span data-i18n-text="feed.loading">Загрузка…</span>
     </div>
     <div class="feed-error" id="feed-error" aria-live="assertive">
-      <strong>Не удалось загрузить новости</strong>
-      Убедитесь, что <code>news.json</code> лежит рядом с файлом.
+      <strong data-i18n-text="feed.error_title">Не удалось загрузить новости</strong>
+      <span data-i18n-text="feed.error_sub">Убедитесь, что news.json лежит рядом с файлом.</span>
     </div>
     <div id="feed-content"></div>
     <div class="feed-empty" id="feed-empty">
-      <strong>Ничего не найдено</strong>
-      Попробуйте изменить фильтры или поисковый запрос.
+      <strong data-i18n-text="feed.empty_title">Ничего не найдено</strong>
+      <span data-i18n-text="feed.empty_sub">Попробуйте изменить фильтры или поисковый запрос.</span>
     </div>
   </div>
 
@@ -788,40 +831,45 @@
   <div class="footer-top">
     <div>
       <a href="https://galelium.com" class="f-logo">Galelium Corp.</a>
-      <p class="f-tagline">Холдинговая корпорация. Инвестиции, технологии, развитие.</p>
+      <p class="f-tagline" data-i18n-text="footer.tagline">Холдинговая корпорация. Инвестиции, технологии, развитие.</p>
     </div>
     <nav class="footer-nav" aria-label="Навигация в футере">
       <div class="footer-nav-group">
-        <p class="footer-nav-group__title">Компания</p>
+        <p class="footer-nav-group__title" data-i18n-text="footer.company">Компания</p>
         <ul role="list">
-          <li><a href="https://galelium.com/#about">О нас</a></li>
-          <li><a href="https://galelium.com/#how-we-work">Как работаем</a></li>
-          <li><a href="https://galelium.com/news.html">Новости</a></li>
-          <li><a href="https://galelium.com/careers.html">Карьера</a></li>
+          <li><a href="https://galelium.com/#about" data-i18n-text="nav.about">О нас</a></li>
+          <li><a href="https://galelium.com/#how-we-work" data-i18n-text="nav.how">Как работаем</a></li>
+          <li><a href="https://galelium.com/news.html" data-i18n-text="nav.news">Новости</a></li>
+          <li><a href="https://galelium.com/careers.html" data-i18n-text="nav.careers">Карьера</a></li>
         </ul>
       </div>
       <div class="footer-nav-group">
-        <p class="footer-nav-group__title">Контакт</p>
+        <p class="footer-nav-group__title" data-i18n-text="footer.contact_col">Контакт</p>
         <ul role="list">
           <li><a href="mailto:info@galelium.com">info@galelium.com</a></li>
           <li><a href="https://t.me/lucas_vegas" target="_blank" rel="noopener">Telegram</a></li>
         </ul>
       </div>
       <div class="footer-nav-group">
-        <p class="footer-nav-group__title">Правовые</p>
+        <p class="footer-nav-group__title" data-i18n-text="footer.legal_col">Правовые</p>
         <ul role="list">
-          <li><a href="https://galelium.com/privacy.html">Конфиденциальность</a></li>
-          <li><a href="https://galelium.com/terms.html">Условия</a></li>
+          <li><a href="https://galelium.com/privacy.html" data-i18n-text="footer.privacy">Конфиденциальность</a></li>
+          <li><a href="https://galelium.com/terms.html" data-i18n-text="footer.terms">Условия</a></li>
         </ul>
       </div>
     </nav>
   </div>
+  <!-- Lang switcher footer row -->
+  <div style="max-width:var(--max);margin-inline:auto;padding:14px var(--px) 0;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px">
+    <span style="font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2)" data-i18n-text="lang.label">Язык</span>
+    <div style="display:flex;gap:2px">
+      <button class="lang-opt" data-lang="ru" style="background:none;border:1px solid var(--border);color:var(--muted);font-family:var(--font-display);font-weight:800;font-size:.55rem;letter-spacing:.14em;padding:4px 9px;cursor:pointer">RU</button>
+      <button class="lang-opt" data-lang="en" style="background:none;border:1px solid var(--border);color:var(--muted);font-family:var(--font-display);font-weight:800;font-size:.55rem;letter-spacing:.14em;padding:4px 9px;cursor:pointer">EN</button>
+    </div>
+  </div>
   <div class="footer-bottom">
-    <span class="f-copy">© 2025–2026 Galelium Corporation. Все права защищены.</span>
-    <ul class="f-legal" role="list">
-      <li><a href="https://galelium.com/privacy.html">Конфиденциальность</a></li>
-      <li><a href="https://galelium.com/terms.html">Условия</a></li>
-    </ul>
+    <span class="f-copy" data-i18n-text="footer.copy">© 2025–2026 Galelium Corporation. Все права защищены.</span>
+    <!-- legal: see footer nav column -->
   </div>
 </footer>
 
@@ -846,7 +894,9 @@
   function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function fmtDate(str) {
     var d = new Date(str + 'T00:00:00');
-    return isNaN(d) ? str : d.toLocaleDateString('ru-RU', { day:'numeric', month:'long', year:'numeric' });
+    if (isNaN(d)) return str;
+    var locale = (window.i18n && window.i18n.lang() === 'en') ? 'en-GB' : 'ru-RU';
+    return d.toLocaleDateString(locale, { day:'numeric', month:'long', year:'numeric' });
   }
   var ARROW = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true"><path d="M1.5 5.5h8M6 2l4 3.5L6 9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
@@ -904,7 +954,7 @@
   function renderFeatured(item, ms) {
     return '<button class="card-featured" data-id="' + esc(item.id) + '" style="animation-delay:' + ms + 'ms" aria-label="Читать: ' + esc(item.title) + '">'
     + '<div class="card-featured__visual">'
-    +   '<span class="badge">Главное</span>'
+    +   '<span class="badge">' + (window.t ? window.t('card.featured') : 'Главное') + '</span>'
     +   '<span class="card-featured__num" aria-hidden="true">' + esc(item.id) + '</span>'
     + '</div>'
     + '<div class="card-featured__body">'
@@ -912,8 +962,8 @@
     +   '<h2 class="card-title-lg">' + esc(item.title) + '</h2>'
     +   '<p class="card-summary">' + esc(item.summary) + '</p>'
     +   '<div class="card-meta-row">'
-    +     '<div class="card-meta-left"><span class="card-date">' + fmtDate(item.date) + '</span><span class="card-read">· ' + (item.readTime||4) + ' мин</span></div>'
-    +     '<span class="card-arrow">Читать ' + ARROW + '</span>'
+    +     '<div class="card-meta-left"><span class="card-date">' + fmtDate(item.date) + '</span><span class="card-read">· ' + (item.readTime||4) + ' ' + (window.t ? window.t('card.min') : 'мин') + '</span></div>'
+    +     '<span class="card-arrow">' + (window.t ? window.t('card.read') : 'Читать') + ' ' + ARROW + '</span>'
     +   '</div>'
     + '</div>'
     + '</button>';
@@ -925,7 +975,7 @@
     + '<h2 class="news-card__title">' + esc(item.title) + '</h2>'
     + '<p class="news-card__summary">' + esc(item.summary) + '</p>'
     + '<div class="news-card__foot">'
-    +   '<div class="news-card__foot-left"><span class="card-date">' + fmtDate(item.date) + '</span><span class="card-read">· ' + (item.readTime||4) + ' мин</span></div>'
+    +   '<div class="news-card__foot-left"><span class="card-date">' + fmtDate(item.date) + '</span><span class="card-read">· ' + (item.readTime||4) + ' ' + (window.t ? window.t('card.min') : 'мин') + '</span></div>'
     +   '<span class="card-arrow" style="color:var(--accent)">' + ARROW + '</span>'
     + '</div>'
     + '</button>';
@@ -940,7 +990,7 @@
     + '</div>'
     + '<div class="news-list-item__meta">'
     +   '<span class="card-date">' + fmtDate(item.date) + '</span>'
-    +   '<span class="card-read">' + (item.readTime||4) + ' мин</span>'
+    +   '<span class="card-read">' + (item.readTime||4) + ' ' + (window.t ? window.t('card.min') : 'мин') + '</span>'
     +   '<span class="news-list-item__arr">' + ARROW + '</span>'
     + '</div>'
     + '</button>';
@@ -994,7 +1044,7 @@
     var seen = {}, cats = ['all'];
     allNews.forEach(function(n){ if(!seen[n.category]){ seen[n.category]=true; cats.push(n.category); } });
     elCatFilt.innerHTML = cats.map(function(c){
-      return '<button class="filter-btn' + (c==='all'?' is-active':'') + '" data-cat="' + esc(c) + '">' + (c==='all'?'Все':esc(c)) + '</button>';
+      return '<button class="filter-btn' + (c==='all'?' is-active':'') + '" data-cat="' + esc(c) + '">' + (c==='all'?(window.t?window.t('controls.all'):'Все'):esc(c)) + '</button>';
     }).join('');
     elCatFilt.addEventListener('click', function(e){
       var b = e.target.closest('.filter-btn');
@@ -1083,7 +1133,129 @@
     }).join('');
   }
 
-  function openModal(item) {
+  /* ── SEO helpers ───────────────────────────────────────── */
+  var _origTitle = document.title;
+  var _origDesc  = (document.getElementById('meta-desc')     || {}).content || '';
+  var _origUrl   = (document.getElementById('meta-og-url')   || {}).content || '';
+  var _origOgT   = (document.getElementById('meta-og-title') || {}).content || '';
+  var _origOgD   = (document.getElementById('meta-og-desc')  || {}).content || '';
+  var _baseUrl   = location.href.split('?')[0];
+
+  function setMeta(item) {
+    var lang    = window.i18n ? window.i18n.lang() : 'ru';
+    var suffix  = lang === 'en' ? ' | Galelium Corporation' : ' | Galelium Corporation';
+    var articleUrl = _baseUrl + '?news=' + encodeURIComponent(item.slug || item.id);
+    var desc    = item.summary || '';
+
+    /* <title> */
+    document.title = item.title + suffix;
+    var tEl = document.getElementById('page-title');
+    if (tEl) tEl.textContent = document.title;
+
+    /* meta description */
+    var mDesc = document.getElementById('meta-desc');
+    if (mDesc) mDesc.content = desc;
+
+    /* canonical */
+    var canon = document.getElementById('meta-canonical');
+    if (canon) canon.href = articleUrl;
+
+    /* og: */
+    var ogUrl  = document.getElementById('meta-og-url');
+    var ogT    = document.getElementById('meta-og-title');
+    var ogD    = document.getElementById('meta-og-desc');
+    if (ogUrl) ogUrl.content = articleUrl;
+    if (ogT)   ogT.content   = item.title + suffix;
+    if (ogD)   ogD.content   = desc;
+
+    /* Twitter card */
+    var twT = document.querySelector('meta[name="twitter:title"]');
+    var twD = document.querySelector('meta[name="twitter:description"]');
+    if (twT) twT.content = item.title + suffix;
+    if (twD) twD.content = desc;
+
+    /* JSON-LD NewsArticle */
+    var ld = document.getElementById('article-ld');
+    if (ld) {
+      var datePublished = item.date ? new Date(item.date + 'T00:00:00').toISOString() : '';
+      ld.textContent = JSON.stringify({
+        '@context':       'https://schema.org',
+        '@type':          'NewsArticle',
+        'headline':       item.title,
+        'description':    desc,
+        'datePublished':  datePublished,
+        'dateModified':   datePublished,
+        'author': {
+          '@type': 'Organization',
+          'name':  item.author || 'Galelium Corporation',
+          'url':   'https://galelium.com'
+        },
+        'publisher': {
+          '@type': 'Organization',
+          'name':  'Galelium Corporation',
+          'url':   'https://galelium.com',
+          'logo':  {
+            '@type': 'ImageObject',
+            'url':   'https://galelium.com/favicon.ico'
+          }
+        },
+        'mainEntityOfPage': {
+          '@type': '@id',
+          '@id':   articleUrl
+        },
+        'keywords': (item.tags || []).join(', '),
+        'articleSection': item.category || '',
+        'url': articleUrl,
+        'isPartOf': {
+          '@type': 'WebPage',
+          'url':   'https://galelium.com/news.html'
+        }
+      });
+    }
+
+    /* Update URL in address bar (no reload) */
+    history.pushState({ newsId: item.id }, item.title, articleUrl);
+  }
+
+  function restoreMeta() {
+    document.title = _origTitle;
+    var tEl = document.getElementById('page-title');
+    if (tEl) tEl.textContent = _origTitle;
+
+    var mDesc  = document.getElementById('meta-desc');
+    var canon  = document.getElementById('meta-canonical');
+    var ogUrl  = document.getElementById('meta-og-url');
+    var ogT    = document.getElementById('meta-og-title');
+    var ogD    = document.getElementById('meta-og-desc');
+    var ld     = document.getElementById('article-ld');
+    var twT    = document.querySelector('meta[name="twitter:title"]');
+    var twD    = document.querySelector('meta[name="twitter:description"]');
+
+    if (mDesc)  mDesc.content  = _origDesc;
+    if (canon)  canon.href     = _baseUrl;
+    if (ogUrl)  ogUrl.content  = _origUrl;
+    if (ogT)    ogT.content    = _origOgT;
+    if (ogD)    ogD.content    = _origOgD;
+    if (ld)     ld.textContent = '';
+    if (twT)    twT.content    = _origOgT;
+    if (twD)    twD.content    = _origOgD;
+
+    history.pushState({ newsId: null }, _origTitle, _baseUrl);
+  }
+
+  /* Handle browser back/forward buttons */
+  window.addEventListener('popstate', function(e) {
+    if (e.state && e.state.newsId) {
+      var item = allNews.find(function(n){ return n.id === e.state.newsId || n.slug === e.state.newsId; });
+      if (item) { openModal(item, true /* skipPush */); return; }
+    }
+    /* No newsId → close modal if open */
+    if (elModalOvl.classList.contains('is-open')) {
+      closeModal(true /* skipPush */);
+    }
+  });
+
+  function openModal(item, skipPush) {
     elModalCat.textContent  = item.category;
     elModalTit.textContent  = item.title;
 
@@ -1092,12 +1264,12 @@
     elModalMeta.innerHTML =
       '<span class="modal__meta-date">' + fmtDate(item.date) + '</span>'
     + '<span class="modal__meta-sep">·</span>'
-    + '<span class="modal__meta-read"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.1"/><path d="M6 3.5V6l2 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>' + (item.readTime||4) + ' мин чтения</span>'
+    + '<span class="modal__meta-read"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.1"/><path d="M6 3.5V6l2 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>' + (item.readTime||4) + ' ' + (window.t?window.t('modal.min_read'):'мин чтения') + '</span>'
     + (tags ? '<span class="modal__meta-sep">·</span><div class="modal__tags">' + tags + '</div>' : '')
     + '<div class="modal__actions">'
-    +   '<button class="action-btn" id="share-btn" title="Скопировать ссылку">'
+    +   '<button class="action-btn" id="share-btn" title="' + (window.t?window.t('modal.share_title'):'Скопировать ссылку') + '">'
     +     '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="9" cy="2.5" r="1.5" stroke="currentColor" stroke-width="1.1"/><circle cx="2.5" cy="6" r="1.5" stroke="currentColor" stroke-width="1.1"/><circle cx="9" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.1"/><path d="M4 5.1l4-2M4 6.9l4 2" stroke="currentColor" stroke-width="1.1"/></svg>'
-    +     'Поделиться'
+    +     (window.t?window.t('modal.share'):'Поделиться')
     +   '</button>'
     + '</div>';
 
@@ -1108,7 +1280,7 @@
     var related = allNews.filter(function(n){ return n.id !== item.id && n.category === item.category; }).slice(0,3);
     if (related.length) {
       elModalRel.style.display = '';
-      elModalRel.innerHTML = '<p class="modal__related-title">Похожие материалы</p>'
+      elModalRel.innerHTML = '<p class="modal__related-title">' + (window.t?window.t('modal.related'):'Похожие материалы') + '</p>'
         + '<div class="related-list">'
         + related.map(function(r){
           return '<button class="related-item" data-id="' + esc(r.id) + '">'
@@ -1132,6 +1304,9 @@
     document.body.style.overflow = 'hidden';
     setTimeout(function(){ elModalCls.focus(); }, 50);
 
+    /* SEO: update meta + URL */
+    if (!skipPush) setMeta(item);
+
     /* Прогресс-бар чтения */
     elModalBody.scrollTop = 0;
     elModalProg.style.width = '0%';
@@ -1141,16 +1316,16 @@
     var shareBtn = document.getElementById('share-btn');
     if (shareBtn) {
       shareBtn.addEventListener('click', function(){
-        var url = window.location.href.split('?')[0] + '?news=' + item.id;
+        var url = window.location.href; /* URL already set by setMeta() */
         if (navigator.clipboard) {
           navigator.clipboard.writeText(url).then(function(){
             shareBtn.classList.add('is-copied');
             shareBtn.querySelector('svg + *') || (shareBtn.lastChild.textContent = ' Скопировано!');
-            showToast('Ссылка скопирована');
+            showToast(window.t?window.t('toast.link_copied'):'Ссылка скопирована');
             setTimeout(function(){ shareBtn.classList.remove('is-copied'); }, 2000);
           });
         } else {
-          showToast('Скопируйте URL из адресной строки');
+          showToast(window.t?window.t('toast.copy_manual'):'Скопируйте URL из адресной строки');
         }
       });
     }
@@ -1163,18 +1338,28 @@
     elModalProg.style.width = Math.min(100, (el.scrollTop / pct) * 100).toFixed(1) + '%';
   }
 
-  function closeModal() {
+  function closeModal(skipPush) {
     elModalOvl.classList.remove('is-open');
     elModalOvl.setAttribute('aria-hidden','true');
     document.body.style.overflow = '';
     elModalBody.removeEventListener('scroll', onBodyScroll);
     elModalProg.style.width = '0%';
+    /* SEO: restore original meta + URL */
+    if (!skipPush) restoreMeta();
   }
 
   elModalCls.addEventListener('click', closeModal);
   elModalOvl.addEventListener('click', function(e){ if(e.target===elModalOvl) closeModal(); });
   document.addEventListener('keydown', function(e){
     if (e.key === 'Escape' && elModalOvl.classList.contains('is-open')) closeModal();
+  });
+
+  /* Перерендер при смене языка */
+  document.addEventListener('langchange', function() {
+    if (allNews.length) {
+      buildCatFilters();
+      refresh();
+    }
   });
 
   /* ════════════ ЗАГРУЗКА ИЗ FIRESTORE /news ════════════ */
@@ -1210,6 +1395,240 @@
   };
 
 }());
+
+/* ══════════════════════════════════════════════════════════════
+   GALELIUM i18n — news.html
+   Читает язык из localStorage ('glm_lang') — синхронизирован
+   с главной страницей. API: window.i18n, window.t(key)
+══════════════════════════════════════════════════════════════ */
+(function (root) {
+  'use strict';
+
+  var FALLBACK    = 'ru';
+  var STORAGE_KEY = 'glm_lang';
+
+  var dict = {
+    ru: {
+      _title:       'Новости | Galelium Corporation',
+      _description: 'Последние новости Galelium Corporation — сделки, портфель, стратегия и аналитика холдинга.',
+      _html_lang:   'ru',
+      /* Lang */
+      'lang.label': 'Язык',
+      /* Nav */
+      'nav.about':    'О нас',
+      'nav.how':      'Как работаем',
+      'nav.news':     'Новости',
+      'nav.careers':  'Карьера',
+      'nav.contact':  'Контакты',
+      'nav.cta':      'Связаться',
+      'nav.cta_long': 'Связаться с нами',
+      /* Header */
+      'header.eyebrow':   'Galelium Corporation',
+      'header.title':     'Новости',
+      'header.title_em':  'аналитика',
+      'header.materials': 'материалов',
+      /* Controls */
+      'controls.search': 'Поиск…',
+      'controls.shown':  'Показано',
+      'controls.reset':  'Сбросить',
+      'controls.topics': 'Темы',
+      'controls.all':    'Все',
+      /* Sort */
+      'sort.date_desc': 'Новые первые',
+      'sort.date_asc':  'Старые первые',
+      'sort.read_asc':  'Быстрее читать',
+      /* Feed */
+      'feed.loading':    'Загрузка…',
+      'feed.error_title':'Не удалось загрузить новости',
+      'feed.error_sub':  'Убедитесь, что news.json лежит рядом с файлом.',
+      'feed.empty_title':'Ничего не найдено',
+      'feed.empty_sub':  'Попробуйте изменить фильтры или поисковый запрос.',
+      /* Cards */
+      'card.featured': 'Главное',
+      'card.read':     'Читать',
+      'card.min':      'мин',
+      /* Modal */
+      'modal.min_read':   'мин чтения',
+      'modal.share':      'Поделиться',
+      'modal.share_title':'Скопировать ссылку',
+      'modal.related':    'Похожие материалы',
+      'modal.copied':     'Скопировано!',
+      /* Toast */
+      'toast.link_copied': 'Ссылка скопирована',
+      'toast.copy_manual': 'Скопируйте URL из адресной строки',
+      /* Footer */
+      'footer.tagline':     'Холдинговая корпорация. Инвестиции, технологии, развитие.',
+      'footer.company':     'Компания',
+      'footer.contact_col': 'Контакт',
+      'footer.legal_col':   'Правовые',
+      'footer.privacy':     'Конфиденциальность',
+      'footer.terms':       'Условия',
+      'footer.copy':        '© 2025–2026 Galelium Corporation. Все права защищены.',
+      /* Misc */
+      'misc.skip': 'Перейти к содержимому',
+    },
+
+    en: {
+      _title:       'News | Galelium Corporation',
+      _description: 'Latest news from Galelium Corporation — deals, portfolio, strategy and analytics.',
+      _html_lang:   'en',
+      /* Lang */
+      'lang.label': 'Language',
+      /* Nav */
+      'nav.about':    'About',
+      'nav.how':      'How We Work',
+      'nav.news':     'News',
+      'nav.careers':  'Careers',
+      'nav.contact':  'Contact',
+      'nav.cta':      'Get in Touch',
+      'nav.cta_long': 'Contact Us',
+      /* Header */
+      'header.eyebrow':   'Galelium Corporation',
+      'header.title':     'News',
+      'header.title_em':  'analytics',
+      'header.materials': 'articles',
+      /* Controls */
+      'controls.search': 'Search…',
+      'controls.shown':  'Showing',
+      'controls.reset':  'Reset',
+      'controls.topics': 'Topics',
+      'controls.all':    'All',
+      /* Sort */
+      'sort.date_desc': 'Newest first',
+      'sort.date_asc':  'Oldest first',
+      'sort.read_asc':  'Quickest to read',
+      /* Feed */
+      'feed.loading':    'Loading…',
+      'feed.error_title':'Failed to load news',
+      'feed.error_sub':  'Make sure news.json is in the same folder.',
+      'feed.empty_title':'Nothing found',
+      'feed.empty_sub':  'Try changing the filters or search query.',
+      /* Cards */
+      'card.featured': 'Featured',
+      'card.read':     'Read',
+      'card.min':      'min',
+      /* Modal */
+      'modal.min_read':   'min read',
+      'modal.share':      'Share',
+      'modal.share_title':'Copy link',
+      'modal.related':    'Related articles',
+      'modal.copied':     'Copied!',
+      /* Toast */
+      'toast.link_copied': 'Link copied',
+      'toast.copy_manual': 'Copy the URL from the address bar',
+      /* Footer */
+      'footer.tagline':     'Holding corporation. Investments, technology, growth.',
+      'footer.company':     'Company',
+      'footer.contact_col': 'Contact',
+      'footer.legal_col':   'Legal',
+      'footer.privacy':     'Privacy Policy',
+      'footer.terms':       'Terms of Use',
+      'footer.copy':        '© 2025–2026 Galelium Corporation. All rights reserved.',
+      /* Misc */
+      'misc.skip': 'Skip to content',
+    }
+  };
+
+  /* ── Detect ─────────────────────────────────────────────── */
+  function detect() {
+    var param = new URLSearchParams(location.search).get('lang');
+    if (param && dict[param]) return param;
+    try { var s = localStorage.getItem(STORAGE_KEY); if (s && dict[s]) return s; } catch(e){}
+    var nav = (navigator.language || 'ru').slice(0, 2).toLowerCase();
+    return dict[nav] ? nav : FALLBACK;
+  }
+
+  var _lang = detect();
+
+  /* ── t() helper ─────────────────────────────────────────── */
+  function t(key, vars) {
+    var d  = dict[_lang]  || {};
+    var fb = dict[FALLBACK] || {};
+    var v  = d[key] !== undefined ? d[key] : fb[key] !== undefined ? fb[key] : key;
+    if (vars) v = v.replace(/\{\{(\w+)\}\}/g, function(_,k){ return vars[k]!==undefined?vars[k]:_; });
+    return v;
+  }
+
+  /* ── Apply lang to DOM ──────────────────────────────────── */
+  function applyLang(lang) {
+    var d = dict[lang]; if (!d) return;
+    _lang = lang;
+
+    document.documentElement.lang = d._html_lang || lang;
+    document.documentElement.style.visibility = '';
+    if (d._title) document.title = d._title;
+    var m = document.querySelector('meta[name="description"]');
+    if (m) m.content = d._description || '';
+    var og = document.querySelector('meta[property="og:locale"]');
+    if (og) og.content = lang === 'ru' ? 'ru_RU' : 'en_US';
+
+    document.querySelectorAll('[data-i18n-text]').forEach(function(el) {
+      el.textContent = t(el.getAttribute('data-i18n-text'));
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+      el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+    });
+    /* Sort <option> elements */
+    document.querySelectorAll('[data-i18n-text].option, option[data-i18n-text]').forEach(function(el) {
+      el.textContent = t(el.getAttribute('data-i18n-text'));
+    });
+    /* Active lang buttons */
+    document.querySelectorAll('.lang-opt').forEach(function(btn) {
+      var active = btn.dataset.lang === _lang;
+      btn.style.borderColor  = active ? 'rgba(200,169,110,.5)' : '';
+      btn.style.color        = active ? '#c8a96e' : '';
+      btn.style.background   = active ? 'rgba(200,169,110,.08)' : '';
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    /* Lang label */
+    document.querySelectorAll('[data-i18n-text="lang.label"]').forEach(function(el) {
+      el.textContent = t('lang.label');
+    });
+
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch(e) {}
+
+    /* Update URL */
+    try {
+      var url = new URL(location.href);
+      if (lang === FALLBACK) url.searchParams.delete('lang');
+      else url.searchParams.set('lang', lang);
+      history.replaceState(null, '', url.toString());
+    } catch(e) {}
+
+    document.dispatchEvent(new CustomEvent('langchange', { detail: { lang: lang } }));
+  }
+
+  function switchLang(lang) {
+    if (!dict[lang] || lang === _lang) return;
+    /* Fade animation */
+    document.documentElement.classList.add('lang-switching');
+    applyLang(lang);
+    setTimeout(function() { document.documentElement.classList.remove('lang-switching'); }, 260);
+  }
+
+  /* ── Bind buttons ───────────────────────────────────────── */
+  function bindButtons() {
+    document.querySelectorAll('.lang-opt').forEach(function(btn) {
+      btn.addEventListener('click', function() { switchLang(this.dataset.lang); });
+    });
+  }
+
+  /* ── Public API ─────────────────────────────────────────── */
+  root.i18n = { t: t, switch: switchLang, lang: function(){ return _lang; } };
+  root.t = t;
+
+  /* ── Init ───────────────────────────────────────────────── */
+  applyLang(_lang);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindButtons);
+  } else {
+    bindButtons();
+  }
+
+})(window);
+
 </script>
 
 <script type="module">
