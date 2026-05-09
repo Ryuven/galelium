@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" style="visibility:hidden">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
@@ -42,7 +42,6 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
-/* ИСПРАВЛЕНИЕ: убрана visibility:hidden на html — теперь страница видима сразу */
 body{background:var(--bg);color:var(--text);font-family:var(--font);font-weight:300;-webkit-font-smoothing:antialiased}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 input,textarea{font-family:inherit;color:inherit;background:none;border:none;outline:none}
@@ -56,9 +55,7 @@ a{color:inherit;text-decoration:none}
   position:fixed;inset:0;z-index:9999;
   background:var(--bg);
   display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;
-  transition:opacity .4s ease;
 }
-#auth-screen.fade-out{opacity:0;pointer-events:none}
 .auth-logo{display:flex;align-items:center;gap:10px}
 .auth-logo-mark{
   width:32px;height:32px;background:var(--accent);
@@ -67,10 +64,9 @@ a{color:inherit;text-decoration:none}
 }
 .auth-logo-text{font-family:var(--font-display);font-weight:800;font-size:1.1rem;letter-spacing:-.01em;color:var(--text)}
 .auth-logo-sub{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted-2);margin-top:2px}
-.auth-bar{width:120px;height:2px;background:var(--surface-3);overflow:hidden;border-radius:1px}
+.auth-bar{width:120px;height:2px;background:var(--surface-3);overflow:hidden}
 .auth-bar-fill{height:100%;background:var(--accent);width:60%;animation:authSlide 1.4s ease-in-out infinite}
 @keyframes authSlide{0%{transform:translateX(-100%)}50%{transform:translateX(0%)}100%{transform:translateX(200%)}}
-.auth-status-text{font-size:.62rem;color:var(--muted-2);letter-spacing:.06em}
 
 /* ══ SHELL ══════════════════════════════════════════════════ */
 #shell{
@@ -151,7 +147,7 @@ a{color:inherit;text-decoration:none}
 }
 .sb-item-icon{font-size:.72rem;width:16px;text-align:center;flex-shrink:0;opacity:.6}
 .sb-item.active .sb-item-icon{opacity:1}
-.sb-item-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-item-name{flex:1;truncate:true;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sb-badge{
   background:var(--red);color:#fff;font-size:.52rem;font-weight:600;
   padding:1px 5px;border-radius:10px;flex-shrink:0;
@@ -494,7 +490,6 @@ a{color:inherit;text-decoration:none}
   transform:translateY(60px);opacity:0;
   transition:transform .25s var(--ease),opacity .2s ease;
   pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,.4);
-  border-radius:var(--r);
 }
 #toast.show{transform:translateY(0);opacity:1}
 #toast.ok{border-color:rgba(76,175,130,.3)}
@@ -514,16 +509,6 @@ a{color:inherit;text-decoration:none}
 }
 .nc-title{font-family:var(--font-display);font-weight:800;font-size:1.2rem}
 .nc-sub{font-size:.76rem;color:var(--muted);text-align:center;max-width:300px;line-height:1.6}
-
-/* ══ CONNECTION BANNER ═════════════════════════════════════ */
-#conn-banner{
-  display:none;
-  position:fixed;top:0;left:0;right:0;z-index:500;
-  background:rgba(208,96,112,.12);border-bottom:1px solid rgba(208,96,112,.25);
-  padding:7px 20px;font-size:.68rem;color:var(--red);
-  align-items:center;justify-content:center;gap:8px;
-}
-#conn-banner.show{display:flex}
 
 /* ══ MOBILE ═════════════════════════════════════════════════ */
 @media(max-width:780px){
@@ -559,7 +544,7 @@ a{color:inherit;text-decoration:none}
 </head>
 <body>
 
-<!-- Auth loader (видим сразу, скрывается после Firebase init) -->
+<!-- Auth loader -->
 <div id="auth-screen">
   <div class="auth-logo">
     <div class="auth-logo-mark">
@@ -571,13 +556,6 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
   <div class="auth-bar"><div class="auth-bar-fill"></div></div>
-  <div class="auth-status-text" id="auth-status-text">Загрузка…</div>
-</div>
-
-<!-- Connection banner -->
-<div id="conn-banner">
-  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 3.5v3M6 8v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-  Нет подключения к интернету — сообщения могут не отправляться
 </div>
 
 <!-- Mobile overlay -->
@@ -710,7 +688,9 @@ a{color:inherit;text-decoration:none}
         <div class="input-hint">Enter — отправить · Shift+Enter — перенос строки</div>
 
         <!-- Emoji picker -->
-        <div class="emoji-picker" id="emoji-picker"></div>
+        <div class="emoji-picker" id="emoji-picker">
+          <!-- filled by JS -->
+        </div>
       </div>
     </div>
 
@@ -806,12 +786,12 @@ const auth = getAuth(app);
 const fdb  = getFirestore(app);
 
 /* ── State ──────────────────────────────────────────────── */
-let me           = null;
-let currentCh    = null;
-let msgUnsub     = null;
+let me           = null;   // { uid, displayName, email, role }
+let currentCh    = null;   // { id, name, type, ... }
+let msgUnsub     = null;   // onSnapshot unsubscribe
 let chUnsub      = null;
-let replyTo      = null;
-let allUsers     = {};
+let replyTo      = null;   // { id, text, authorName }
+let allUsers     = {};     // uid → user profile
 let typingTimer  = null;
 let editingId    = null;
 
@@ -874,27 +854,9 @@ function autoResize(ta) {
   ta.style.height = Math.min(ta.scrollHeight, 200) + 'px';
 }
 
-/* ── Network status banner ──────────────────────────────── */
-window.addEventListener('online',  () => $('conn-banner').classList.remove('show'));
-window.addEventListener('offline', () => $('conn-banner').classList.add('show'));
-
 /* ── Auth Guard ─────────────────────────────────────────── */
-/* Таймаут: если Firebase не отвечает 8 секунд — редирект на логин */
-const authTimeout = setTimeout(() => {
-  $('auth-status-text').textContent = 'Не удалось подключиться…';
-  setTimeout(() => location.replace('login.html'), 1500);
-}, 8000);
-
 onAuthStateChanged(auth, async user => {
-  clearTimeout(authTimeout);
-
-  if (!user) {
-    $('auth-status-text').textContent = 'Перенаправление…';
-    setTimeout(() => location.replace('login.html'), 400);
-    return;
-  }
-
-  $('auth-status-text').textContent = 'Загрузка профиля…';
+  if (!user) { location.replace('login.html'); return; }
 
   /* Load user profile */
   let profile = { uid: user.uid, displayName: user.displayName || user.email, email: user.email, role: 'user' };
@@ -912,16 +874,14 @@ onAuthStateChanged(auth, async user => {
   );
   window.addEventListener('beforeunload', () => updatePresence('offline'));
 
-  /* Show app with smooth transition */
-  $('auth-screen').classList.add('fade-out');
-  setTimeout(() => {
-    $('auth-screen').style.display = 'none';
-    $('shell').classList.add('active');
-  }, 400);
+  /* Show app */
+  $('auth-screen').style.display = 'none';
+  document.documentElement.style.visibility = '';
+  $('shell').classList.add('active');
 
   /* Fill user panel */
-  $('my-avatar').textContent = initial(me.displayName);
-  $('my-name').textContent   = me.displayName || me.email;
+  $('my-avatar').textContent  = initial(me.displayName);
+  $('my-name').textContent    = me.displayName || me.email;
 
   /* Load users list and channels */
   await loadAllUsers();
@@ -965,6 +925,7 @@ function startChannelListener() {
     snap.forEach(d => {
       const ch = { id: d.id, ...d.data() };
       if (ch.type === 'direct') {
+        /* Only show DMs where current user is a member */
         if ((ch.members || []).includes(me.uid)) dms.push(ch);
       } else {
         channels.push(ch);
@@ -1033,8 +994,10 @@ function renderDMList() {
 async function openChannel(chId) {
   if (currentCh?.id === chId) { closeSidebar(); return; }
 
+  /* Unsubscribe old */
   if (msgUnsub) { msgUnsub(); msgUnsub = null; }
 
+  /* Load channel data */
   let chData;
   try {
     const snap = await getDoc(doc(fdb, 'pulsar_channels', chId));
@@ -1045,9 +1008,11 @@ async function openChannel(chId) {
   currentCh = chData;
   replyTo = null;
 
+  /* Update UI */
   $('no-channel').style.display    = 'none';
   $('conversation').style.display  = 'flex';
 
+  /* Header */
   if (chData.type === 'direct') {
     const otherId = (chData.members || []).find(uid => uid !== me.uid);
     const other   = allUsers[otherId] || {};
@@ -1060,16 +1025,17 @@ async function openChannel(chId) {
     $('ch-desc').textContent = chData.description || '';
   }
 
+  /* Update sidebar active state */
   document.querySelectorAll('.sb-item,.dm-item').forEach(el =>
     el.classList.toggle('active', el.dataset.chid === chId)
   );
 
+  /* Update reply bar */
   clearReply();
+
+  /* Start messages listener */
   startMessageListener(chId);
   closeSidebar();
-
-  /* Focus input */
-  setTimeout(() => $('msg-input').focus(), 100);
 }
 
 /* ── Message listener ───────────────────────────────────── */
@@ -1085,10 +1051,12 @@ function startMessageListener(chId) {
 
   let firstLoad = true;
   msgUnsub = onSnapshot(q, snap => {
-    const wasNearBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 120;
     renderMessages(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     if (firstLoad) { scrollToBottom(); firstLoad = false; }
-    else if (wasNearBottom) { scrollToBottom(); }
+    else { /* Scroll only if near bottom */
+      const near = list.scrollHeight - list.scrollTop - list.clientHeight < 120;
+      if (near) scrollToBottom();
+    }
   }, e => {
     list.innerHTML = `<div style="padding:20px;text-align:center;color:var(--red);font-size:.75rem">Ошибка: ${escHtml(e.message)}</div>`;
   });
@@ -1115,6 +1083,7 @@ function renderMessages(msgs) {
     const ts     = msg.ts?.toDate?.() || (msg.clientTs ? new Date(msg.clientTs) : new Date());
     const dateKey = ts.toDateString();
 
+    /* Date divider */
     if (dateKey !== prevDate) {
       html += `<div class="date-div">
         <div class="date-div-line"></div>
@@ -1130,12 +1099,14 @@ function renderMessages(msgs) {
     const reactions = msg.reactions || {};
     const reactionsList = REACTIONS_DEFAULT.filter(e => reactions[e]?.length);
 
+    /* Reply reference */
     const replyHtml = msg.replyTo ? `
       <div class="msg-reply-ref" data-scroll="${escHtml(msg.replyTo.id)}">
         <span class="msg-reply-author">${escHtml(msg.replyTo.authorName)}</span>
         <span class="msg-reply-text">${escHtml(msg.replyTo.text?.slice(0,80))}</span>
       </div>` : '';
 
+    /* Reactions */
     const reactHtml = reactionsList.length ? `
       <div class="msg-reactions">
         ${reactionsList.map(emoji => {
@@ -1147,6 +1118,7 @@ function renderMessages(msgs) {
         }).join('')}
       </div>` : '';
 
+    /* Actions */
     const actionsHtml = `
       <div class="msg-actions">
         ${REACTIONS_DEFAULT.slice(0,4).map(e =>
@@ -1193,6 +1165,7 @@ function renderMessages(msgs) {
 
   list.innerHTML = html;
 
+  /* Bind action buttons */
   list.querySelectorAll('[data-action]').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
@@ -1200,6 +1173,7 @@ function renderMessages(msgs) {
     });
   });
 
+  /* Bind quick reactions */
   list.querySelectorAll('.react-quick,.reaction-btn').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
@@ -1207,6 +1181,7 @@ function renderMessages(msgs) {
     });
   });
 
+  /* Bind reply scroll */
   list.querySelectorAll('[data-scroll]').forEach(el => {
     el.addEventListener('click', () => {
       const target = list.querySelector(`[data-msgid="${el.dataset.scroll}"]`);
@@ -1334,26 +1309,27 @@ async function sendMessage() {
     replyTo:    replyTo || null,
   };
 
-  clearReply();
-
   try {
     await addDoc(
       collection(fdb, 'pulsar_channels', currentCh.id, 'messages'),
       payload
     );
+
+    /* Update channel lastMessage */
     await updateDoc(doc(fdb, 'pulsar_channels', currentCh.id), {
       lastMessage: { text: text.slice(0, 80), authorName: me.displayName, ts: serverTimestamp() }
     });
+
+    clearReply();
   } catch(e) {
     toast('Ошибка отправки: ' + e.message, 'err');
     input.value = text;
-    $('btn-send').disabled = false;
   }
 }
 
 function scrollToBottom() {
   const list = $('msg-list');
-  requestAnimationFrame(() => { list.scrollTop = list.scrollHeight; });
+  list.scrollTop = list.scrollHeight;
 }
 
 /* ── Reply ──────────────────────────────────────────────── */
@@ -1387,6 +1363,7 @@ async function createChannel() {
 
 /* ── Create DM ──────────────────────────────────────────── */
 async function openOrCreateDM(otherUid) {
+  /* Check if DM already exists */
   const members = [me.uid, otherUid].sort();
   const q = query(
     collection(fdb, 'pulsar_channels'),
@@ -1400,6 +1377,7 @@ async function openOrCreateDM(otherUid) {
       openChannel(snap.docs[0].id);
       return;
     }
+    /* Create new DM */
     const ref = await addDoc(collection(fdb, 'pulsar_channels'), {
       type: 'direct', members, createdBy: me.uid,
       createdAt: serverTimestamp(), order: 9999, lastMessage: null
@@ -1434,6 +1412,7 @@ function closeSidebar() {
 
 /* ── Init UI ────────────────────────────────────────────── */
 function initUI() {
+  /* Input textarea auto-resize */
   const input = $('msg-input');
   input.addEventListener('input', () => {
     autoResize(input);
@@ -1444,6 +1423,8 @@ function initUI() {
   });
 
   $('btn-send').addEventListener('click', sendMessage);
+
+  /* Reply close */
   $('reply-close').addEventListener('click', clearReply);
 
   /* Emoji picker */
@@ -1521,23 +1502,16 @@ function initUI() {
     location.replace('login.html');
   });
 
-  /* Stubs */
+  /* Settings stub */
   $('btn-settings').addEventListener('click', () => toast('Настройки — скоро', 'ok'));
   $('btn-mute').addEventListener('click', () => toast('Уведомления — скоро', 'ok'));
   $('btn-search-ch').addEventListener('click', () => toast('Поиск — скоро', 'ok'));
-
-  /* Escape key closes modals */
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.modal-overlay.open').forEach(el => closeModal(el.id));
-    }
-  });
 }
 
 /* ── DM user search ─────────────────────────────────────── */
-function renderDMUserSearch(queryStr) {
+function renderDMUserSearch(query) {
   const list = $('dm-user-list');
-  const q = queryStr.toLowerCase();
+  const q = query.toLowerCase();
   const users = Object.values(allUsers)
     .filter(u => u.uid !== me.uid)
     .filter(u => !q ||
